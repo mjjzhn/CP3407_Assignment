@@ -18,6 +18,6 @@ def create_customer_token():
     if customer is None or not customer.check_password(password):
         return {"msg": "Wrong username or password"}, 401
 
-    access_token = create_access_token(identity=username)
+    access_token = create_access_token(identity=username, additional_claims={"is_administrator": False})
     response = {"access_token":access_token}
     return response

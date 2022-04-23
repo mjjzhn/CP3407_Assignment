@@ -1,17 +1,20 @@
 from datetime import datetime, timedelta, timezone
-from app import db
+from app import db,jwt
 from app.auth import bp
-from app.models import Admin
 import json
 from flask import Flask, request, jsonify
 from flask_jwt_extended import create_access_token,unset_jwt_cookies, create_access_token,get_jwt,get_jwt_identity
 from flask_cors import cross_origin
+from app.models import Admin,Customer
 
 
 
 #this method resets the token for both admin and Customer
 @bp.after_request
 def refresh_expiring_jwts(response):
+    """
+    refresh the jwt token after a request
+    """
     try:
         exp_timestamp = get_jwt()["exp"]
         now = datetime.now(timezone.utc)
@@ -21,7 +24,7 @@ def refresh_expiring_jwts(response):
             if claims["is_administrator"]:#reset token for admin
                 access_token = create_access_token(identity=get_jwt_identity(),additional_claims={"is_administrator": True})
             else:    
-                access_token = create_access_token(identity=get_jwt_identity())
+                access_token = create_access_token(identity=get_jwt_identity(),additional_claims={"is_administrator": False})
             data = response.get_json()
             if type(data) is dict:
                 data["access_token"] = access_token 
@@ -33,6 +36,16 @@ def refresh_expiring_jwts(response):
 
 ###
 # From here is admin authentication        
+
+@jwt.user_lookup_loader
+def user_lookup_callback(_jwt_header, jwt_data):
+    identity = jwt_data["sub"]
+    is_admin = jwt_data["is_administrator"]
+    if is_admin:
+        return Admin.query.filter_by(username=identity).one_or_none()
+    else:
+        return Customer.query.filter_by(username=identity).one_or_none()
+   
 
 @bp.route("/logout", methods=["POST"])
 def logout():
