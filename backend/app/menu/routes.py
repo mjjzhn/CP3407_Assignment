@@ -23,6 +23,33 @@ def update_item(id):
     data = request.get_json() or {}
     if  'id' in data and data['id'] != item.id:
         return bad_request('You can not change id of this item')
+    
+    if "item_name" in data:
+        if Item.query.filter_by(item_name=data['item_name']).first():
+            return bad_request('Name duplicate detected! Please use another name!')
+            
+    #check the category and subtype
+    if "item_category" and "item_subtype" in data:
+        if not Item.validate_category_subtype(data["item_category"],data["item_subtype"]):
+            msg ="Please provide proper item_category: "+str(Item.category)
+            msg += "\n"
+            msg+= "Please provide proper item_subtype: "+str(Item.subtype)
+            return bad_request(msg)
+    # if not Item.validate_category(data["item_category"]):
+    #     return bad_request("Please provide proper item_category: "+str(Item.category))
+    # if not Item.validate_subtype(data["item_subtype"]):
+    #     return bad_request("Please provide proper item_subtype: "+str(Item.subtype))
+        
+    #select correct item_sizes based on the subtype
+    #change later on
+    if "item_subtype" in data:
+        data["item_sizes"] = Item.available_size_lists[data["item_subtype"].lower()]
+    
+    if "unavailable_sizes" in data:
+        if data["unavailable_sizes"]:
+            if not Item.validate_size(data["unavailable_sizes"],item.item_sizes):
+                return bad_request('Please provide proper unavailable_sizes'+ str(data["item_sizes"]))
+    
     item.from_dict(data)
     db.session.commit()
     return jsonify(item.to_dict())
@@ -32,35 +59,51 @@ def update_item(id):
 def create_item():
     if request.method == 'GET':
         #basic information before create an item
+        
         data ={
             "id": "automatical",
             "item_name":"an unique item name (String)",
             "item_category": [category for category in Item.category],
+            "item_subtype": [subtype for subtype in Item.subtype],
             "item_image_link": "image_url",
             "item_description": "short description for item",
-            "item_base_price":"price in Float",
-            "size_plus_price":"difference between prices",
+            "item_price":"price in Float",
             "num_of_item": "integer",
-            "size_list": Item.available_size_lists,
-            "available": "boolean", 
+            "item_sizes": "set automatically based on item_subtype",
+            "discount": "discount percentage",
+            unavailable_sizes:"specify the sizes that are unavailable",
+            "is_hot": "is the item a trend or not",
+            "available": "boolean"
         }
         response = jsonify(data)
         return response
     else:
         has_id_field = False
         data = request.get_json() or {}
-        for field in ['item_name',"item_category","item_image_link", "item_description","item_base_price", "size_plus_price","num_of_item","size_list"]:
+        for field in ['item_name',"item_category","item_subtype","item_image_link", "item_description","item_price","num_of_item"]:
             if field not in data:
                 return bad_request('must include '+field+' fields') 
         if Item.query.filter_by(item_name=data['item_name']).first():
             return bad_request('Name duplicate detected! Please use another name!')
-        if not Item.validate_category(data["item_category"]):
-            return bad_request("Please provide proper item_category: "+str(Item.category))
-        if not Item.validate_size_list(data["size_list"]):
-            if not data["size_list"]:
-                data["size_list"]="S/M/L"
-            else:
-                return bad_request("Only accept size list from "+ str(Item.available_size_lists.items()))
+        
+        #check the category and subtype
+        if not Item.validate_category_subtype(data["item_category"],data["item_subtype"]):
+            msg ="Please provide proper item_category: "+str(Item.category)
+            msg += "\n"
+            msg+= "Please provide proper item_subtype: "+str(Item.subtype)
+            return bad_request(msg)
+        # if not Item.validate_category(data["item_category"]):
+        #     return bad_request("Please provide proper item_category: "+str(Item.category))
+        # if not Item.validate_subtype(data["item_subtype"]):
+        #     return bad_request("Please provide proper item_subtype: "+str(Item.subtype))
+        
+        #select correct item_sizes based on the subtype
+        data["item_sizes"] = Item.available_size_lists[data["item_subtype"].lower()]
+        
+        if "unavailable_sizes" in data:
+            if data["unavailable_sizes"]:
+                if not Item.validate_size(data["unavailable_sizes"],data["item_sizes"]):
+                    return bad_request('Please provide proper unavailable_sizes'+ str(data["item_sizes"]))
         
         if 'id' in data:
             has_id_field =True

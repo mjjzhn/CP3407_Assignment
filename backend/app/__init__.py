@@ -35,8 +35,8 @@ def create_app(config_class=Config):
     from app.admin import bp as admin_bp
     app.register_blueprint(admin_bp, url_prefix='/admin')
 
-    # from app.menu import bp as menu_bp
-    # app.register_blueprint(menu_bp, url_prefix='/menu')
+    from app.menu import bp as menu_bp
+    app.register_blueprint(menu_bp, url_prefix='/menu')
 
     if not app.debug and not app.testing:
         
