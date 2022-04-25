@@ -71,7 +71,7 @@ def create_item():
             "num_of_item": "integer",
             "item_sizes": "set automatically based on item_subtype",
             "discount": "discount percentage",
-            unavailable_sizes:"specify the sizes that are unavailable",
+            "unavailable_sizes":"specify the sizes that are unavailable",
             "is_hot": "is the item a trend or not",
             "available": "boolean"
         }
