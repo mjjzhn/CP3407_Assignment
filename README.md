@@ -20,8 +20,8 @@ Please put your name here:
  ```
  #### 1. Clone this project 
  #### 2. Go to the packages and go to the client or admin project
-	cd packages/client-side 
-	cd packages/admin-side
+	cd packages/shopka-app
+	 
  #### 3. Install package: 
  > Just run in the first time
  ```
@@ -43,10 +43,7 @@ Please put your name here:
   #### 6. Install necessary files: 
   	pip install -r requirements.txt
   #### 7. Create new .env file (inside /backend) and add this content: 
-  	JWT_COOKIE_SECURE=False
-	JWT_SECRET_KEY=hello_world
-	SECRET_KEY=just-a-random-key
-	DATABASE_URL=postgres://nqbtlizkmplaem:ceaf26000c428ca4e360897a3f0b2d1555b240a7ea142c1012ae5ee1ec12db0f@ec2-34-192-210-139.compute-1.amazonaws.com:5432/d3l31dol5kojm8
+
   ##### For dev team, delete the DATABASE_URL (we should work with sqlite db before deployment)
   #### 8. Upgrade the database (for dev team):
   	flask db upgrade
