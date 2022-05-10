@@ -1,31 +1,28 @@
 from app.admin import bp
-from flask_jwt_extended import jwt_required, current_user
-import json
-from app.auth.admin_routes import admin_required
-from flask import jsonify,request, current_app
-from app import db
-from app.models import Admin
+from app.auth.customer_routes import customer_required
+from flask import jsonify, request
+from flask_jwt_extended import current_user
 from app.errors import bad_request
-
+from backend.app import db
+from backend.app.models import Customer
 
 
 @bp.route('')
-@admin_required()
+@customer_required
 def my_profile():
     return jsonify(
         id=current_user.id,
-        username=current_user.username,
-        msg="Hello admin"
+        username = current_user.username,
+        msg="Hello " + current_user.username
     )
 
-
 @bp.route('/update', methods=["POST"])
-@admin_required()
+@customer_required
 def update_profile():
     if request.method == 'POST':
         data = request.get_json() or {}
         if 'username' in data and data['username'] != current_user.username and \
-            Admin.query.filter_by(username=data['username']).first():
+            Customer.query.filter_by(username=data['username']).first():
             return bad_request('please use a different username')
         if "password" in data:
             if 'currentPassword' not in data:
