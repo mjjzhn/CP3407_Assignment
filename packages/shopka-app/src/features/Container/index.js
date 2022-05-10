@@ -16,88 +16,79 @@ import Home from "@mui/icons-material/Home";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import menuApi from "../../../../shopka-app/src/api/menuApi";
-import MenuPage from "../MenuPage";
-import OrderPage from "../OrderPage";
-import { useSelector, useDispatch } from "react-redux";
-import { addProduct, checkout } from "../../appSlice";
 import Header from "../../components/Header";
 import LeftSection from "../LeftSection";
-
-// const handleTabs = (
-//   value,
-//   productList,
-//   productCards,
-//   handleAddProduct,
-//   checkout
-// ) => {
-//   switch (value) {
-//     case 0:
-//       return (
-//         <MenuPage productList={productList} onAddProduct={handleAddProduct} />
-//       );
-//     case 1:
-//       return <OrderPage productCards={productCards} checkout={checkout} />;
-//   }
-// };
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setLoading,
+  selectLoading,
+  selectMsg,
+  setMsg,
+  selectIsAlert,
+  setIsAlert,
+  addProduct,
+  removeProduct,
+  checkout,
+} from "../../appSlice";
+import Spinner from "../../components/Spinner";
+import AlertNotification from "../../components/Alert";
 
 export default function Container({}) {
-  // const dispatch = useDispatch();
-  // const productCards = useSelector((state) => state.app.productCards);
-  // const [value, setValue] = useState(0);
-  // const [productList, setProductList] = useState([]);
+  const [productList, setProductList] = useState([]);
+  const dispatch = useDispatch();
+  const loading = useSelector(selectLoading);
+  const msg = useSelector(selectMsg);
+  const isAlert = useSelector(selectIsAlert);
 
-  // const handleChangeTab = (event, newValue) => {
-  //   setValue(newValue);
-  // };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
-  // const handleAddProduct = (product) => {
-  //   dispatch(addProduct({ ...product, numberOrder: 1 }));
-  // };
+    dispatch(setIsAlert({ isAlert: false, code: 200 }));
+  };
 
-  // useEffect(() => {
-  //   const getProduct = async () => {
-  //     try {
-  //       const params = { _limit: 10, _page: 1 };
-  //       const response = await menuApi.getAll(params);
-  //       setProductList(response.items);
-  //     } catch (error) {
-  //       console.log("no products found", error);
-  //     }
-  //   };
+  const handleAddProduct = (product) => {
+    dispatch(addProduct({ ...product, numberOrder: 1 }));
+    dispatch(setMsg("Product is added"));
+    dispatch(setIsAlert({ isAlert: true, code: 200 }));
+  };
 
-  //   getProduct();
-  // }, []);
+  const handleRemoveProduct = (product) => {
+    dispatch(removeProduct(product));
+    dispatch(setMsg("Product is removed"));
+    dispatch(setIsAlert({ isAlert: true, code: 200 }));
+  };
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const params = { _limit: 10, _page: 1 };
+        const response = await menuApi.getAll(params);
+        setProductList(response.items);
+      } catch (error) {
+        console.log("no products found", error);
+      }
+    };
+
+    getProduct();
+  }, []);
 
   return (
     <>
+      {loading && <Spinner open={loading} />}
       <Header />
-      <LeftSection />
-      {/* <Box mt={5}>
-        {handleTabs(
-          value,
-          productList,
-          productCards,
-          handleAddProduct,
-          checkout
-        )}
-      </Box> */}
-      {/* <Box sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 20 }}>
-        <Paper elevation={3}>
-          <Tabs
-            value={value}
-            onChange={handleChangeTab}
-            variant="fullWidth"
-            scrollButtons="auto"
-            aria-label="Tabs Menu"
-            textColor="primary"
-            indicatorColor="primary"
-          >
-            <Tab label="Home" icon={<Home />} />
-            <Tab label="Order" icon={<ShoppingCartIcon />} />
-            <Tab label="Process" icon={<ListAltIcon />} />
-          </Tabs>
-        </Paper>
-      </Box> */}
+      <LeftSection
+        productList={productList}
+        handleAddProduct={handleAddProduct}
+        handleRemoveProduct={handleRemoveProduct}
+      />
+      <AlertNotification
+        msg={msg}
+        open={isAlert.isAlert}
+        onClose={handleClose}
+        code={isAlert.code}
+      />
     </>
   );
 }

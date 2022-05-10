@@ -11,8 +11,7 @@ import {
   Tab,
   Tabs,
 } from "@mui/material";
-import ProductCard from "./components/ProductCard";
-import { PRODUCTS } from "../../constants";
+import ProductCard from "../LeftSection/components/ProductCard";
 
 export default function MenuPage({ productList, onAddProduct }) {
   const numberProduct = productList?.length;

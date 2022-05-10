@@ -4,7 +4,7 @@ import queryString from "query-string";
 // require("dotenv").config();
 
 const axiosClient = axios.create({
-  baseURL: `${process.env.REACT_APP_BACKEND_API}`,
+  baseURL: `https://flask-pirnfood.herokuapp.com`,
   headers: {
     "Content-Type": "application/json",
     // 'X-Requested-With': 'XMLHttpRequest',

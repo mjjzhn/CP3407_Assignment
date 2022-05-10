@@ -1,132 +1,180 @@
 import React, { useState, useEffect } from "react";
-import { Tab, Tabs, Typography, Box } from "@mui/material";
+import { Tab, Tabs, Typography, Box, Grid } from "@mui/material";
 import { mockProducts } from "./products";
+import ProductCard from "./components/ProductCard";
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+const checkType = (value) => {
+  switch (value) {
+    case 2:
+      return "men";
+    case 3:
+      return "women";
+    case 4:
+      return "kid";
+    case 6:
+      return "t-shirt";
+    case 7:
+      return "hoodie";
+    case 8:
+      return "jacket";
+    case 10:
+      return "janet";
+    case 11:
+      return "sort";
+    case 12:
+      return "trouser";
+  }
+};
 
+function TabPanel({ children, value, index, productList, onAddProduct }) {
+  const code = checkType(value);
   return (
-    <Box
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
+    <Box role="tabpanel" hidden={value !== index}>
+      <Grid container spacing={2} pl={2}>
+        {mockProducts.map((product, index) => {
+          if (product.item_category.includes(code)) {
+            return (
+              <Grid item key={index}>
+                <ProductCard product={product} onAddProduct={onAddProduct} />
+              </Grid>
+            );
+          }
+        })}
+      </Grid>
     </Box>
   );
 }
 
-export default function LeftSection() {
+export default function LeftSection({
+  productList,
+  handleAddProduct,
+  handleRemoveProduct,
+}) {
   const [value, setValue] = useState(2);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  console.log(mockProducts, "mockProducts");
+  const onAddProduct = (product) => {
+    handleAddProduct(product);
+  };
 
   return (
     <Box
       sx={{
-        flexGrow: 1,
+        // flexGrow: 1,
         bgcolor: "background.paper",
         display: "flex",
         height: "100vh",
+        width: "100%",
         padding: 3,
       }}
     >
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        sx={{ borderRight: 1, borderColor: "divider" }}
-      >
-        <Typography variant="h5" color="primary" align="left">
-          Filter
-        </Typography>
-        <Typography
-          variant="body1"
-          color="secondary"
-          align="left"
-          sx={{ fontWeight: 700 }}
-        >
-          Gender
-        </Typography>
-        <Tab label="Men" />
-        <Tab label="Female" />
-        <Tab label="Children" />
-        <Typography
-          variant="body1"
-          color="secondary"
-          align="left"
-          sx={{ fontWeight: 700 }}
-        >
-          Top
-        </Typography>
-        <Tab label="T-shirt" />
-        <Tab label="Hoodie" />
-        <Tab label="Jacket" />
-        <Typography
-          variant="body1"
-          color="secondary"
-          align="left"
-          sx={{ fontWeight: 700 }}
-        >
-          Bottom
-        </Typography>
-        <Tab label="Jane" />
-        <Tab label="Sort" />
-        <Tab label="Trouser" />
-      </Tabs>
-      <TabPanel value={value} index={2}>
-        <Typography variant="body1" color="secondary" align="left">
-          Male
-        </Typography>
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <Typography variant="body1" color="secondary" align="left">
-          Female
-        </Typography>
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        <Typography variant="body1" color="secondary" align="left">
-          Children
-        </Typography>
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        <Typography variant="body1" color="secondary" align="left">
-          T-shirt
-        </Typography>
-      </TabPanel>
-      <TabPanel value={value} index={7}>
-        <Typography variant="body1" color="secondary" align="left">
-          Hoodie
-        </Typography>
-      </TabPanel>
-      <TabPanel value={value} index={8}>
-        <Typography variant="body1" color="secondary" align="left">
-          Jacket
-        </Typography>
-      </TabPanel>
-      <TabPanel value={value} index={10}>
-        <Typography variant="body1" color="secondary" align="left">
-          Jane
-        </Typography>
-      </TabPanel>
-      <TabPanel value={value} index={11}>
-        <Typography variant="body1" color="secondary" align="left">
-          Sort
-        </Typography>
-      </TabPanel>
-      <TabPanel value={value} index={12}>
-        <Typography variant="body1" color="secondary" align="left">
-          Trouser
-        </Typography>
-      </TabPanel>
+      <Grid container>
+        <Grid item xs={2}>
+          <Tabs
+            orientation="vertical"
+            value={value}
+            onChange={handleChange}
+            aria-label="Vertical tabs example"
+            sx={{ borderRight: 1, borderColor: "divider" }}
+          >
+            <Typography variant="h5" color="primary" align="left">
+              Filter
+            </Typography>
+            <Typography
+              variant="body1"
+              color="secondary"
+              align="left"
+              sx={{ fontWeight: 700 }}
+            >
+              Gender
+            </Typography>
+            <Tab label="Men" />
+            <Tab label="Female" />
+            <Tab label="Children" />
+            <Typography
+              variant="body1"
+              color="secondary"
+              align="left"
+              sx={{ fontWeight: 700 }}
+            >
+              Top
+            </Typography>
+            <Tab label="T-shirt" />
+            <Tab label="Hoodie" />
+            <Tab label="Jacket" />
+            <Typography
+              variant="body1"
+              color="secondary"
+              align="left"
+              sx={{ fontWeight: 700 }}
+            >
+              Bottom
+            </Typography>
+            <Tab label="Jane" />
+            <Tab label="Sort" />
+            <Tab label="Trouser" />
+          </Tabs>
+        </Grid>
+        <Grid item xs={8}>
+          <TabPanel
+            value={value}
+            index={2}
+            productList={productList}
+            onAddProduct={onAddProduct}
+          />
+          <TabPanel
+            value={value}
+            index={3}
+            productList={productList}
+            onAddProduct={onAddProduct}
+          />
+          <TabPanel
+            value={value}
+            index={4}
+            productList={productList}
+            onAddProduct={onAddProduct}
+          />
+          <TabPanel
+            value={value}
+            index={6}
+            productList={productList}
+            onAddProduct={onAddProduct}
+          />
+          <TabPanel
+            value={value}
+            index={7}
+            productList={productList}
+            onAddProduct={onAddProduct}
+          />
+          <TabPanel
+            value={value}
+            index={8}
+            productList={productList}
+            onAddProduct={onAddProduct}
+          />
+          <TabPanel
+            value={value}
+            index={10}
+            productList={productList}
+            onAddProduct={onAddProduct}
+          />
+          <TabPanel
+            value={value}
+            index={11}
+            productList={productList}
+            onAddProduct={onAddProduct}
+          />
+          <TabPanel
+            value={value}
+            index={12}
+            productList={productList}
+            onAddProduct={onAddProduct}
+          />
+        </Grid>
+      </Grid>
     </Box>
   );
 }
