@@ -28,7 +28,8 @@ import {
   setIsAlert,
   addProduct,
   removeProduct,
-  checkout,
+  selectToken,
+  setToken,
 } from "../../appSlice";
 import Spinner from "../../components/Spinner";
 import AlertNotification from "../../components/Alert";
@@ -39,6 +40,7 @@ export default function Container({}) {
   const loading = useSelector(selectLoading);
   const msg = useSelector(selectMsg);
   const isAlert = useSelector(selectIsAlert);
+  const token = useSelector(selectToken);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -49,15 +51,25 @@ export default function Container({}) {
   };
 
   const handleAddProduct = (product) => {
-    dispatch(addProduct({ ...product, numberOrder: 1 }));
-    dispatch(setMsg("Product is added"));
-    dispatch(setIsAlert({ isAlert: true, code: 200 }));
+    if (token) {
+      dispatch(addProduct({ ...product, numberOrder: 1 }));
+      dispatch(setMsg("Product is added"));
+      dispatch(setIsAlert({ isAlert: true, code: 200 }));
+    } else {
+      dispatch(setMsg("Please login"));
+      dispatch(setIsAlert({ isAlert: true, code: 400 }));
+    }
   };
 
   const handleRemoveProduct = (product) => {
-    dispatch(removeProduct(product));
-    dispatch(setMsg("Product is removed"));
-    dispatch(setIsAlert({ isAlert: true, code: 200 }));
+    if (token) {
+      dispatch(removeProduct(product));
+      dispatch(setMsg("Product is removed"));
+      dispatch(setIsAlert({ isAlert: true, code: 200 }));
+    } else {
+      dispatch(setMsg("Please login"));
+      dispatch(setIsAlert({ isAlert: true, code: 400 }));
+    }
   };
 
   useEffect(() => {

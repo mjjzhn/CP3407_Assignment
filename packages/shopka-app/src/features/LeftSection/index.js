@@ -18,7 +18,7 @@ const checkType = (value) => {
     case 8:
       return "jacket";
     case 10:
-      return "janet";
+      return "jean";
     case 11:
       return "sort";
     case 12:
@@ -45,11 +45,7 @@ function TabPanel({ children, value, index, productList, onAddProduct }) {
   );
 }
 
-export default function LeftSection({
-  productList,
-  handleAddProduct,
-  handleRemoveProduct,
-}) {
+export default function LeftSection({ productList, handleAddProduct }) {
   const [value, setValue] = useState(2);
 
   const handleChange = (event, newValue) => {
@@ -60,121 +56,111 @@ export default function LeftSection({
     handleAddProduct(product);
   };
 
+
   return (
-    <Box
-      sx={{
-        // flexGrow: 1,
-        bgcolor: "background.paper",
-        display: "flex",
-        height: "100vh",
-        width: "100%",
-        padding: 3,
-      }}
-    >
-      <Grid container>
-        <Grid item xs={2}>
-          <Tabs
-            orientation="vertical"
-            value={value}
-            onChange={handleChange}
-            aria-label="Vertical tabs example"
-            sx={{ borderRight: 1, borderColor: "divider" }}
+    <Grid container sx={{ width: "100%" }} p={2}>
+      <Grid item>
+        <Tabs
+          orientation="vertical"
+          value={value}
+          onChange={handleChange}
+          aria-label="Vertical tabs example"
+          sx={{ borderRight: 1, borderColor: "divider" }}
+        >
+          <Typography variant="h5" color="primary" align="left">
+            Filter
+          </Typography>
+          <Typography
+            variant="body1"
+            color="secondary"
+            align="left"
+            sx={{ fontWeight: 700 }}
           >
-            <Typography variant="h5" color="primary" align="left">
-              Filter
-            </Typography>
-            <Typography
-              variant="body1"
-              color="secondary"
-              align="left"
-              sx={{ fontWeight: 700 }}
-            >
-              Gender
-            </Typography>
-            <Tab label="Men" />
-            <Tab label="Female" />
-            <Tab label="Children" />
-            <Typography
-              variant="body1"
-              color="secondary"
-              align="left"
-              sx={{ fontWeight: 700 }}
-            >
-              Top
-            </Typography>
-            <Tab label="T-shirt" />
-            <Tab label="Hoodie" />
-            <Tab label="Jacket" />
-            <Typography
-              variant="body1"
-              color="secondary"
-              align="left"
-              sx={{ fontWeight: 700 }}
-            >
-              Bottom
-            </Typography>
-            <Tab label="Jane" />
-            <Tab label="Sort" />
-            <Tab label="Trouser" />
-          </Tabs>
-        </Grid>
-        <Grid item xs={8}>
-          <TabPanel
-            value={value}
-            index={2}
-            productList={productList}
-            onAddProduct={onAddProduct}
-          />
-          <TabPanel
-            value={value}
-            index={3}
-            productList={productList}
-            onAddProduct={onAddProduct}
-          />
-          <TabPanel
-            value={value}
-            index={4}
-            productList={productList}
-            onAddProduct={onAddProduct}
-          />
-          <TabPanel
-            value={value}
-            index={6}
-            productList={productList}
-            onAddProduct={onAddProduct}
-          />
-          <TabPanel
-            value={value}
-            index={7}
-            productList={productList}
-            onAddProduct={onAddProduct}
-          />
-          <TabPanel
-            value={value}
-            index={8}
-            productList={productList}
-            onAddProduct={onAddProduct}
-          />
-          <TabPanel
-            value={value}
-            index={10}
-            productList={productList}
-            onAddProduct={onAddProduct}
-          />
-          <TabPanel
-            value={value}
-            index={11}
-            productList={productList}
-            onAddProduct={onAddProduct}
-          />
-          <TabPanel
-            value={value}
-            index={12}
-            productList={productList}
-            onAddProduct={onAddProduct}
-          />
-        </Grid>
+            Gender
+          </Typography>
+          <Tab label="Men" />
+          <Tab label="Female" />
+          <Tab label="Children" />
+          <Typography
+            variant="body1"
+            color="secondary"
+            align="left"
+            sx={{ fontWeight: 700 }}
+          >
+            Top
+          </Typography>
+          <Tab label="T-shirt" />
+          <Tab label="Hoodie" />
+          <Tab label="Jacket" />
+          <Typography
+            variant="body1"
+            color="secondary"
+            align="left"
+            sx={{ fontWeight: 700 }}
+          >
+            Bottom
+          </Typography>
+          <Tab label="Jean" />
+          <Tab label="Sort" />
+          <Tab label="Trouser" />
+        </Tabs>
       </Grid>
-    </Box>
+      <Grid item xs={7}>
+        <TabPanel
+          value={value}
+          index={2}
+          productList={productList}
+          onAddProduct={onAddProduct}
+        />
+        <TabPanel
+          value={value}
+          index={3}
+          productList={productList}
+          onAddProduct={onAddProduct}
+        />
+        <TabPanel
+          value={value}
+          index={4}
+          productList={productList}
+          onAddProduct={onAddProduct}
+        />
+        <TabPanel
+          value={value}
+          index={6}
+          productList={productList}
+          onAddProduct={onAddProduct}
+        />
+        <TabPanel
+          value={value}
+          index={7}
+          productList={productList}
+          onAddProduct={onAddProduct}
+        />
+        <TabPanel
+          value={value}
+          index={8}
+          productList={productList}
+          onAddProduct={onAddProduct}
+        />
+        <TabPanel
+          value={value}
+          index={10}
+          productList={productList}
+          onAddProduct={onAddProduct}
+        />
+        <TabPanel
+          value={value}
+          index={11}
+          productList={productList}
+          onAddProduct={onAddProduct}
+        />
+        <TabPanel
+          value={value}
+          index={12}
+          productList={productList}
+          onAddProduct={onAddProduct}
+        />
+      </Grid>
+    </Grid>
   );
 }

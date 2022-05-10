@@ -17,8 +17,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-// import { selectStaff } from "../appSlice";
-import HomeIcon from '@mui/icons-material/Home';
+import { selectToken, setOpenLogin, setToken } from "../appSlice";
+import HomeIcon from "@mui/icons-material/Home";
+import LoginIcon from "@mui/icons-material/Login";
+
 const options = [
   {
     icon: <HomeIcon />,
@@ -52,8 +54,10 @@ export default function HeaderNavigation({}) {
   });
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+  const token = useSelector(selectToken);
   // const staff = useSelector(selectStaff);
-  console.log(location.pathname.split("/")[1]);
+  // console.log(location.pathname.split("/")[1]);
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -69,9 +73,12 @@ export default function HeaderNavigation({}) {
     navigate(URL);
   };
 
-  const handleLogout = () => {
-    // localStorage.removeItem("token");
-    navigate("/");
+  const handleClickLoginAndOut = () => {
+    if (token) {
+      dispatch(setToken(null));
+    } else {
+      dispatch(setOpenLogin(true));
+    }
   };
   const list = () => (
     <Box
@@ -82,9 +89,6 @@ export default function HeaderNavigation({}) {
     >
       <List>
         <ListItem>
-          {/* <ListItemIcon>
-            <img src={staff.avatar} alt="avatar" width="50" height="50" />
-          </ListItemIcon> */}
           <ListItemText primary={"shopka"} />
         </ListItem>
       </List>
@@ -98,11 +102,9 @@ export default function HeaderNavigation({}) {
       </List>
       <Divider />
       <List>
-        <ListItem button onClick={() => handleLogout()}>
-          <ListItemIcon>
-            <LogoutIcon />
-          </ListItemIcon>
-          <ListItemText primary={"Log out"} />
+        <ListItem button onClick={() => handleClickLoginAndOut()}>
+          <ListItemIcon>{token ? <LogoutIcon /> : <LoginIcon />}</ListItemIcon>
+          <ListItemText primary={token ? "Log out" : "Log in"} />
         </ListItem>
       </List>
     </Box>

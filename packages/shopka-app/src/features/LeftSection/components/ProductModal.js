@@ -18,6 +18,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "70%",
+  maxWidth: "700px",
   bgcolor: "background.paper",
   borderRadius: "8px",
   boxShadow: 24,
@@ -36,8 +37,8 @@ export default function ProductModal({
   listPrices,
   onClickAddToCard,
 }) {
-  const [size, setSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
+  const [size, setSize] = useState(sizes[0]);
+  const [selectedColor, setSelectedColor] = useState(colors[0]);
 
   const handleSize = (event, newAlignment) => {
     setSize(newAlignment);
@@ -55,6 +56,7 @@ export default function ProductModal({
       size,
       selectedColor,
       price,
+      size,
     });
   };
 
@@ -95,10 +97,13 @@ export default function ProductModal({
               </Typography>
             </Grid>
             <Grid item xs={12}>
+              <Typography variant="body1" align="left">
+                Description:
+              </Typography>
               <Typography
-                variant="body2"
+                variant="body1"
                 align="left"
-                sx={{ color: color.grey[500] }}
+                sx={{ fontWeight: 700, color: color.grey[500] }}
               >
                 {description}
               </Typography>

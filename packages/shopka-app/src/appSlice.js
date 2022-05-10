@@ -11,6 +11,8 @@ const initialState = {
   },
   disabledCheckOut: false,
   orderId: null,
+  token: null,
+  openLogin: false,
 };
 
 export const appSlice = createSlice({
@@ -65,6 +67,12 @@ export const appSlice = createSlice({
     setOrderId: (state, action) => {
       state.orderId = action.payload;
     },
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
+    setOpenLogin: (state, action) => {
+      state.openLogin = action.payload;
+    },
   },
 });
 
@@ -77,6 +85,8 @@ export const {
   removeProduct,
   setDisabledCheckOut,
   setOrderId,
+  setToken,
+  setOpenLogin,
 } = appSlice.actions;
 
 export const selectLoading = (state) => state.app.loading;
@@ -85,5 +95,7 @@ export const selectIsAlert = (state) => state.app.isAlert;
 export const selectDisabledCheckOut = (state) => state.app.disabledCheckOut;
 export const selectOrderId = (state) => state.app.orderId;
 export const selectProductCards = (state) => state.app.productCards;
+export const selectToken = (state) => state.app.token;
+export const selectOpenLogin = (state) => state.app.openLogin;
 
 export default appSlice.reducer;

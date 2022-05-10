@@ -34,17 +34,9 @@ export default function ProductCard({ product, onAddProduct }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [isAvailable, setAvailable] = useState(true);
-  const onClickAddToCard = (e, props) => {
+  const onClickAddToCard = (e, data) => {
     e.stopPropagation();
-    onAddProduct({
-      name,
-      description,
-      price,
-      image,
-      type,
-      number,
-      id,
-    });
+    onAddProduct({ ...data });
   };
 
   const writerDescription = (description) => {
