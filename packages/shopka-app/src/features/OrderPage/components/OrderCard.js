@@ -40,6 +40,14 @@ export default function OrderCard({
 
   return (
     <>
+      {productCards.length > 0 && (
+        <Divider sx={{ margin: "16px" }}>
+          <Typography variant="body1" sx={{ color: color.grey[500] }}>
+            Products
+          </Typography>
+        </Divider>
+      )}
+
       <Grid
         container
         pt={3}
@@ -221,35 +229,6 @@ export default function OrderCard({
           )}
         </Grid>
       </Grid>
-
-      {productCards.length !== 0 && (
-        <>
-          <Divider sx={{ margin: "16px" }}>
-            <Typography variant="body1" sx={{ color: color.grey[500] }}>
-              Checkout
-            </Typography>
-          </Divider>
-          <Grid
-            container
-            spacing={2}
-            justifyContent="flex-end"
-            alignItems="center"
-            mt={3}
-          >
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleClickCheckout}
-              >
-                Check Out
-              </Button>
-            </Grid>
-          </Grid>
-        </>
-      )}
-
-      {/* <Popup open={open} handleClose={handleClose} /> */}
     </>
   );
 }

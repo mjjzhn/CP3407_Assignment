@@ -14,6 +14,7 @@ import {
   setToken,
 } from "./appSlice";
 import Login from "./features/Login";
+import TabContainer from "./features/TabContainer";
 
 function App() {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ function App() {
         <Route exact path="/home" element={<Container />} />
         <Route
           path="/cart"
-          element={<OrderPage productCards={productCards} />}
+          element={<TabContainer productCards={productCards} />}
         />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>

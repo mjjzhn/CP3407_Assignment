@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Box, Grid } from "@mui/material";
 import OrderCard from "./components/OrderCard";
 import orderApi from "../../api/orderApi";
-import Header from "../../components/Header";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setLoading,
@@ -14,15 +13,16 @@ import {
   addProduct,
   removeProduct,
   selectToken,
-  setOpenLogin
+  setOpenLogin,
+  setPaidProductCard,
+  removeAllProductCard,
+  setStatus,
 } from "../../appSlice";
 import Spinner from "../../components/Spinner";
 import AlertNotification from "../../components/Alert";
-import Login from "../Login";
+import Payment from "./components/Payment";
 
-export default function OrderPage({ productCards }) {
-
-
+export default function OrderPage({ productCards, changeTab }) {
   const dispatch = useDispatch();
   const loading = useSelector(selectLoading);
   const msg = useSelector(selectMsg);
@@ -33,7 +33,7 @@ export default function OrderPage({ productCards }) {
     if (!token) {
       dispatch(setOpenLogin(true));
     }
-  },[token]);
+  }, [token]);
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -76,21 +76,39 @@ export default function OrderPage({ productCards }) {
     };
     postData();
   };
+  const [disablePayment, setDisablePayment] = useState(true);
+
+  const handleSubmit = (data) => {
+    dispatch(setPaidProductCard({ ...productCards }));
+    dispatch(setStatus("speding"));
+    dispatch(removeAllProductCard());
+    changeTab(1);
+  };
+
+  useEffect(() => {
+    if (Object.keys(productCards).length > 0) {
+      setDisablePayment(false);
+    } else {
+      setDisablePayment(true);
+    }
+  }, [productCards]);
 
   return (
     <>
-      <Header />
       {token && (
-        <Grid container direction="column" p={3}>
-          <Grid item sx={12}>
-            <OrderCard
-              productCards={productCards}
-              onCheckout={handleCheckout}
-              handleAddProduct={handleAddProduct}
-              handleRemoveProduct={handleRemoveProduct}
-            />
+        <>
+          <Payment disablePayment={disablePayment} onSubmit={handleSubmit} />
+          <Grid container direction="column" p={3}>
+            <Grid item sx={12}>
+              <OrderCard
+                productCards={productCards}
+                onCheckout={handleCheckout}
+                handleAddProduct={handleAddProduct}
+                handleRemoveProduct={handleRemoveProduct}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        </>
       )}
     </>
   );

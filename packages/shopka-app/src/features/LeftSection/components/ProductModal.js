@@ -101,9 +101,9 @@ export default function ProductModal({
                 Description:
               </Typography>
               <Typography
-                variant="body1"
+                variant="body2"
                 align="left"
-                sx={{ fontWeight: 700, color: color.grey[500] }}
+                sx={{ color: color.grey[500] }}
               >
                 {description}
               </Typography>

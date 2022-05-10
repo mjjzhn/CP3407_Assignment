@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   productCards: [],
+  paidProductCards: [],
   isPaid: false,
   loading: false,
   msg: "",
@@ -13,6 +14,7 @@ const initialState = {
   orderId: null,
   token: null,
   openLogin: false,
+  status: null,
 };
 
 export const appSlice = createSlice({
@@ -73,6 +75,16 @@ export const appSlice = createSlice({
     setOpenLogin: (state, action) => {
       state.openLogin = action.payload;
     },
+    setPaidProductCard: (state, action) => {
+      const { productCards } = state;
+      state.paidProductCards = productCards;
+    },
+    removeAllProductCard: (state, action) => {
+      state.productCards = [];
+    },
+    setStatus: (state, action) => {
+      state.status = action.payload;
+    },
   },
 });
 
@@ -87,6 +99,9 @@ export const {
   setOrderId,
   setToken,
   setOpenLogin,
+  setPaidProductCard,
+  removeAllProductCard,
+  setStatus,
 } = appSlice.actions;
 
 export const selectLoading = (state) => state.app.loading;
@@ -97,5 +112,7 @@ export const selectOrderId = (state) => state.app.orderId;
 export const selectProductCards = (state) => state.app.productCards;
 export const selectToken = (state) => state.app.token;
 export const selectOpenLogin = (state) => state.app.openLogin;
+export const selectPaidProductCards = (state) => state.app.paidProductCards;
+export const selectStatus = (state) => state.app.status;
 
 export default appSlice.reducer;
