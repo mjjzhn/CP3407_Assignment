@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import OrderCard from "./components/OrderCard";
 import orderApi from "../../api/orderApi";
+import Header from "../../components/Header";
 
 export default function OrderPage({ productCards }) {
   const [open, setOpen] = useState(false);
@@ -42,10 +43,13 @@ export default function OrderPage({ productCards }) {
   };
 
   return (
+    <>
+    <Header />
     <Grid container direction="column" alignItems="center" pt={3}>
       <Grid item>
         <OrderCard productCards={productCards} onCheckout={handleCheckout} />
       </Grid>
     </Grid>
+    </>
   );
 }

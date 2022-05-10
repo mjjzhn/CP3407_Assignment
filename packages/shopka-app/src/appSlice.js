@@ -84,5 +84,6 @@ export const selectMsg = (state) => state.app.msg;
 export const selectIsAlert = (state) => state.app.isAlert;
 export const selectDisabledCheckOut = (state) => state.app.disabledCheckOut;
 export const selectOrderId = (state) => state.app.orderId;
+export const selectProductCards = (state) => state.app.productCards;
 
 export default appSlice.reducer;

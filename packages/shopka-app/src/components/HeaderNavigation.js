@@ -18,8 +18,14 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 // import { selectStaff } from "../appSlice";
-
+import HomeIcon from '@mui/icons-material/Home';
 const options = [
+  {
+    icon: <HomeIcon />,
+    name: "Home",
+    path: "/home",
+    description: "View all products in cart",
+  },
   {
     icon: <FormatListBulletedIcon />,
     name: "My Cart",
