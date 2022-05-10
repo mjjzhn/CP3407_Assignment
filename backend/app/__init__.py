@@ -34,9 +34,15 @@ def create_app(config_class=Config):
 
     from app.admin import bp as admin_bp
     app.register_blueprint(admin_bp, url_prefix='/admin')
+    
+    from app.customer import bp as customer_bp
+    app.register_blueprint(customer_bp, url_prefix='/customer')
 
     from app.menu import bp as menu_bp
     app.register_blueprint(menu_bp, url_prefix='/menu')
+    
+    from app.order import bp as order_bp
+    app.register_blueprint(order_bp, url_prefix='/order')
 
     if not app.debug and not app.testing:
         

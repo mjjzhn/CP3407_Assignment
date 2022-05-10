@@ -1,8 +1,26 @@
 from app.auth import bp
 from flask import jsonify, request
+from functools import wraps
 
 from app.models import Customer
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, verify_jwt_in_request,get_jwt
+from app import db, models
+from app.errors import bad_request
+
+def customer_required():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            verify_jwt_in_request()
+            claims = get_jwt()
+            if not claims["is_administrator"]:
+                return fn(*args, **kwargs)
+            else:
+                return jsonify(msg="Customer only!"), 403
+            
+        return decorator
+    return wrapper
+
 
 @bp.route('customer/token', methods=['POST'])
 def create_customer_token():
@@ -19,5 +37,27 @@ def create_customer_token():
         return {"msg": "Wrong username or password"}, 401
 
     access_token = create_access_token(identity=username, additional_claims={"is_administrator": False})
-    response = {"access_token":access_token}
+    response = {"access_token":access_token,"customer":customer.to_dict()}
     return response
+
+@bp.route('customer/register', methods=['POST'])
+def register_customer():
+    data = request.get_json() or {}
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+
+    if Customer.query.filter_by(username= username).first():
+        return {"msg": "choose another username"}, 401
+    customer = Customer(username= username)
+    customer.set_password(password)
+    if "customer_name" in data:
+        customer.staffname = data["customer_name"]
+    else:
+        customer.staffname = "New customer"
+    if "avatar" in data:
+        customer.avatar = data["avatar"]
+    else:
+        customer.avatar = "https://www.nicepng.com/png/detail/115-1150176_employee-avatar-png-transparent-image-avatar-male.png"
+    db.session.add(customer)
+    db.session.commit()
+    return {"msg": "register successfully"}, 200
