@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   IconButton,
+  Typography
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
@@ -89,7 +90,9 @@ export default function HeaderNavigation({}) {
     >
       <List>
         <ListItem>
-          <ListItemText primary={"shopka"} />
+          <Typography variant="h6" sx={{ color: "#2979FF" }}>
+            Welcome {token|| "Customer"}
+          </Typography>
         </ListItem>
       </List>
       <List>

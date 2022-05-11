@@ -29,7 +29,7 @@ const checkType = (value) => {
 function TabPanel({ children, value, index, productList, onAddProduct }) {
   const code = checkType(value);
   return (
-    <Box role="tabpanel" hidden={value !== index}>
+    <Box hidden={value !== index}>
       <Grid container spacing={2} pl={2}>
         {mockProducts.map((product, index) => {
           if (product.item_category.includes(code)) {
@@ -58,7 +58,7 @@ export default function LeftSection({ productList, handleAddProduct }) {
 
 
   return (
-    <Grid container sx={{ width: "100%" }} p={2}>
+    <Grid container p={2}>
       <Grid item>
         <Tabs
           orientation="vertical"
@@ -105,7 +105,7 @@ export default function LeftSection({ productList, handleAddProduct }) {
           <Tab label="Trouser" />
         </Tabs>
       </Grid>
-      <Grid item xs={7}>
+      <Grid item xs={10}>
         <TabPanel
           value={value}
           index={2}

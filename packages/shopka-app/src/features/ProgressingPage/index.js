@@ -86,13 +86,21 @@ export default function LinearWithValueLabel() {
                 </Typography>
               </Typography>
             </Grid>
+
             <Grid item xs={12}>
-              <LinearProgress variant="determinate" value={progress} />
+              <Card variant="outlined">
+                <CardContent>
+                  <LinearProgress
+                    variant="determinate"
+                    value={progress}
+                    sx={{ mt: 1 }}
+                  />
+                </CardContent>
+              </Card>
             </Grid>
 
             {paidProductCards.map((paidProductCard, index) => (
               <>
-                {console.log(index < paidProductCards.length - 1)}
                 <Grid item xs={12} key={index} container>
                   <Grid item xs={5}>
                     <img

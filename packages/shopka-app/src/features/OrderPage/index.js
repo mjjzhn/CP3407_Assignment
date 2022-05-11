@@ -80,7 +80,7 @@ export default function OrderPage({ productCards, changeTab }) {
 
   const handleSubmit = (data) => {
     dispatch(setPaidProductCard({ ...productCards }));
-    dispatch(setStatus("speding"));
+    dispatch(setStatus("spending"));
     dispatch(removeAllProductCard());
     changeTab(1);
   };
