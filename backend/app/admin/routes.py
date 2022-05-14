@@ -19,10 +19,10 @@ def my_profile():
     )
 
 
-@bp.route('/update', methods=["POST"])
+@bp.route('/update', methods=["PUT"])
 @admin_required()
 def update_profile():
-    if request.method == 'POST':
+    if request.method == 'PUT':
         data = request.get_json() or {}
         if 'username' in data and data['username'] != current_user.username and \
             Admin.query.filter_by(username=data['username']).first():
