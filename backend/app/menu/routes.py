@@ -1,10 +1,11 @@
 from app.menu import bp
 from flask import jsonify
 from app.models import Item
-from flask import request
+from flask import request,current_app
 from app.errors import bad_request
 from app import db
 from flask import url_for
+from app import cloudinary
 
 @bp.route('/items', methods =["GET"])
 def get_items():
@@ -21,8 +22,9 @@ def get_item(id):
 def update_item(id):
     #now I will interact with json, However, when implement cms, everthing need to be change to form data
     item = Item.query.get_or_404(id)
-    data = request.get_json() or {}
-    # data = request.form.to_dict() or {}
+    # data = request.get_json() or {}
+    data = request.form.to_dict() or {}
+    # data = request.form.to_dict() or {} 
     if  'id' in data and data['id'] != item.id:
         return bad_request('You can not change id of this item')
     
@@ -30,15 +32,54 @@ def update_item(id):
         if Item.query.filter_by(item_name=data['item_name']).first():
             return bad_request('Name duplicate detected! Please use another name!')
 
-    if "item_category" in data:
-        for attribute in ["gender","top","bottom"]:
-            if attribute not in data["item_category"]:
-                return bad_request(f"please provide {attribute} for item_category")
+    #these lines under here is no proper to update or add item
+    # if "item_category" in data:
+    #     for attribute in ["gender","top","bottom"]:
+    #         if attribute not in data["item_category"]:
+    #             return bad_request(f"please provide {attribute} for item_category")
+
+    if any(i in data for i in ["gender","top","bottom"]) and not all(i in data for i in ["gender","top","bottom"]):
+        return bad_request(f"please provide gender,top and bottom for item_category")
     
+    #for float attribute
+    if "item_price" in data:
+        data["item_price"] = float(data["item_price"])
+    #for integer attribute    
+    for field in ["num_of_item","discount"]:
+        if field in data:
+            data[field]= int(data[field])
+    #for boolean value
+    for field in ["is_hot","available"]:
+        if field in data:
+            data[field]= bool(data[field])
+    #for field that have a list format
+    for attribute in ["item_sizes","colors","unavailable_sizes"]:
+        if attribute in data:
+            data[attribute]=data[attribute].split(',')
+        else:
+            data[attribute]=[]
     if "unavailable_sizes" in data:
         if data["unavailable_sizes"]:
-            if not Item.validate_size(data["unavailable_sizes"],item.item_sizes):
+            if not Item.validate_size(data["unavailable_sizes"],data["item_sizes"]):
                 return bad_request('Please provide proper unavailable_sizes'+ str(data["item_sizes"]))
+                
+    #adding item_image_link
+    upload_result = None
+    if "item_image_link" in request.files:
+        file_to_upload = request.files['item_image_link']
+        if file_to_upload:
+                upload_result = cloudinary.uploader.upload(file_to_upload)
+                current_app.logger.info(upload_result)
+                data['item_image_link']=upload_result["secure_url"]
+    
+    data["item_category"]=dict()
+    if "gender" in data:
+        for attribute in ["gender","top","bottom"]:
+            if data[attribute]:
+                item_list= data[attribute].split(',')
+                data["item_category"][attribute]=item_list
+            else:
+                data["item_category"][attribute]=[]
     
     item.from_dict(data)
     db.session.commit()
@@ -68,28 +109,66 @@ def create_item():
         return response
     else:
         has_id_field = False
-        data = request.get_json() or {}
-        for field in ['item_name',"item_category","item_image_link", "item_description","item_price","item_sizes","num_of_item","colors"]:
+        # data = request.get_json() or {}
+        # return request.form
+        data = request.form.to_dict() or {}
+        for field in ['item_name',"item_description","item_price","item_sizes","num_of_item","colors"]:
             if field not in data:
                 return bad_request('must include '+field+' fields') 
         if Item.query.filter_by(item_name=data['item_name']).first():
             return bad_request('Name duplicate detected! Please use another name!')
         
-        if "item_category" in data:
-            for attribute in ["gender","top","bottom"]:
-                if attribute not in data["item_category"]:
-                    return bad_request(f"please provide {attribute} for item_category")
-                
+        for attribute in ["gender","top","bottom"]:
+            if attribute not in data:
+                return bad_request(f"please provide {attribute} for item_category")
+        
+        #for float attribute
+        if "item_price" in data:
+            data["item_price"] = float(data["item_price"])
+        #for integer attribute    
+        for field in ["num_of_item","discount"]:
+            if field in data:
+                data[field]= int(data[field])
+        #for boolean value
+        for field in ["is_hot","available"]:
+            if field in data:
+                data[field]= bool(data[field])
+        #for field that have a list format
+        for attribute in ["item_sizes","colors","unavailable_sizes"]:
+            if attribute in data:
+                data[attribute]=data[attribute].split(',')
+            else:
+                data[attribute]=[]
         if "unavailable_sizes" in data:
             if data["unavailable_sizes"]:
                 if not Item.validate_size(data["unavailable_sizes"],data["item_sizes"]):
                     return bad_request('Please provide proper unavailable_sizes'+ str(data["item_sizes"]))
+                
+        #adding item_image_link
+        upload_result = None
+        if "item_image_link" in request.files:
+            file_to_upload = request.files['item_image_link']
+            if file_to_upload:
+                upload_result = cloudinary.uploader.upload(file_to_upload)
+                current_app.logger.info(upload_result)
+                data['item_image_link']=upload_result["secure_url"]
+        else:
+            return bad_request('Please provide an image for the product')
+        
+        data["item_category"] = dict()
+        for attribute in ["gender","top","bottom"]:
+            if data[attribute]:
+                item_list= data[attribute].split(',')
+                data["item_category"][attribute]=item_list
+            else:
+                data["item_category"][attribute]=[]
         
         if 'id' in data:
             has_id_field =True
         item = Item()
         if has_id_field:
-            data.pop('id')
+            data.pop('id')  
+        
         item.from_dict(data)
         db.session.add(item)
         db.session.commit()
@@ -113,16 +192,20 @@ def create_multiple_item():
         if Item.query.filter_by(item_name=data['item_name']).first():
             return bad_request('Name duplicate detected! Please use another name!')
             
-        if "item_category" in data:
-            for attribute in ["gender","top","bottom"]:
-                if attribute not in data["item_category"]:
-                    return bad_request(f"please provide {attribute} for item_category")
-                    
+        #these lines under here is no proper to update or add item
+        for attribute in ["gender","top","bottom"]:
+            if attribute not in data["item_category"]:
+                return bad_request(f"please provide {attribute} for item_category") 
+                
         if "unavailable_sizes" in data:
             if data["unavailable_sizes"]:
                 if not Item.validate_size(data["unavailable_sizes"],data["item_sizes"]):
                     return bad_request('Please provide proper unavailable_sizes'+ str(data["item_sizes"]))
-            
+        
+        for attribute in ["gender","top","bottom"]:
+            if attribute not in data["item_category"]:
+                return bad_request(f"please provide {attribute} for item_category")
+        
         if 'id' in data:
             has_id_field =True
         item = Item()
@@ -133,4 +216,3 @@ def create_multiple_item():
     
     db.session.commit()
     return f"just add {len(request.get_json())}"   
-        
