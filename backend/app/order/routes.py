@@ -42,7 +42,7 @@ def create_order():
     db.session.commit()
     for item in data["items"]:
         new_order.add_item(item["item_id"],item["quantity"])
-    
+    db.session.commit()
     return jsonify(new_order.to_dict())
 
 @bp.route('/<int:id>', methods =["PUT"])
@@ -85,6 +85,7 @@ def adjust_order(id):
 @bp.route('/<int:id>', methods =["DELETE"])
 # @admin_required()
 def remove_order(id):
+    id = int(id)
     current_order = Order.query.get_or_404(id)
     for order_item in current_order.order_items:
         db.session.delete(order_item)
@@ -95,6 +96,7 @@ def remove_order(id):
 
 @bp.route('/<int:id>/nextStep', methods =["PUT"])
 def move_order_status(id):
+    id = int(id)
     current_order = Order.query.get_or_404(id)
     position = 0
     for i in range(len(Order.status)):
