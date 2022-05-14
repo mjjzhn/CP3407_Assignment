@@ -6,6 +6,7 @@ from app.errors import bad_request
 from app import db, models
 from app.models import Customer, Order, Order_item, Item
 
+#this file is for control user settings.
 
 @bp.route('')
 @customer_required()
