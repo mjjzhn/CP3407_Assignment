@@ -39,7 +39,6 @@ def create_order():
     new_order = Order(customer_id=data["customer_id"])
     new_order.set_status_order_received()
     db.session.add(new_order)
-    db.session.commit()
     for item in data["items"]:
         new_order.add_item(item["item_id"],item["quantity"])
     db.session.commit()
