@@ -1,6 +1,6 @@
 from functools import wraps
 from app.auth import bp
-
+from app import db, jwt
 from flask_jwt_extended import verify_jwt_in_request,get_jwt, create_access_token
 from flask import jsonify, request
 from app.models import Admin
