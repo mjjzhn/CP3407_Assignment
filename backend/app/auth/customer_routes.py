@@ -51,9 +51,9 @@ def register_customer():
     customer = Customer(username= username)
     customer.set_password(password)
     if "customer_name" in data:
-        customer.staffname = data["customer_name"]
+        customer.customer_name = data["customer_name"]
     else:
-        customer.staffname = "New customer"
+        customer.customer_name = "New customer"
     if "avatar" in data:
         customer.avatar = data["avatar"]
     else:
