@@ -15,6 +15,7 @@ def my_profile():
 @bp.route('/update', methods=["POST"])
 @customer_required()
 def update_profile():
+    #updating task will be changed to form data, now we use json for test
     if request.method == 'POST':
         data = request.get_json() or {}
         if 'username' in data and data['username'] != current_user.username and \
@@ -33,6 +34,11 @@ def update_profile():
             response["is_password_updated"] = True
         return jsonify(response)
 
+@bp.route('/favorite', methods=["GET"])
+@customer_required()
+def get_favourite_items():
+    return jsonify(current_user.get_favourite())
+
 @bp.route('/favorite/<id>', methods=["POST"])
 @customer_required()
 def add_to_favourite(id):
@@ -43,9 +49,12 @@ def add_to_favourite(id):
 @bp.route('/favorite/<id>', methods=["DELETE"])
 @customer_required()
 def remove_from_favourite(id):
-    item = Item.query.get_or_404(id)
+    id= int(id)
+    # item = Item.query.get_or_404(id)
     current_user.remove_from_favourite(id)
     return jsonify(current_user.get_favourite())
+
+
 
 # @bp.route('/check_out', methods=["POST"])#check_out
 # @customer_required

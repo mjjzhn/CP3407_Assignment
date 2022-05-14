@@ -79,10 +79,8 @@ class Customer(db.Model):
         db.session.commit()
     
     def remove_from_favourite(self,item_id):
-        if item_id not in self.favorite_list:
-            pass
-        else:
-            new_list= list(self.favorite_list)
+        new_list= list(self.favorite_list)
+        if item_id in new_list:
             new_list.remove(item_id)
             self.favorite_list =new_list
         db.session.commit()
@@ -182,10 +180,11 @@ class Item(APIMixin, db.Model):
             ###########
             "is_hot": self.is_hot,
             "available":self.available,
-            "colors":self.colors,
-            '_links':{
-                'self': url_for('menu.get_item', id=self.id)
-            }
+            "colors":self.colors
+            # ,
+            # '_links':{
+            #     'self': url_for('menu.get_item', id=self.id)
+            # }
         }
         return data
     
