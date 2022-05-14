@@ -6,7 +6,7 @@ from flask import jsonify,request, current_app
 from app import db
 from app.models import Admin
 from app.errors import bad_request
-
+from app import cloudinary
 
 
 @bp.route('')
@@ -23,7 +23,8 @@ def my_profile():
 @admin_required()
 def update_profile():
     if request.method == 'PUT':
-        data = request.get_json() or {}
+        # data = request.get_json() or {}
+        data = request.form.to_dict() or {}
         if 'username' in data and data['username'] != current_user.username and \
             Admin.query.filter_by(username=data['username']).first():
             return bad_request('please use a different username')
@@ -32,6 +33,18 @@ def update_profile():
                 return bad_request("Please provide your current password")
         if 'currentPassword' in data and not current_user.check_password(data["currentPassword"]):
             return bad_request("Current password incorrect")
+         
+        #change avatar
+        current_app.logger.info('in admin/update route')
+        upload_result = None
+        if "avatar" in request.files:
+            file_to_upload = request.files['avatar']
+            current_app.logger.info('%s file_to_upload', file_to_upload)
+            if file_to_upload:
+                upload_result = cloudinary.uploader.upload(file_to_upload)
+                current_app.logger.info(upload_result)
+                data['avatar']=upload_result["secure_url"]
+        
         current_user.from_dict(data)
         db.session.commit()
         response = current_user.to_dict()

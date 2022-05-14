@@ -61,10 +61,19 @@ class Customer(db.Model):
             "username": self.username,
             "orders": self.get_orders(),
             "favourite_items":self.get_favourite(),
-            "favourite":self.favorite_list
+            "favourite":self.favorite_list,
+            "avatar": self.avatar,
+            "customer_name":self.customer_name
         }
         return data
 
+    def from_dict(self,data):
+        for field in ['username','customer_name','avatar']:
+            if field in data:
+                setattr(self, field, data[field])
+        if 'password' in data:
+            self.set_password(data['password'])
+    
     def add_to_favorite(self,item_id):
         item_id=int(item_id)
         if self.favorite_list:

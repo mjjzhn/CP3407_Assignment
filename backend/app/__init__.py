@@ -6,7 +6,9 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 import logging
 from logging.handlers import RotatingFileHandler
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 from flask_jwt_extended import jwt_required
 
@@ -28,6 +30,9 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     CORS(app, support_credentials=True)
+    
+    #config cloudinary
+    cloudinary.config(cloud_name = config_class.CLOUD_NAME, api_key=config_class.API_KEY, api_secret=config_class.API_SECRET)
 
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
