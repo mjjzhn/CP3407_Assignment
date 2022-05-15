@@ -134,17 +134,17 @@ class APIMixin(object):
 
 class Item(APIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True) #
-    item_name = db.Column(db.String(64), index=True, unique=True)#
-    
-    #delete these two fields
-    item_category =db.Column(db.JSON) 
+    item_name = db.Column(db.String(64), index=True, unique=True)
+    item_category =db.Column(db.JSON)
     item_image_link = db.Column(db.String(140))
     item_description= db.Column(db.String(140))
     item_price = db.Column(db.Float(16))
     discount = db.Column(db.Integer, default=0)
-    num_of_item = db.Column(db.Integer)
-    item_sizes = db.Column(db.JSON)
-    unavailable_sizes=db.Column(db.JSON) #store in json file
+    #now we gonna change our logic for item sizes
+    M_stock= db.Column(db.Integer)
+    L_stock= db.Column(db.Integer)
+    XL_stock= db.Column(db.Integer)
+    XXL_stock= db.Column(db.Integer)
     is_hot = db.Column(db.Boolean, default=False)
     available = db.Column(db.Boolean, default=True)
     colors = db.Column(db.JSON)
@@ -160,15 +160,15 @@ class Item(APIMixin, db.Model):
     #refers to this link: https://iora.online/sg/size-guide/
     available_size_lists= ["M","L","XL","XXL"]
     
-    @staticmethod
-    def validate_size(sizes, size_list):
-        for size in sizes:
-            if size not in size_list:
-                return False
-        return True
-
-    def add_item_to_order(self):
-        self.num_of_item -= 1
+    def add_item_to_order(self, size):
+        if size=="M":
+            self.M_stock -=1
+        elif size=="L":
+            self.L_stock -=1
+        elif size=="XL":
+            self.XL_stock -=1
+        else:
+            self.XXL_stock -=1
 
     def __repr__(self):
         return '<Item {}>'.format(self.item_name)
@@ -182,11 +182,10 @@ class Item(APIMixin, db.Model):
             "item_description": self.item_description,
             "item_price":self.item_price,
             "discount": self.discount,
-            "num_of_item":self.num_of_item,
-            #############
-            "item_sizes":self.item_sizes,
-            "unavailable_sizes":self.unavailable_sizes,
-            ###########
+            "M_stock":self.M_stock,
+            "L_stock":self.L_stock,
+            "XL_stock":self.XL_stock,
+            "XXL_stock":self.XXL_stock,
             "is_hot": self.is_hot,
             "available":self.available,
             "colors":self.colors
@@ -198,18 +197,9 @@ class Item(APIMixin, db.Model):
         return data
     
     def from_dict(self,data):
-        for field in ['item_name',"item_image_link", "item_description","item_price","discount","num_of_item"]:
+        for field in ['item_name',"item_image_link", "item_description","item_price","discount","M_stock","L_stock","XL_stock","XXL_stock"]:
             if field in data:
-                setattr(self, field, data[field])
-        
-        for field in ["item_sizes", "unavailable_sizes"]:
-            if field in data:
-                setattr(self, field, data[field])
-                
-        for field in ["item_sizes","unavailable_sizes","colors"]:
-            if field in data:
-                setattr(self, field, data[field])
-        
+                setattr(self, field, data[field])        
         if "item_category" in data:
             category_list= list()
             for attribute in data["item_category"]:
@@ -244,8 +234,10 @@ class Order(APIMixin, db.Model):
     def __repr__(self):
         return '<Order No. {}>'.format(self.id)
 
-    def add_item(self, item_id, quantity):
-        order_item = Order_item(order_id=self.id, item_id=item_id, quantity=quantity)
+    def add_item(self, item_id, quantity,item_size):
+        order_item = Order_item(order_id=self.id, item_id=item_id, quantity=quantity, item_size=item_size)
+        ordered_item= Item.query.filter_by(item_id=item_id)
+        ordered_item.add_item_to_order(item_size)
         db.session.add(order_item)
         db.session.commit()
 
@@ -298,6 +290,7 @@ class Order(APIMixin, db.Model):
             item_to_quan = {}
             item_to_quan["item"] = order_item.get_item().to_dict()
             item_to_quan["quantity"] = order_item.quantity
+            item_to_quan["size"]=order_item.item_size
             items.append(item_to_quan)
             total = total + order_item.get_item().get_price()*order_item.quantity #new defined function in item model
 
@@ -314,6 +307,7 @@ class Order(APIMixin, db.Model):
 class Order_item(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey("order.id"), primary_key=True)
     item_id = db.Column(db.Integer, db.ForeignKey("item.id"), primary_key=True)
+    item_size= db.Column(db.String(4))
     quantity = db.Column(db.Integer)
 
     def get_item(self):

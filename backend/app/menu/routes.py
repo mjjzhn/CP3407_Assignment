@@ -18,7 +18,7 @@ def get_item(id):
     return jsonify(Item.query.get_or_404(id).to_dict())
 
 @bp.route('/items/<int:id>', methods =["PUT"])
-#authentication control here
+#authentication control here 
 def update_item(id):
     #now I will interact with json, However, when implement cms, everthing need to be change to form data
     item = Item.query.get_or_404(id)
@@ -45,7 +45,7 @@ def update_item(id):
     if "item_price" in data:
         data["item_price"] = float(data["item_price"])
     #for integer attribute    
-    for field in ["num_of_item","discount"]:
+    for field in ["M_stock","L_stock","XL_stock","XXL_stock","discount"]:
         if field in data:
             data[field]= int(data[field])
     #for boolean value
@@ -53,15 +53,11 @@ def update_item(id):
         if field in data:
             data[field]= bool(data[field])
     #for field that have a list format
-    for attribute in ["item_sizes","colors","unavailable_sizes"]:
+    for attribute in ["colors"]:
         if attribute in data:
             data[attribute]=data[attribute].split(',')
         else:
             data[attribute]=[]
-    if "unavailable_sizes" in data:
-        if data["unavailable_sizes"]:
-            if not Item.validate_size(data["unavailable_sizes"],data["item_sizes"]):
-                return bad_request('Please provide proper unavailable_sizes'+ str(data["item_sizes"]))
                 
     #adding item_image_link
     upload_result = None
@@ -98,10 +94,11 @@ def create_item():
             "item_image_link": "image_url",
             "item_description": "short description for item",
             "item_price":"price in Float",
-            "num_of_item": "integer",
-            "item_sizes": Item.available_size_lists,
+            "M_stock": "stock of M size",
+            "L_stock": "stock of L size",
+            "XL_stock": "stock of XL size",
+            "XXL_stock": "stock of XXL size",
             "discount": "discount percentage",
-            "unavailable_sizes":Item.available_size_lists,
             "is_hot": "is the item a trend or not",
             "available": "boolean"
         }
@@ -112,7 +109,7 @@ def create_item():
         # data = request.get_json() or {}
         # return request.form
         data = request.form.to_dict() or {}
-        for field in ['item_name',"item_description","item_price","item_sizes","num_of_item","colors"]:
+        for field in ['item_name',"item_description","item_price","M_stock","L_stock","XL_stock","XXL_stock","colors"]:
             if field not in data:
                 return bad_request('must include '+field+' fields') 
         if Item.query.filter_by(item_name=data['item_name']).first():
@@ -126,7 +123,7 @@ def create_item():
         if "item_price" in data:
             data["item_price"] = float(data["item_price"])
         #for integer attribute    
-        for field in ["num_of_item","discount"]:
+        for field in ["M_stock","L_stock","XL_stock","XXL_stock","discount"]:
             if field in data:
                 data[field]= int(data[field])
         #for boolean value
@@ -134,15 +131,11 @@ def create_item():
             if field in data:
                 data[field]= bool(data[field])
         #for field that have a list format
-        for attribute in ["item_sizes","colors","unavailable_sizes"]:
+        for attribute in ["colors"]:
             if attribute in data:
                 data[attribute]=data[attribute].split(',')
             else:
                 data[attribute]=[]
-        if "unavailable_sizes" in data:
-            if data["unavailable_sizes"]:
-                if not Item.validate_size(data["unavailable_sizes"],data["item_sizes"]):
-                    return bad_request('Please provide proper unavailable_sizes'+ str(data["item_sizes"]))
                 
         #adding item_image_link
         upload_result = None
@@ -186,7 +179,7 @@ def create_item():
 def create_multiple_item():
     for data in request.get_json() or []:
         has_id_field = False
-        for field in ['item_name',"item_category","item_image_link", "item_description","item_price","item_sizes","num_of_item","colors"]:
+        for field in ['item_name',"item_category","item_image_link", "item_description","item_price","M_stock","L_stock","XL_stock","XXL_stock","colors"]:
             if field not in data:
                 return bad_request('must include '+field+' fields') 
         if Item.query.filter_by(item_name=data['item_name']).first():
@@ -196,11 +189,6 @@ def create_multiple_item():
         for attribute in ["gender","top","bottom"]:
             if attribute not in data["item_category"]:
                 return bad_request(f"please provide {attribute} for item_category") 
-                
-        if "unavailable_sizes" in data:
-            if data["unavailable_sizes"]:
-                if not Item.validate_size(data["unavailable_sizes"],data["item_sizes"]):
-                    return bad_request('Please provide proper unavailable_sizes'+ str(data["item_sizes"]))
         
         for attribute in ["gender","top","bottom"]:
             if attribute not in data["item_category"]:

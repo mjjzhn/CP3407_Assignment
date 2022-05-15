@@ -30,9 +30,11 @@ def create_order():
         return bad_request("please give {} an integer value!".format("customer_id"))
     
     for item in data["items"]:
-        for field in ["item_id","quantity"]:
+        for field in ["item_id","quantity", "item_size"]:
             if field not in item:
                 return bad_request("must include {} field.".format(field))
+            
+        for field in ["item_id","quantity"]:
             if not isinstance(item[field], int):
                 return bad_request("please give {} an integer value!".format(field))
     
@@ -40,7 +42,7 @@ def create_order():
     new_order.set_status_order_received()
     db.session.add(new_order)
     for item in data["items"]:
-        new_order.add_item(item["item_id"],item["quantity"])
+        new_order.add_item(item["item_id"],item["quantity"],item["item_size"])
     db.session.commit()
     return jsonify(new_order.to_dict())
 
@@ -65,19 +67,20 @@ def adjust_order(id):
     
     if "items" in data:
         for item in data["items"]:
-            for field in ["item_id","quantity"]:
+            for field in ["item_id","quantity","item_size"]:
                 if field not in item:
-                    return bad_request("must include item_id and quantity")
+                    return bad_request(f"must include {field}")
+            for field in ["item_id","quantity"]:
                 if not isinstance(item[field], int):
                     return bad_request("please give {} an integer value!".format(field))
                 
         if "add_item" in data and data["add_item"]:
             for item in data["items"]:
-                current_order.add_item(item["item_id"],item["quantity"])
+                current_order.add_item(item["item_id"],item["quantity"],item["item_size"])
         else:
             current_order.remove_all_item()
             for item in data["items"]:
-                current_order.add_item(item["item_id"],item["quantity"])
+                current_order.add_item(item["item_id"],item["quantity"],item["item_size"])
     return jsonify(current_order.to_dict())
         
         
