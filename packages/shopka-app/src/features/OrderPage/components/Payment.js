@@ -22,16 +22,22 @@ export default function Payment({ disablePayment, onSubmit }) {
     if (value.length > 0) {
       newValue = value.replace(/[^0-9]/g, "");
     }
-
     return newValue;
   };
 
   const expiryDate = (value) => {
     let confirmNumber = validationNumber(value);
     let newValue = "";
-    if (confirmNumber.length > 2) {
-      newValue =
-        confirmNumber.substring(0, 2) + "/" + confirmNumber.substring(2);
+
+    if (confirmNumber.length > 4) {
+      confirmNumber = confirmNumber.slice(0, 3);
+    }
+
+    if (confirmNumber.length > 0) {
+      newValue = confirmNumber.substring(0, 2);
+      if (confirmNumber.length > 2) {
+        newValue += "/" + confirmNumber.substring(2, 4);
+      }
     } else {
       newValue = confirmNumber;
     }
@@ -39,17 +45,41 @@ export default function Payment({ disablePayment, onSubmit }) {
   };
 
   const cardNumber = (value) => {
+    const numeralString = value.replace(/\s/g, "");
+    let confirmNumber = validationNumber(numeralString);
+    let newValue = "";
+
+    if (confirmNumber.length > 16) {
+      confirmNumber = confirmNumber.slice(0, 15);
+    }
+
+    if (confirmNumber.length > 0) {
+      newValue = confirmNumber.substring(0, 4);
+      if (confirmNumber.length > 4) {
+        newValue += " " + confirmNumber.substring(4, 8);
+      }
+      if (confirmNumber.length > 8) {
+        newValue += " " + confirmNumber.substring(8, 12);
+      }
+      if (confirmNumber.length > 12) {
+        newValue += " " + confirmNumber.substring(12, 16);
+      }
+    } else {
+      newValue = confirmNumber;
+    }
+    return newValue;
+  };
+
+  const CVV = (value) => {
     let confirmNumber = validationNumber(value);
     let newValue = "";
+
+    if (confirmNumber.length > 3) {
+      confirmNumber = confirmNumber.slice(0, 3);
+    }
+
     if (confirmNumber.length > 0) {
-      newValue =
-        confirmNumber.substring(0, 4) +
-        " " +
-        confirmNumber.substring(4, 8) +
-        " " +
-        confirmNumber.substring(8, 12) +
-        " " +
-        confirmNumber.substring(12);
+      newValue = confirmNumber.substring(0, 3);
     } else {
       newValue = confirmNumber;
     }
@@ -160,7 +190,7 @@ export default function Payment({ disablePayment, onSubmit }) {
                   <TextField
                     label="CVV"
                     variant="standard"
-                    value={validationNumber(value)}
+                    value={CVV(value)}
                     onChange={onChange}
                     fullWidth
                     error={!!error}

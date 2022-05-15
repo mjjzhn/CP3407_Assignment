@@ -30,6 +30,7 @@ import {
   removeProduct,
   selectToken,
   setToken,
+  setOpenLogin,
 } from "../../appSlice";
 import Spinner from "../../components/Spinner";
 import AlertNotification from "../../components/Alert";
@@ -56,8 +57,7 @@ export default function Container({}) {
       dispatch(setMsg("Product is added"));
       dispatch(setIsAlert({ isAlert: true, code: 200 }));
     } else {
-      dispatch(setMsg("Please login"));
-      dispatch(setIsAlert({ isAlert: true, code: 400 }));
+      dispatch(setOpenLogin(true));
     }
   };
 
@@ -67,8 +67,7 @@ export default function Container({}) {
       dispatch(setMsg("Product is removed"));
       dispatch(setIsAlert({ isAlert: true, code: 200 }));
     } else {
-      dispatch(setMsg("Please login"));
-      dispatch(setIsAlert({ isAlert: true, code: 400 }));
+      dispatch(setOpenLogin(true));
     }
   };
 

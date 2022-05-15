@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import OrderCard from "./components/OrderCard";
 import orderApi from "../../api/orderApi";
 import { useSelector, useDispatch } from "react-redux";
@@ -79,6 +79,7 @@ export default function OrderPage({ productCards, changeTab }) {
   const [disablePayment, setDisablePayment] = useState(true);
 
   const handleSubmit = (data) => {
+    console.log(data);
     dispatch(setPaidProductCard({ ...productCards }));
     dispatch(setStatus("spending"));
     dispatch(removeAllProductCard());
@@ -95,7 +96,7 @@ export default function OrderPage({ productCards, changeTab }) {
 
   return (
     <>
-      {token && (
+      {token ? (
         <>
           <Payment disablePayment={disablePayment} onSubmit={handleSubmit} />
           <Grid container direction="column" p={3}>
@@ -109,6 +110,12 @@ export default function OrderPage({ productCards, changeTab }) {
             </Grid>
           </Grid>
         </>
+      ) : (
+        <Box p={3}>
+          <Typography variant="h4" color="error">
+            Please login to checkout
+          </Typography>
+        </Box>
       )}
     </>
   );

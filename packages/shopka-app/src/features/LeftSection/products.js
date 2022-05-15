@@ -198,7 +198,7 @@ export const mockProducts = [
     discount: null,
     id: 3,
     item_base_price: 25.5,
-    item_category: ["kid"],
+    item_category: ["kid", "jacket"],
     item_description:
       "Hallo-win color - Cotton-look AIRism fabric with an outdoorsy print.",
     item_image_link: Product16,
