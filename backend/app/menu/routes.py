@@ -52,12 +52,6 @@ def update_item(id):
     for field in ["is_hot","available"]:
         if field in data:
             data[field]= bool(data[field])
-    #for field that have a list format
-    for attribute in ["colors"]:
-        if attribute in data:
-            data[attribute]=data[attribute].split(',')
-        else:
-            data[attribute]=[]
                 
     #adding item_image_link
     upload_result = None
@@ -109,7 +103,7 @@ def create_item():
         # data = request.get_json() or {}
         # return request.form
         data = request.form.to_dict() or {}
-        for field in ['item_name',"item_description","item_price","M_stock","L_stock","XL_stock","XXL_stock","colors"]:
+        for field in ['item_name',"item_description","item_price","M_stock","L_stock","XL_stock","XXL_stock"]:
             if field not in data:
                 return bad_request('must include '+field+' fields') 
         if Item.query.filter_by(item_name=data['item_name']).first():
@@ -133,12 +127,6 @@ def create_item():
         for field in ["is_hot","available"]:
             if field in data:
                 data[field]= bool(data[field])
-        #for field that have a list format
-        for attribute in ["colors"]:
-            if attribute in data:
-                data[attribute]=data[attribute].split(',')
-            else:
-                data[attribute]=[]
                 
         #adding item_image_link
         upload_result = None
@@ -182,7 +170,7 @@ def create_item():
 def create_multiple_item():
     for data in request.get_json() or []:
         has_id_field = False
-        for field in ['item_name',"item_category","item_image_link", "item_description","item_price","M_stock","L_stock","XL_stock","XXL_stock","colors"]:
+        for field in ['item_name',"item_category","item_image_link", "item_description","item_price","M_stock","L_stock","XL_stock","XXL_stock"]:
             if field not in data:
                 return bad_request('must include '+field+' fields') 
         if Item.query.filter_by(item_name=data['item_name']).first():

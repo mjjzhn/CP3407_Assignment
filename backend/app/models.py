@@ -147,7 +147,6 @@ class Item(APIMixin, db.Model):
     XXL_stock= db.Column(db.Integer)
     is_hot = db.Column(db.Boolean, default=False)
     available = db.Column(db.Boolean, default=True)
-    colors = db.Column(db.JSON)
 
     # #the list of size for this item in ascending order. Format:"small large big"
     # size_list_dict ={}
@@ -188,8 +187,7 @@ class Item(APIMixin, db.Model):
             "XL_stock":self.XL_stock,
             "XXL_stock":self.XXL_stock,
             "is_hot": self.is_hot,
-            "available":self.available,
-            "colors":self.colors
+            "available":self.available
             # ,
             # '_links':{
             #     'self': url_for('menu.get_item', id=self.id)
@@ -203,7 +201,7 @@ class Item(APIMixin, db.Model):
         return data
     
     def from_dict(self,data):
-        for field in ['item_name',"item_image_link", "item_description","item_price","discount","M_stock","L_stock","XL_stock","XXL_stock","item_category","colors"]:
+        for field in ['item_name',"item_image_link", "item_description","item_price","discount","M_stock","L_stock","XL_stock","XXL_stock","item_category"]:
             if field in data:
                 setattr(self, field, data[field])        
         # if "item_category" in data:
@@ -236,9 +234,27 @@ class Order(APIMixin, db.Model):
     order_items = db.relationship('Order_item', backref='order', lazy='dynamic')
 
     status = ['order received', 'shipping', 'delivered', 'close']
+    unpaid_status="unpaid"
 
     def __repr__(self):
         return '<Order No. {}>'.format(self.id)
+    
+    def to_dict(self):
+        data = {
+            "id": self.id,
+            "customer_id": self.customer_id,
+            "order_status": self.order_status,
+            "timestamp": self.timestamp
+        }
+        items = []
+        total = 0
+        for order_item in self.order_items:
+            items.append(order_item.to_dict())
+            total = total + order_item.get_item().get_price()*order_item.quantity #new defined function in item model
+
+        data["items"] = items
+        data["total"] = total
+        return data
 
     def add_item(self, item_id, quantity,item_size):
         order_item = Order_item(order_id=self.id, item_id=item_id, quantity=quantity, item_size=item_size)
@@ -283,27 +299,6 @@ class Order(APIMixin, db.Model):
     def set_status_close(self):
         self.order_status = Order.status[4]
 
-    def to_dict(self):
-        data = {
-            "id": self.id,
-            "customer_id": self.customer_id,
-            "order_status": self.order_status,
-            "timestamp": self.timestamp
-        }
-        items = []
-        total = 0
-        for order_item in self.order_items:
-            item_to_quan = {}
-            item_to_quan["item"] = order_item.get_item().to_dict()
-            item_to_quan["quantity"] = order_item.quantity
-            item_to_quan["size"]=order_item.item_size
-            items.append(item_to_quan)
-            total = total + order_item.get_item().get_price()*order_item.quantity #new defined function in item model
-
-        data["items"] = items
-        data["total"] = total
-        return data
-
     def from_dict(self, data, add_item=False):
         for field in ['customer_id', 'order_status']:
             if field in data:
@@ -311,11 +306,28 @@ class Order(APIMixin, db.Model):
 
 
 class Order_item(db.Model):
-    order_id = db.Column(db.Integer, db.ForeignKey("order.id"), primary_key=True)
-    item_id = db.Column(db.Integer, db.ForeignKey("item.id"), primary_key=True)
-    item_size= db.Column(db.String(4))
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey("order.id"))
+    item_id = db.Column(db.Integer, db.ForeignKey("item.id"))
     quantity = db.Column(db.Integer)
+    #
+    item_size= db.Column(db.String(8))
+    item_price = db.Column(db.Float(16))
 
+    
+    def to_dict(self):
+        item= Item.query.get(self.item_id)
+        
+        data = {
+            "order_id": self.order_id, 
+            "item_name": item.item_name,
+            "item_id":self.item_id,
+            "quantity":self.quantity,
+            "item_size":self.item_size,
+            "item_price":self.item_price
+        }
+        return data
+    
     def get_item(self):
         return Item.query.filter_by(id=self.item_id).first()
 
