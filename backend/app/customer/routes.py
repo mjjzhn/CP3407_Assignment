@@ -49,14 +49,14 @@ def update_profile():
 @bp.route('/favorite', methods=["GET"])
 @customer_required()
 def get_favourite_items():
-    return jsonify(current_user.get_favourite())
+    return jsonify(current_user.get_favourite()),200
 
 @bp.route('/favorite/<id>', methods=["POST"])
 @customer_required()
 def add_to_favourite(id):
     item = Item.query.get_or_404(id)
     current_user.add_to_favorite(id)
-    return jsonify(current_user.get_favourite())
+    return jsonify(current_user.get_favourite()),200
 
 @bp.route('/favorite/<id>', methods=["DELETE"])
 @customer_required()
@@ -64,7 +64,7 @@ def remove_from_favourite(id):
     id= int(id)
     # item = Item.query.get_or_404(id)
     current_user.remove_from_favourite(id)
-    return jsonify(current_user.get_favourite())
+    return jsonify(current_user.get_favourite()),200
 
 
 
