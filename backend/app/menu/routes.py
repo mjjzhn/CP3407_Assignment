@@ -207,3 +207,11 @@ def create_multiple_item():
     
     db.session.commit()
     return f"just add {len(request.get_json())}"   
+
+#a test function to see what we get when taking an image from file
+@bp.route('/image', methods =["POST"])
+def get_image():
+    upload_file=request.files['item_image_link'].stream.read()
+    upload_result = cloudinary.uploader.upload(upload_file)
+    return upload_result["secure_url"]
+#therefore the binary files can be read by cloudbinary
