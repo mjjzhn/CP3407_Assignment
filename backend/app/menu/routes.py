@@ -67,9 +67,9 @@ def update_item(id):
                 upload_result = cloudinary.uploader.upload(file_to_upload)
                 current_app.logger.info(upload_result)
                 data['item_image_link']=upload_result["secure_url"]
-    
-    data["item_category"]=dict()
+     
     if "gender" in data:
+        data["item_category"]=dict()
         for attribute in ["gender","top","bottom"]:
             if data[attribute]:
                 item_list= data[attribute].split(',')
@@ -121,7 +121,10 @@ def create_item():
         
         #for float attribute
         if "item_price" in data:
-            data["item_price"] = float(data["item_price"])
+            try:
+                data["item_price"] = float(data["item_price"])
+            except ValueError:
+                return bad_request(f"please providea float value for item price")
         #for integer attribute    
         for field in ["M_stock","L_stock","XL_stock","XXL_stock","discount"]:
             if field in data:

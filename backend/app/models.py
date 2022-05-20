@@ -139,7 +139,7 @@ class Item(APIMixin, db.Model):
     item_image_link = db.Column(db.String(140))
     item_description= db.Column(db.String(140))
     item_price = db.Column(db.Float(16))
-    discount = db.Column(db.Integer, default=0)
+    discount = db.Column(db.Integer, default=0) #discount in percent
     #now we gonna change our logic for item sizes
     M_stock= db.Column(db.Integer)
     L_stock= db.Column(db.Integer)
@@ -181,6 +181,7 @@ class Item(APIMixin, db.Model):
             "item_image_link":self.item_image_link,
             "item_description": self.item_description,
             "item_price":self.item_price,
+            "item_current_price":self.get_price(),
             "discount": self.discount,
             "M_stock":self.M_stock,
             "L_stock":self.L_stock,
@@ -194,18 +195,23 @@ class Item(APIMixin, db.Model):
             #     'self': url_for('menu.get_item', id=self.id)
             # }
         }
+        item_category_list =list()
+        for sub in self.item_category:
+            for item in self.item_category[sub]:
+                item_category_list.append(item)
+        data["item_category_list"]= item_category_list
         return data
     
     def from_dict(self,data):
-        for field in ['item_name',"item_image_link", "item_description","item_price","discount","M_stock","L_stock","XL_stock","XXL_stock"]:
+        for field in ['item_name',"item_image_link", "item_description","item_price","discount","M_stock","L_stock","XL_stock","XXL_stock","item_category","colors"]:
             if field in data:
                 setattr(self, field, data[field])        
-        if "item_category" in data:
-            category_list= list()
-            for attribute in data["item_category"]:
-                for item in data["item_category"][attribute]:
-                    category_list.append(item)
-            setattr(self, "item_category", category_list)   
+        # if "item_category" in data:
+        #     category_list= list()
+        #     for attribute in data["item_category"]:
+        #         for item in data["item_category"][attribute]:
+        #             category_list.append(item)
+        #     setattr(self, "item_category", category_list)   
 
         if "available" in data:
             if isinstance(data["available"], bool):
@@ -216,7 +222,7 @@ class Item(APIMixin, db.Model):
 
     def get_price(self):
         if self.discount:
-            price = self.item_price - self.discount
+            price = self.item_price*(100-self.discount)/100
         else:
             price = self.item_price
         return price
