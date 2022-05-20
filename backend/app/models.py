@@ -87,6 +87,8 @@ class Customer(db.Model):
             self.favorite_list = [item_id]
         db.session.commit()
     
+    
+    
     def remove_from_favourite(self,item_id):
         new_list= list(self.favorite_list)
         if item_id in new_list:
@@ -159,16 +161,28 @@ class Item(APIMixin, db.Model):
     #refers to this link: https://iora.online/sg/size-guide/
     available_size_lists= ["M","L","XL","XXL"]
     
-    def add_item_to_order(self, size):
+    def add_item_to_order(self, size,quantity):
         if size=="M":
-            self.M_stock -=1
+            self.M_stock -=quantity
         elif size=="L":
-            self.L_stock -=1
+            self.L_stock -=quantity
         elif size=="XL":
-            self.XL_stock -=1
+            self.XL_stock -=quantity
         else:
-            self.XXL_stock -=1
-
+            self.XXL_stock -=quantity
+        db.session.commit()
+    
+    def plus_item_quantity(self,quantity,size):
+        if size=="M":
+            self.M_stock +=quantity
+        elif size=="L":
+            self.L_stock +=quantity
+        elif size=="XL":
+            self.XL_stock +=quantity
+        else:
+            self.XXL_stock +=quantity
+        db.session.commit()
+    
     def __repr__(self):
         return '<Item {}>'.format(self.item_name)
 
@@ -225,6 +239,16 @@ class Item(APIMixin, db.Model):
             price = self.item_price
         return price
 
+    def check_quantity_available(self,quantity,size):
+        if size=="M":
+            return (self.M_stock -quantity) >0
+        elif size=="L":
+            return (self.L_stock -quantity) >0
+        elif size=="XL":
+            return (self.XL_stock -quantity) >0
+        else:
+            return (self.XXL_stock -quantity) >0
+
 class Order(APIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
@@ -247,31 +271,25 @@ class Order(APIMixin, db.Model):
             "timestamp": self.timestamp
         }
         items = []
-        total = 0
+        total_amount = 0
         for order_item in self.order_items:
             items.append(order_item.to_dict())
-            total = total + order_item.get_item().get_price()*order_item.quantity #new defined function in item model
+            total_amount = total_amount + order_item.item_price*order_item.quantity 
 
         data["items"] = items
-        data["total"] = total
+        data["total_amount"] = total_amount
         return data
 
-    def add_item(self, item_id, quantity,item_size):
-        order_item = Order_item(order_id=self.id, item_id=item_id, quantity=quantity, item_size=item_size)
-        ordered_item= Item.query.filter_by(item_id=item_id)
-        ordered_item.add_item_to_order(item_size)
+    def add_item(self, item_id, quantity,item_size, item_price):
+        order_item = Order_item(order_id=self.id, item_id=item_id, quantity=quantity, item_size=item_size, item_price=item_price)
         db.session.add(order_item)
-        db.session.commit()
-
-    def remove_item(self, item_id):
-        order_items = Order_item.query.filter_by(order_id=self.id, item_id=item_id).all()
-        for order_item in order_items:
-            db.session.delete(order_item)
         db.session.commit()
 
     def remove_all_item(self):
         order_items = Order_item.query.filter_by(order_id=self.id).all()
         for order_item in order_items:
+            item= Item.query.filter_by(id=order_item.item_id).first()
+            item.plus_item_quantity(order_item.quantity, order_item.item_size) 
             db.session.delete(order_item)
         db.session.commit()
 
@@ -286,9 +304,18 @@ class Order(APIMixin, db.Model):
         for order_item in self.order_items:
             item_id_to_quantity[order_item.item_id] = order_item.quantity
         return item_id_to_quantity
+    
+    def set_status_order_unpaid(self):
+        self.order_status= Order.unpaid_status
+        db.session.commit()
 
     def set_status_order_received(self):
+        if self.order_status== Order.unpaid_status:
+            for order_item in self.order_items:
+                item= Item.query.filter_by(id=order_item.item_id).first()
+                item.add_item_to_order(order_item.item_size,order_item.quantity)
         self.order_status = Order.status[0]
+        db.session.commit()
 
     def set_status_shipping(self):
         self.order_status = Order.status[1]
