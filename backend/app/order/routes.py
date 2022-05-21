@@ -4,8 +4,10 @@ from app.models import Order, Item
 from flask import request
 from app.errors import bad_request
 from app import db,stripe
-from flask import url_for
+from flask import url_for,current_app
 from app.auth.admin_routes import admin_required
+from app.auth.customer_routes import customer_required
+from flask_jwt_extended import current_user
 
 @bp.route('', methods =["GET"])
 @admin_required()
@@ -18,11 +20,15 @@ def get_order(id):
     return jsonify(Order.query.get_or_404(id).to_dict())
 
 @bp.route('/create', methods =["POST"])
+@customer_required()
 def create_order():
     data = request.get_json() or {}
-    for field in ["items","customer_id"]:
+    for field in ["items"]:
         if field not in data:
             return bad_request("Must include the {} field".format(field))
+    if "customer_id" not in data:
+        data["customer_id"]= current_user.id
+    
     for field in ["total_amount"]:
         if field not in data:
             total_amount = 0
