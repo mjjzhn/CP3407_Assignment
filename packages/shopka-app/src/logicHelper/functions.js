@@ -99,16 +99,24 @@ export const CVV = (value) => {
 };
 
 export const checkValue = (value) => {
-    switch (value) {
-      case "spending":
-        return 25;
-      case "processing":
-        return 50;
-      case "ready":
-        return 75;
-      case "taken":
-        return 100;
-      default:
-        return 0;
-    }
-  };
+  switch (value) {
+    case "spending":
+      return 25;
+    case "processing":
+      return 50;
+    case "ready":
+      return 75;
+    case "taken":
+      return 100;
+    default:
+      return 0;
+  }
+};
+
+export const writerDescription = (description) => {
+  if (description.length > 85) {
+    return description.slice(0, 85) + "...";
+  } else {
+    return description;
+  }
+};

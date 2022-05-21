@@ -9,14 +9,14 @@ function TabPanel({ children, value, index, productList, onAddProduct }) {
   return (
     <Box hidden={value !== index}>
       <Grid container spacing={2} pl={2}>
-        {mockProducts.map((product, index) => {
-          if (product.item_category.includes(code)) {
-            return (
-              <Grid item key={index}>
-                <ProductCard product={product} onAddProduct={onAddProduct} />
-              </Grid>
-            );
-          }
+        {productList.map((product, index) => {
+          // if (product.item_category.includes(code)) {
+          return (
+            <Grid item key={index}>
+              <ProductCard product={product} onAddProduct={onAddProduct} />
+            </Grid>
+          );
+          // }
         })}
       </Grid>
     </Box>
@@ -25,15 +25,14 @@ function TabPanel({ children, value, index, productList, onAddProduct }) {
 
 export default function LeftSection({ productList, handleAddProduct }) {
   const [value, setValue] = useState(2);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const onAddProduct = (product) => {
+    console.log(product,"product");
     handleAddProduct(product);
   };
-
 
   return (
     <Grid container p={2}>

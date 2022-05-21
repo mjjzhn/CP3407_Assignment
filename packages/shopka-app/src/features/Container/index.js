@@ -57,13 +57,15 @@ export default function Container({}) {
 
   useEffect(() => {
     const getProduct = async () => {
+      dispatch(setLoading(true));
       try {
         const params = { };
         const response = await menuApi.get(params);
         setProductList(response.items);
-        console.log(response.items);
+        dispatch(setLoading(false));
       } catch (error) {
-        console.log("no products found", error);
+        // console.log("no products found", error);
+        dispatch(setLoading(false));
       }
     };
 

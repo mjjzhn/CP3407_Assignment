@@ -15,6 +15,8 @@ const initialState = {
   token: null,
   openLogin: false,
   status: null,
+  clientSecret: null,
+  customerId: null,
 };
 
 export const appSlice = createSlice({
@@ -85,6 +87,15 @@ export const appSlice = createSlice({
     setStatus: (state, action) => {
       state.status = action.payload;
     },
+    setClientSecret: (state, action) => {
+      state.clientSecret = action.payload;
+    },
+    removeClientSecret: (state, action) => {
+      state.clientSecret = null;
+    },
+    setCustomerId: (state, action) => {
+      state.customerId = action.payload;
+    },
   },
 });
 
@@ -102,6 +113,9 @@ export const {
   setPaidProductCard,
   removeAllProductCard,
   setStatus,
+  setClientSecret,
+  removeClientSecret,
+  setCustomerId,
 } = appSlice.actions;
 
 export const selectLoading = (state) => state.app.loading;
@@ -114,5 +128,7 @@ export const selectToken = (state) => state.app.token;
 export const selectOpenLogin = (state) => state.app.openLogin;
 export const selectPaidProductCards = (state) => state.app.paidProductCards;
 export const selectStatus = (state) => state.app.status;
+export const selectClientSecret = (state) => state.app.clientSecret;
+export const selectCustomerId = (state) => state.app.customerId;
 
 export default appSlice.reducer;

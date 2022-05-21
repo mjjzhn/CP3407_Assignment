@@ -12,7 +12,6 @@ import {
   Divider,
 } from "@mui/material";
 import numeral from "numeral";
-import Popup from "./Popup";
 import AddIcon from "@mui/icons-material/Add";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
@@ -28,15 +27,6 @@ export default function OrderCard({
   productCards.forEach((product) => {
     total += product.discountPrice * product.numberOrder;
   });
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const handleClickCheckout = () => {
-    handleOpen();
-    onCheckout(productCards);
-  };
 
   return (
     <>
@@ -138,7 +128,7 @@ export default function OrderCard({
                                 {product.name}
                               </Typography>
                             </Grid>
-                            <Grid item mt={2}>
+                            {/* <Grid item mt={2}>
                               <Typography variant="body1" align="left">
                                 Size:{" "}
                                 <Typography
@@ -163,7 +153,7 @@ export default function OrderCard({
                                   {product.selectedColor.toUpperCase()}
                                 </Typography>
                               </Typography>
-                            </Grid>
+                            </Grid> */}
                             <Grid item mt={1}>
                               <Typography variant="body1" align="left">
                                 Price:{" "}
