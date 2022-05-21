@@ -4,7 +4,7 @@ from flask import jsonify, request, current_app
 from flask_jwt_extended import current_user
 from app.errors import bad_request
 from app import db, models
-from app.models import Customer, Order, Order_item, Item
+from app.models import Customer, Order, Order_item, Item, Contact_form
 from app import cloudinary
 #this file is for control user settings.
 
@@ -74,7 +74,37 @@ def get_shopping_history():
     # return jsonify(data),200
     return jsonify(current_user.get_orders()),200
 
+@bp.route('/contact', methods=["POST"])
+@customer_required()
+def contact_to_shop():
+    data = request.form.to_dict() or {}
+    for field in ["email","message"]:
+        if field not in data:
+            return bad_request(f"Please include {field} field")
+    if "customer_id" not in data:
+        data["customer_id"] = current_user.id
+    if "full_name" not in data:
+        data["full_name"] = current_user.customer_name
+    if not isinstance(data["customer_id"], int):
+        return bad_request(f"Please provide an integer for {field} field")
+    
+    new_message = Contact_form()
+    new_message.from_dict(data)
+    db.session.add(new_message)
+    db.session.commit()
+    return jsonify(new_message.to_dict())
 
+@bp.route('/contact/get', methods=["GET"])
+@customer_required()
+def get_all_contacts():
+    data = Contact_form.to_collection_dict(current_user.contact_forms.all(), 'customer.get_all_contacts')
+    return jsonify(data),200 
+
+@bp.route('/contact/get/<id>', methods=["GET"])
+@customer_required()
+def get_contact(id):
+    return jsonify(current_user.contact_forms.filter_by(id=id).first().to_dict()),200 
+    
 # @bp.route('/check_out', methods=["POST"])#check_out
 # @customer_required
 # def check_out():

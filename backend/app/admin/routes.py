@@ -4,7 +4,7 @@ import json
 from app.auth.admin_routes import admin_required
 from flask import jsonify,request, current_app
 from app import db
-from app.models import Admin
+from app.models import Admin, Contact_form
 from app.errors import bad_request
 from app import cloudinary
 
@@ -51,3 +51,26 @@ def update_profile():
         if "password" in data:
             response["is_password_updated"] = True
         return jsonify(response)
+
+
+@bp.route('/contactforms', methods=["GET"])
+@admin_required()
+def get_all_message():
+    data = Contact_form.to_collection_dict(Contact_form.query.all(), 'order.get_orders')
+    return jsonify(data),200 
+
+@bp.route('/contactforms/<id>', methods=["GET"])
+@admin_required()
+def get_contact(id):
+    return jsonify(Contact_form.query.filter_by(id=id).first().to_dict()),200 
+
+@bp.route('/contactforms/<id>/response', methods=["POST"])
+@admin_required()
+def response_to_contact(id):
+    contact_form =Contact_form.query.filter_by(id=id).first()
+    data = request.get_json() or {}
+    if "response" not in data:
+        return bad_request("Please provide response!")
+    contact_form.response = data["response"]
+    db.session.commit()
+    return contact_form.to_dict(),200

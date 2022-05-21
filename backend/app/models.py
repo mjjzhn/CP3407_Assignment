@@ -9,6 +9,23 @@ import json
 from flask import jsonify
 
 
+
+
+
+class APIMixin(object):
+    @staticmethod
+    def to_collection_dict(query, endpoint, **kwargs):
+        data ={
+            'items': [item.to_dict() for item in query],
+            '_meta': {
+                'total_items': len(query)
+            },
+            '_links': {
+                'self': url_for(endpoint,**kwargs)
+            }
+        }
+        return data
+
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -51,6 +68,7 @@ class Customer(db.Model):
     customer_name=db.Column(db.String(64))
     avatar =db.Column(db.String(140))
     orders = db.relationship('Order', backref='customer', lazy='dynamic')
+    contact_forms =db.relationship('Contact_form', backref='customer', lazy='dynamic')
 
     def __repr__(self):
         return '<Customer {}>'.format(self.username)
@@ -120,22 +138,9 @@ class Customer(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-class APIMixin(object):
-    @staticmethod
-    def to_collection_dict(query, endpoint, **kwargs):
-        data ={
-            'items': [item.to_dict() for item in query],
-            '_meta': {
-                'total_items': len(query)
-            },
-            '_links': {
-                'self': url_for(endpoint,**kwargs)
-            }
-        }
-        return data
 
 class Item(APIMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True) #
+    id = db.Column(db.Integer, primary_key=True)
     item_name = db.Column(db.String(64), index=True, unique=True)
     item_category =db.Column(db.JSON)
     item_image_link = db.Column(db.String(140))
@@ -248,6 +253,37 @@ class Item(APIMixin, db.Model):
             return (self.XL_stock -quantity) >0
         else:
             return (self.XXL_stock -quantity) >0
+
+class Contact_form(APIMixin,db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    full_name=db.Column(db.String(32))
+    email=db.Column(db.String(32))
+    message=db.Column(db.String(140))
+    response=db.Column(db.String(140))
+    
+    def __repr__(self):
+        return f'<Contact_form {self.id}:Customer:"{self.full_name}">'
+    
+    def to_dict(self):
+        data={
+            "id": self.id,
+            "customer_id": self.customer_id,
+            "full_name":self.full_name,
+            "email":self.email,
+            "message":self.message,
+            "response":self.response
+        }
+        return data
+    
+    def from_dict(self,data):
+        for field in ['customer_id', 'full_name',"email","message"]:
+            if field in data:
+                setattr(self, field, data[field])
+    
+    def add_response(self,response):
+        self.response = response
+        db.session.commit()
 
 class Order(APIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

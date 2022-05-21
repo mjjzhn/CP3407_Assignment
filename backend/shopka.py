@@ -1,5 +1,5 @@
 from app import create_app,db
-from app.models import Admin, Customer, Item,Order,Order_item
+from app.models import Admin, Customer, Item,Order,Order_item, Contact_form
 app= create_app()
 
 #create flask shell to test python when developing
