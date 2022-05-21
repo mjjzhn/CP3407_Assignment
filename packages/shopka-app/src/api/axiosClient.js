@@ -4,7 +4,7 @@ import queryString from "query-string";
 // require("dotenv").config();
 
 const axiosClient = axios.create({
-  baseURL: `https://flask-pirnfood.herokuapp.com`,
+  baseURL: `https://flask-shopka.herokuapp.com`,
   headers: {
     "Content-Type": "application/json",
     // 'X-Requested-With': 'XMLHttpRequest',
@@ -13,6 +13,10 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 

@@ -2,43 +2,21 @@ import React, { useState, useEffect } from "react";
 import { Tab, Tabs, Typography, Box, Grid } from "@mui/material";
 import { mockProducts } from "./products";
 import ProductCard from "./components/ProductCard";
-
-const checkType = (value) => {
-  switch (value) {
-    case 2:
-      return "men";
-    case 3:
-      return "women";
-    case 4:
-      return "kid";
-    case 6:
-      return "t-shirt";
-    case 7:
-      return "hoodie";
-    case 8:
-      return "jacket";
-    case 10:
-      return "jean";
-    case 11:
-      return "sort";
-    case 12:
-      return "trouser";
-  }
-};
+import { checkType } from "../../logicHelper/functions";
 
 function TabPanel({ children, value, index, productList, onAddProduct }) {
   const code = checkType(value);
   return (
-    <Box role="tabpanel" hidden={value !== index}>
+    <Box hidden={value !== index}>
       <Grid container spacing={2} pl={2}>
-        {mockProducts.map((product, index) => {
-          if (product.item_category.includes(code)) {
-            return (
-              <Grid item key={index}>
-                <ProductCard product={product} onAddProduct={onAddProduct} />
-              </Grid>
-            );
-          }
+        {productList.map((product, index) => {
+          // if (product.item_category.includes(code)) {
+          return (
+            <Grid item key={index}>
+              <ProductCard product={product} onAddProduct={onAddProduct} />
+            </Grid>
+          );
+          // }
         })}
       </Grid>
     </Box>
@@ -47,18 +25,17 @@ function TabPanel({ children, value, index, productList, onAddProduct }) {
 
 export default function LeftSection({ productList, handleAddProduct }) {
   const [value, setValue] = useState(2);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const onAddProduct = (product) => {
+    console.log(product,"product");
     handleAddProduct(product);
   };
 
-
   return (
-    <Grid container sx={{ width: "100%" }} p={2}>
+    <Grid container p={2}>
       <Grid item>
         <Tabs
           orientation="vertical"
@@ -105,7 +82,7 @@ export default function LeftSection({ productList, handleAddProduct }) {
           <Tab label="Trouser" />
         </Tabs>
       </Grid>
-      <Grid item xs={7}>
+      <Grid item xs={10}>
         <TabPanel
           value={value}
           index={2}

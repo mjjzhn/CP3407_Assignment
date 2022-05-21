@@ -1,22 +1,24 @@
 import React, { useState } from "react";
-import {
-  Grid,
-  Typography,
-  Button,
-  TextField,
-  Box,
-  Tab,
-  Tabs,
-} from "@mui/material";
+import { Grid, Typography, Button, TextField, Box } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 
-export default function LoginForm({ onSubmit }) {
+export default function SignUpForm({ onSubmit }) {
   const { handleSubmit, control } = useForm();
+  const [isSame, setIsSame] = useState(true);
 
+  const checkValue = (data) => {
+    if (data.password === data.confPassword) {
+      onSubmit(data);
+    }
+    setIsSame(false);
+  };
+  
   return (
     <Grid item>
       <form
-        onSubmit={handleSubmit((data) => onSubmit({ ...data, type: "login" }))}
+        onSubmit={handleSubmit((data) =>
+          checkValue({ ...data, type: "signup" })
+        )}
       >
         <Grid
           container
@@ -67,6 +69,37 @@ export default function LoginForm({ onSubmit }) {
                 />
               )}
               rules={{ required: "Password is required" }}
+            />
+          </Grid>
+
+          <Grid item>
+            <Controller
+              name="confPassword"
+              control={control}
+              defaultValue="" // this will avoid uncontrolled to controlled input
+              render={({
+                field: { onChange, value, isTouched },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  label="Confirm Password"
+                  variant="standard"
+                  value={value}
+                  type="password"
+                  onChange={onChange}
+                  error={!!error || isTouched || !isSame}
+                  helperText={
+                    error
+                      ? error.message
+                      : !isSame
+                      ? "Password must match"
+                      : null
+                  }
+                />
+              )}
+              rules={{
+                required: "Password is required",
+              }}
             />
           </Grid>
 

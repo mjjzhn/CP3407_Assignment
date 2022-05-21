@@ -1,6 +1,5 @@
 import React from "react";
 import logo from "./logo.svg";
-import { Counter } from "./features/counter/Counter";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Container from "./features/Container";
@@ -12,9 +11,18 @@ import {
   selectOpenLogin,
   setOpenLogin,
   setToken,
+  setLoading,
+  setMsg,
+  setIsAlert,
+  setCustomerId,
 } from "./appSlice";
 import Login from "./features/Login";
 import TabContainer from "./features/TabContainer";
+import ManagerCMS from "./features/ManagerCMS";
+import Setting from "./features/Setting";
+import loginApi from "./api/loginApi";
+import signupApi from "./api/signupApi";
+import Payment from "./features/Payment";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,29 +33,49 @@ function App() {
   };
 
   const handleSubmit = (data) => {
-    dispatch(setToken("tuan"));
     dispatch(setOpenLogin(false));
-    // dispatch(setLoading(true));
+    dispatch(setLoading(true));
 
-    // const postData = async () => {
-    //   try {
-    //     const params = { username: data.userName, password: data.password };
-    //     const token = await loginApi.post(params).then(function (response) {
-    //       return response;
-    //     });
+    const Signup = async () => {
+      try {
+        const params = { username: data.userName, password: data.password };
+        const response = await signupApi.post(params).then(function (response) {
+          return response;
+        });
+        dispatch(setLoading(false));
+        dispatch(setMsg(response.msg));
+        dispatch(setLoading(false));
+        dispatch(setIsAlert({ isAlert: true, code: 200 }));
+      } catch (error) {
+        dispatch(setMsg(error.response.data.msg));
+        dispatch(setLoading(false));
+        dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
+      }
+    };
 
-    //     localStorage.setItem("token", `${token.access_token}`);
-    //     dispatch(setStaff(token.admin));
-    //     navigate("/home");
-    //     dispatch(setLoading(false));
-    //   } catch (error) {
-    //     dispatch(setMsg(error.response.data.msg));
-    //     dispatch(setLoading(false));
-    //     setOpenAlert(true);
-    //     dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
-    //   }
-    // };
-    // postData();
+    const Login = async () => {
+      try {
+        const params = { username: data.userName, password: data.password };
+        const token = await loginApi.post(params).then(function (response) {
+          return response;
+        });
+        localStorage.setItem("token", `${token.access_token}`);
+        localStorage.setItem("customerName", `${token.customer.customer_name}`);
+        dispatch(setCustomerId(token.customer.id));
+        dispatch(setLoading(false));
+      } catch (error) {
+        dispatch(setMsg(error.response.data.msg));
+        dispatch(setLoading(false));
+        setIsAlert(true);
+        dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
+      }
+    };
+
+    if (data.type === "login") {
+      Login();
+    } else if (data.type === "signup") {
+      Signup();
+    }
   };
 
   return (
@@ -59,6 +87,9 @@ function App() {
           path="/cart"
           element={<TabContainer productCards={productCards} />}
         />
+        <Route exact path="/cms" element={<ManagerCMS />} />
+        <Route exact path="/setting" element={<Setting />} />
+        <Route path="/payment" element={<Payment />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
 

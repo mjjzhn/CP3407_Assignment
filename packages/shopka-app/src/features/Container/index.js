@@ -1,20 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Grid,
-  IconButton,
-  Card,
-  Pagination,
-  Paper,
-  Avatar,
-  Tab,
-  Tabs,
-  Button,
-} from "@mui/material";
-import Home from "@mui/icons-material/Home";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import ListAltIcon from "@mui/icons-material/ListAlt";
 import menuApi from "../../../../shopka-app/src/api/menuApi";
 import Header from "../../components/Header";
 import LeftSection from "../LeftSection";
@@ -30,6 +14,7 @@ import {
   removeProduct,
   selectToken,
   setToken,
+  setOpenLogin,
 } from "../../appSlice";
 import Spinner from "../../components/Spinner";
 import AlertNotification from "../../components/Alert";
@@ -56,8 +41,7 @@ export default function Container({}) {
       dispatch(setMsg("Product is added"));
       dispatch(setIsAlert({ isAlert: true, code: 200 }));
     } else {
-      dispatch(setMsg("Please login"));
-      dispatch(setIsAlert({ isAlert: true, code: 400 }));
+      dispatch(setOpenLogin(true));
     }
   };
 
@@ -67,19 +51,21 @@ export default function Container({}) {
       dispatch(setMsg("Product is removed"));
       dispatch(setIsAlert({ isAlert: true, code: 200 }));
     } else {
-      dispatch(setMsg("Please login"));
-      dispatch(setIsAlert({ isAlert: true, code: 400 }));
+      dispatch(setOpenLogin(true));
     }
   };
 
   useEffect(() => {
     const getProduct = async () => {
+      dispatch(setLoading(true));
       try {
-        const params = { _limit: 10, _page: 1 };
-        const response = await menuApi.getAll(params);
+        const params = { };
+        const response = await menuApi.get(params);
         setProductList(response.items);
+        dispatch(setLoading(false));
       } catch (error) {
-        console.log("no products found", error);
+        // console.log("no products found", error);
+        dispatch(setLoading(false));
       }
     };
 

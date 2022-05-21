@@ -15,43 +15,27 @@ import {
 import numeral from "numeral";
 import { color } from "../../../styles/constants";
 import ProductModal from "./ProductModal";
+import { writerDescription } from "../../../logicHelper/functions";
 
 export default function ProductCard({ product, onAddProduct }) {
   const {
     name = product?.item_name,
     description = product?.item_description,
     image = product?.item_image_link,
-    type = Object.keys(product?.item_prices)[0],
-    number = product?.num_of_item,
-    price = Object.values(product?.item_prices)[0],
+    price = product?.item_current_price,
     listPrices = product?.item_prices,
-    id = product?.item_id,
-    sizes = product?.size_list,
-    colors = product?.color,
+    id = product?.id,
+    discountPrice = product?.discount,
+    isAvailable = product?.available,
   } = product;
-
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [isAvailable, setAvailable] = useState(true);
   const onClickAddToCard = (e, data) => {
     e.stopPropagation();
     onAddProduct({ ...data });
   };
 
-  const writerDescription = (description) => {
-    if (description.length > 85) {
-      return description.slice(0, 85) + "...";
-    } else {
-      return description;
-    }
-  };
-
-  useEffect(() => {
-    if (number === 0) {
-      setAvailable(false);
-    }
-  }, [number]);
 
   return (
     <>
@@ -98,8 +82,7 @@ export default function ProductCard({ product, onAddProduct }) {
         description={description}
         image={image}
         price={price}
-        colors={colors}
-        sizes={sizes}
+        id={id}
         handleClose={handleClose}
         open={open}
         onClickAddToCard={onClickAddToCard}
