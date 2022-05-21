@@ -17,3 +17,9 @@ class Config(object):
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or "hello-hacker-come-here-babe"
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+    
+    #cloudinary configuration
+    CLOUD_NAME = os.environ.get('CLOUD_NAME')
+    API_KEY =os.environ.get('API_KEY')
+    API_SECRET =os.environ.get('API_SECRET')
+    CLOUDINARY_URL =os.environ.get('CLOUDINARY_URL')

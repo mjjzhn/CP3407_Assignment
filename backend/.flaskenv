@@ -1,2 +1,1 @@
 FLASK_APP=shopka.py
-FLASK_ENV=development
