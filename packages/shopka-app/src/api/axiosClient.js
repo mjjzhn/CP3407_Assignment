@@ -4,7 +4,7 @@ import queryString from "query-string";
 // require("dotenv").config();
 
 const axiosClient = axios.create({
-  baseURL: `https://flask-pirnfood.herokuapp.com`,
+  baseURL: `https://flask-shopka.herokuapp.com`,
   headers: {
     "Content-Type": "application/json",
     // 'X-Requested-With': 'XMLHttpRequest',

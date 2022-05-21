@@ -2,29 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Tab, Tabs, Typography, Box, Grid } from "@mui/material";
 import { mockProducts } from "./products";
 import ProductCard from "./components/ProductCard";
-
-const checkType = (value) => {
-  switch (value) {
-    case 2:
-      return "men";
-    case 3:
-      return "women";
-    case 4:
-      return "kid";
-    case 6:
-      return "t-shirt";
-    case 7:
-      return "hoodie";
-    case 8:
-      return "jacket";
-    case 10:
-      return "jean";
-    case 11:
-      return "sort";
-    case 12:
-      return "trouser";
-  }
-};
+import { checkType } from "../../logicHelper/functions";
 
 function TabPanel({ children, value, index, productList, onAddProduct }) {
   const code = checkType(value);

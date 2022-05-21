@@ -13,21 +13,9 @@ import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPaidProductCards, selectStatus } from "../../appSlice";
 import numeral from "numeral";
+import { checkValue } from "../../logicHelper/functions";
 
-const checkValue = (value) => {
-  switch (value) {
-    case "spending":
-      return 25;
-    case "processing":
-      return 50;
-    case "ready":
-      return 75;
-    case "taken":
-      return 100;
-    default:
-      return 0;
-  }
-};
+
 
 export default function LinearWithValueLabel() {
   const [progress, setProgress] = useState(0);

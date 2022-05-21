@@ -15,6 +15,8 @@ import {
 } from "./appSlice";
 import Login from "./features/Login";
 import TabContainer from "./features/TabContainer";
+import ManagerCMS from "./features/ManagerCMS";
+import Setting from "./features/Setting";
 
 function App() {
   const dispatch = useDispatch();
@@ -59,6 +61,8 @@ function App() {
           path="/cart"
           element={<TabContainer productCards={productCards} />}
         />
+        <Route exact path="/cms" element={<ManagerCMS />} />
+        <Route exact path="/setting" element={<Setting />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
 

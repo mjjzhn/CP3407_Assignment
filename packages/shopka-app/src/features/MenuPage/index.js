@@ -18,7 +18,13 @@ export default function MenuPage({ productList, onAddProduct }) {
   const [page, setPage] = useState(1);
 
   const numberPage =
-    Math.round(numberProduct / 10) === 0 ? 1 : Math.round(numberProduct / 10);
+    Math.round(numberProduct % 10) !== 0
+      ? Math.round(numberProduct / 10) === 0
+        ? 1
+        : Math.round(numberProduct / 10) + 1
+      : Math.round(numberProduct / 10) === 0
+      ? 1
+      : Math.round(numberProduct / 10);
 
   const handleChangePage = (event, newValue) => {
     setPage(newValue);

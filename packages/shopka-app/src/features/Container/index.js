@@ -1,20 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  Grid,
-  IconButton,
-  Card,
-  Pagination,
-  Paper,
-  Avatar,
-  Tab,
-  Tabs,
-  Button,
-} from "@mui/material";
-import Home from "@mui/icons-material/Home";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import ListAltIcon from "@mui/icons-material/ListAlt";
 import menuApi from "../../../../shopka-app/src/api/menuApi";
 import Header from "../../components/Header";
 import LeftSection from "../LeftSection";
@@ -74,9 +58,10 @@ export default function Container({}) {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const params = { _limit: 10, _page: 1 };
-        const response = await menuApi.getAll(params);
+        const params = { };
+        const response = await menuApi.get(params);
         setProductList(response.items);
+        console.log(response.items);
       } catch (error) {
         console.log("no products found", error);
       }
