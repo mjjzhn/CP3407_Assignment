@@ -29,7 +29,7 @@ export default function OrderPage({ productCards, changeTab }) {
   const loading = useSelector(selectLoading);
   const msg = useSelector(selectMsg);
   const isAlert = useSelector(selectIsAlert);
-  const token = useSelector(selectToken);
+  const token = localStorage.getItem("token");
   const customerId = useSelector(selectCustomerId);
   const navigate = useNavigate();
 

@@ -59,9 +59,8 @@ function App() {
         const token = await loginApi.post(params).then(function (response) {
           return response;
         });
-
         localStorage.setItem("token", `${token.access_token}`);
-        dispatch(setToken(token.customer.customer_name));
+        localStorage.setItem("customerName", `${token.customer.customer_name}`);
         dispatch(setCustomerId(token.customer.id));
         dispatch(setLoading(false));
       } catch (error) {

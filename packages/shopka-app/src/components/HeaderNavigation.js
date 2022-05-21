@@ -9,14 +9,14 @@ import {
   ListItemIcon,
   ListItemText,
   IconButton,
-  Typography
+  Typography,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectToken, setOpenLogin, setToken } from "../appSlice";
 import HomeIcon from "@mui/icons-material/Home";
@@ -54,11 +54,9 @@ export default function HeaderNavigation({}) {
     left: false,
   });
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
-  const token = useSelector(selectToken);
-  // const staff = useSelector(selectStaff);
-  // console.log(location.pathname.split("/")[1]);
+  const token = localStorage.getItem("token");
+  const customerName = localStorage.getItem("customerName");
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -76,7 +74,12 @@ export default function HeaderNavigation({}) {
 
   const handleClickLoginAndOut = () => {
     if (token) {
-      dispatch(setToken(null));
+      localStorage.removeItem("token");
+      localStorage.removeItem("customerName");
+      localStorage.removeItem("orderID");
+      localStorage.removeItem("clientSecret");
+      dispatch(setToken(""));
+      navigate("/");
     } else {
       dispatch(setOpenLogin(true));
     }
@@ -91,7 +94,7 @@ export default function HeaderNavigation({}) {
       <List>
         <ListItem>
           <Typography variant="h6" sx={{ color: "#2979FF" }}>
-            Welcome {token|| "Customer"}
+            Welcome {customerName || "Customer"}
           </Typography>
         </ListItem>
       </List>
