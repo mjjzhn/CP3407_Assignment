@@ -155,6 +155,8 @@ def remove_order(id):
 def move_order_status(id):
     id = int(id)
     current_order = Order.query.get_or_404(id)
+    if current_order.order_status== Order.unpaid_status:
+        return bad_request("Please pay for this order")
     position = 0
     for i in range(len(Order.status)):
         if current_order.order_status == Order.status[i]:

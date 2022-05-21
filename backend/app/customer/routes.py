@@ -67,6 +67,13 @@ def remove_from_favourite(id):
     return jsonify(current_user.get_favourite()),200
 
 
+@bp.route('/orders', methods=["GET"])
+@customer_required()
+def get_shopping_history():
+    # data = Order.to_collection_dict(current_user.orders.all(), 'customer.get_shopping_history')
+    # return jsonify(data),200
+    return jsonify(current_user.get_orders()),200
+
 
 # @bp.route('/check_out', methods=["POST"])#check_out
 # @customer_required
