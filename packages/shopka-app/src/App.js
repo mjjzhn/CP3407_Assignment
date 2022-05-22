@@ -4,7 +4,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Container from "./features/Container";
 import ErrorPage from "./features/ErrorPage";
-import OrderPage from "./features/OrderPage";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectProductCards,
@@ -18,11 +17,12 @@ import {
 } from "./appSlice";
 import Login from "./features/Login";
 import TabContainer from "./features/TabContainer";
-import ManagerCMS from "./features/ManagerCMS";
 import Setting from "./features/Setting";
 import loginApi from "./api/loginApi";
 import signupApi from "./api/signupApi";
 import Payment from "./features/Payment";
+import ContactForm from "./features/ContactForm";
+import contactApi from "./api/contactApi";
 
 function App() {
   const dispatch = useDispatch();
@@ -33,7 +33,6 @@ function App() {
   };
 
   const handleSubmit = (data) => {
-    dispatch(setOpenLogin(false));
     dispatch(setLoading(true));
 
     const Signup = async () => {
@@ -62,6 +61,7 @@ function App() {
         localStorage.setItem("token", `${token.access_token}`);
         localStorage.setItem("customerName", `${token.customer.customer_name}`);
         dispatch(setCustomerId(token.customer.id));
+        dispatch(setToken(token.customer.favourite_items));
         dispatch(setLoading(false));
       } catch (error) {
         dispatch(setMsg(error.response.data.msg));
@@ -78,6 +78,31 @@ function App() {
     }
   };
 
+  const handleSubmitFormContact = (data) => {
+    dispatch(setLoading(true));
+    const sendContact = async () => {
+      try {
+        const params = {
+          email: data.email,
+          full_name: data.fullName,
+          message: data.message,
+        };
+        const response = await contactApi.post(params).then(function (response) {
+          return response;
+        });
+        dispatch(setLoading(false));
+        dispatch(setMsg(response.msg));
+        dispatch(setLoading(false));
+        dispatch(setIsAlert({ isAlert: true, code: 200 }));
+      } catch (error) {
+        dispatch(setMsg(error.message));
+        dispatch(setLoading(false));
+        dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
+      }
+    };
+    sendContact();
+  };
+
   return (
     <div className="App">
       <Routes>
@@ -87,9 +112,9 @@ function App() {
           path="/cart"
           element={<TabContainer productCards={productCards} />}
         />
-        <Route exact path="/cms" element={<ManagerCMS />} />
         <Route exact path="/setting" element={<Setting />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/contact" element={<ContactForm />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
 
@@ -98,6 +123,7 @@ function App() {
         handleClose={handleCloseLogin}
         onSubmit={handleSubmit}
       />
+      <ContactForm onSubmit={handleSubmitFormContact} />
     </div>
   );
 }

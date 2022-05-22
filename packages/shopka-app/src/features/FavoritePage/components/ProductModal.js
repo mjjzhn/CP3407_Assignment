@@ -54,17 +54,6 @@ export default function ProductModal({
     });
   };
 
-  const handleClickAddToFavorites = (e) => {
-    onAddToFavorites(e, {
-      name,
-      image,
-      description,
-      size,
-      price,
-      id,
-    });
-  };
-
   return (
     <Modal
       open={open}
@@ -140,34 +129,20 @@ export default function ProductModal({
               </Grid>
             </Grid>
           </Grid>
-          <Grid container item xs={12} spacing={0.5}>
-            <Grid item xs={6}>
-              <Button
-                startIcon={<FavoriteBorderIcon />}
-                variant="outlined"
-                color="error"
-                sx={{ height: "40px", width: "100%" }}
-                onClick={(e) => {
-                  handleClickAddToFavorites(e);
-                }}
-              >
-                <Typography variant="body2">Add to Favorite</Typography>
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                startIcon={<AddIcon />}
-                variant="contained"
-                //   disabled={!isAvailable}
-                color="primary"
-                sx={{ height: "40px", width: "100%" }}
-                onClick={(e) => {
-                  handleClickAddToCard(e);
-                }}
-              >
-                <Typography variant="body2">Add to Cart</Typography>
-              </Button>
-            </Grid>
+
+          <Grid item xs={12}>
+            <Button
+              startIcon={<AddIcon />}
+              variant="contained"
+              //   disabled={!isAvailable}
+              color="primary"
+              sx={{ height: "40px", width: "100%" }}
+              onClick={(e) => {
+                handleClickAddToCard(e);
+              }}
+            >
+              <Typography variant="body2">Add to Cart</Typography>
+            </Button>
           </Grid>
         </Grid>
       </Box>

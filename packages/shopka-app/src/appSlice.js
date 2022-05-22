@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   productCards: [],
+  favoritesCards: [],
   paidProductCards: [],
   isPaid: false,
   loading: false,
@@ -96,6 +97,12 @@ export const appSlice = createSlice({
     setCustomerId: (state, action) => {
       state.customerId = action.payload;
     },
+    setFavoritesCard: (state, action) => {
+      state.favoritesCards = action.payload;
+    },
+    removeFavoritesCard: (state, action) => {
+      state.favoritesCards = [];
+    },
   },
 });
 
@@ -116,6 +123,8 @@ export const {
   setClientSecret,
   removeClientSecret,
   setCustomerId,
+  setFavoritesCard,
+  removeFavoritesCard,
 } = appSlice.actions;
 
 export const selectLoading = (state) => state.app.loading;
@@ -130,5 +139,6 @@ export const selectPaidProductCards = (state) => state.app.paidProductCards;
 export const selectStatus = (state) => state.app.status;
 export const selectClientSecret = (state) => state.app.clientSecret;
 export const selectCustomerId = (state) => state.app.customerId;
+export const selectFavoritesCards = (state) => state.app.favoritesCards;
 
 export default appSlice.reducer;

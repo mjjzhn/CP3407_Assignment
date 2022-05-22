@@ -100,7 +100,7 @@ export const CVV = (value) => {
 
 export const checkValue = (value) => {
   switch (value) {
-    case "spending":
+    case "order received":
       return 25;
     case "processing":
       return 50;

@@ -33,7 +33,7 @@ export default function OrderCard({
       {productCards.length > 0 && (
         <Divider sx={{ margin: "16px" }}>
           <Typography variant="body1" sx={{ color: color.grey[500] }}>
-            Products
+            Order Products
           </Typography>
         </Divider>
       )}

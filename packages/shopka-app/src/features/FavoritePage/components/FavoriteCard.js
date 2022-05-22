@@ -17,7 +17,7 @@ import { color } from "../../../styles/constants";
 import ProductModal from "./ProductModal";
 import { writerDescription } from "../../../logicHelper/functions";
 
-export default function ProductCard({
+export default function FavoriteCard({
   product,
   onAddProduct,
   onAddToFavorites,

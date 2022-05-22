@@ -22,13 +22,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/Spinner";
 import AlertNotification from "../../components/Alert";
-// import Payment from "./components/Payment";
 
 export default function OrderPage({ productCards, changeTab }) {
   const dispatch = useDispatch();
-  const loading = useSelector(selectLoading);
-  const msg = useSelector(selectMsg);
-  const isAlert = useSelector(selectIsAlert);
   const token = localStorage.getItem("token");
   const customerId = useSelector(selectCustomerId);
   const navigate = useNavigate();
@@ -36,21 +32,12 @@ export default function OrderPage({ productCards, changeTab }) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
 
   useEffect(() => {
     if (!token) {
       dispatch(setOpenLogin(true));
     }
   }, [token]);
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    dispatch(setIsAlert({ isAlert: false, code: 200 }));
-  };
 
   const handleAddProduct = (product) => {
     dispatch(addProduct({ ...product, numberOrder: 1 }));
@@ -65,7 +52,6 @@ export default function OrderPage({ productCards, changeTab }) {
   };
 
   const handleCheckout = (productCards) => {
-    console.log(productCards);
     const postData = async () => {
       try {
         const items = [];
@@ -84,7 +70,6 @@ export default function OrderPage({ productCards, changeTab }) {
         };
 
         const checkout = await orderApi.post(params).then(function (response) {
-          // dispatch(setOrderId(response.order_id));
           localStorage.setItem("clientSecret", `${response.client_secret}`);
           localStorage.setItem("orderID", `${response.order_id}`);
         });
@@ -125,7 +110,6 @@ export default function OrderPage({ productCards, changeTab }) {
             <Grid item sx={12}>
               <OrderCard
                 productCards={productCards}
-                // onCheckout={handleCheckout}
                 handleAddProduct={handleAddProduct}
                 handleRemoveProduct={handleRemoveProduct}
               />

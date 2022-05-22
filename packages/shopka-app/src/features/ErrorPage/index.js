@@ -8,7 +8,7 @@ export default function ErrorPage() {
         Error
       </Typography>
       <Typography variant="body1" align="center" color="error">
-        Please scan the QR code again
+        Something went wrong.
       </Typography>
     </>
   );

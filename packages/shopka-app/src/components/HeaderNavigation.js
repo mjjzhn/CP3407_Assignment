@@ -14,6 +14,7 @@ import {
 import SettingsIcon from "@mui/icons-material/Settings";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
@@ -34,12 +35,6 @@ const options = [
     name: "My Cart",
     path: "/cart",
     description: "View all products in cart",
-  },
-  {
-    icon: <DisplaySettingsIcon />,
-    name: "Seller Settings",
-    path: "/cms",
-    description: "Manager product, promotion, and news",
   },
   {
     icon: <SettingsIcon />,
