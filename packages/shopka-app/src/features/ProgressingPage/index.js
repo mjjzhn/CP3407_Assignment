@@ -25,7 +25,7 @@ export default function LinearWithValueLabel() {
   const status = useSelector(selectStatus);
   const orderID = localStorage.getItem("orderID");
   const [orderStatus, setOrderStatus] = useState("nothing in progress");
-
+  console.log(orderID);
   useEffect(() => {
     if (paidProductCards) {
       setOrderStatus(status || "nothing in progress");
@@ -71,7 +71,7 @@ export default function LinearWithValueLabel() {
               <Typography variant="body1" color="secondary">
                 #Order ID:{" "}
                 <Typography variant="h6" color="primary" component="span">
-                  1
+                  {orderID}
                 </Typography>
               </Typography>
             </Grid>
