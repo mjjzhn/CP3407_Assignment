@@ -61,8 +61,7 @@ export default function FavoritePage({}) {
 
   const favoriteCards = useSelector(selectFavoritesCards);
 
-  const handleAddProduct = (e, product) => {
-    e.stopPropagation();
+  const handleAddProduct = (product) => {
     dispatch(setLoading(true));
     const removeProduct = async () => {
       try {
@@ -78,12 +77,12 @@ export default function FavoritePage({}) {
         dispatch(setLoading(false));
       }
     };
-    dispatch(addProduct(product));
+
+    dispatch(addProduct({ ...product, numberOrder: 1 }));
     removeProduct();
   };
 
-  const handleRemoveProduct = (e, product) => {
-    e.stopPropagation();
+  const handleRemoveProduct = (product) => {
     dispatch(setLoading(true));
     const removeProduct = async () => {
       try {
@@ -133,7 +132,7 @@ export default function FavoritePage({}) {
                     {favoriteCards.map((product) => (
                       <FavoriteCard
                         product={product}
-                        handleAddProduct={handleAddProduct}
+                        onAddProduct={handleAddProduct}
                         handleRemoveProduct={handleRemoveProduct}
                       />
                     ))}

@@ -1,123 +1,102 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Button,
+  Box,
+  Grid,
   Card,
-  CardActions,
   CardContent,
   CardMedia,
   Typography,
-  Grid,
   IconButton,
-  Box,
-  Divider,
+  CardActions,
+  Button,
+  Badge,
 } from "@mui/material";
-import numeral from "numeral";
-import AddIcon from "@mui/icons-material/Add";
-import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
-import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 
-import { useSelector, useDispatch } from "react-redux";
-import {
-  addProduct,
-  removeProduct,
-  selectFavoritesCards,
-} from "../../../appSlice";
+import numeral from "numeral";
+import { color } from "../../../styles/constants";
+import ProductModal from "./ProductModal";
+import { writerDescription } from "../../../logicHelper/functions";
 
 export default function FavoriteCard({
   product,
-  handleAddProduct,
-  handleRemoveProduct,
+  onAddProduct,
+  onAddToFavorites,
 }) {
-  const handleClickAddToCard = (e, product) => {
+  const {
+    name = product?.item_name,
+    description = product?.item_description,
+    image = product?.item_image_link,
+    price = product?.item_current_price,
+    listPrices = product?.item_prices,
+    id = product?.id,
+    discountPrice = product?.discount,
+    isAvailable = product?.available,
+  } = product;
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const onClickAddToCard = (e, data) => {
     e.stopPropagation();
-    console.log(product);
-    handleAddProduct(e, {
-      id: product.item_id,
-    });
+    onAddProduct({ ...data });
   };
 
-  const handleClickRemoveFavoriteCard = (e, product) => {
+  const onClickAddFavorites = (e, data) => {
     e.stopPropagation();
-    handleRemoveProduct({
-      id: product.item_id,
-    });
+    onAddToFavorites({ ...data });
   };
 
   return (
-    <Grid item xs={6}>
-      <Card>
-        <CardContent>
-          <Grid item container justifyContent="left" alignItems="center">
-            <Grid
-              item
-              xs={6}
-              container
-              direction={"row"}
-              justifyContent="center"
-              alignItems="center"
+    <>
+      <Card sx={{ width: 180 }} onClick={handleOpen}>
+        <CardMedia component="img" height="140" image={image} alt={name} />
+        <CardContent sx={{ height: 200 }}>
+          <Box sx={{ height: 70 }}>
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: 700, color: color.textPrimary }}
+              align="left"
             >
-              <Grid item>
-                <img
-                  src={product.item_image_link}
-                  alt="product"
-                  height="150px"
-                  width="auto"
-                />
-              </Grid>
+              {name}
+            </Typography>
+          </Box>
+          <Grid
+            container
+            direction="row"
+            justifyContent="left"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item>
+              <Typography variant="h6" align="left" sx={{ fontWeight: 700 }}>
+                ${numeral(price).format("0,0.00")}
+              </Typography>
             </Grid>
-            <Grid item xs={6} container direction="column">
-              <Grid item>
-                <Typography variant="body1" align="left" fontWeight={700}>
-                  {product.item_name}
-                </Typography>
-              </Grid>
-              <Grid item mt={1}>
-                <Typography variant="body1" align="left">
-                  Price:{" "}
-                  <Typography
-                    variant="body1"
-                    color="primary"
-                    fontWeight={700}
-                    component="span"
-                  >
-                    ${numeral(product.item_current_price).format("0,0.00")}
-                  </Typography>
-                </Typography>
-              </Grid>
-            </Grid>
+          </Grid>
+
+          <Grid item>
+            <Typography
+              variant="body2"
+              align="left"
+              sx={{ color: color.grey[500] }}
+            >
+              {writerDescription(description)}
+            </Typography>
           </Grid>
         </CardContent>
-        <CardActions>
-          <Grid container direction="column" spacing={2}>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={(e, product) => {
-                  console.log(product);
-                  handleClickAddToCard(e, product);
-                }}
-              >
-                Add to Cart
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="outlined"
-                color="error"
-                fullWidth
-                onClick={(e, product) => {
-                  console.log(product);
-                  handleClickRemoveFavoriteCard(e, product);
-                }}
-              >
-                Remove
-              </Button>
-            </Grid>
-          </Grid>
-        </CardActions>
       </Card>
-    </Grid>
+
+      <ProductModal
+        name={name}
+        description={description}
+        image={image}
+        price={price}
+        id={id}
+        handleClose={handleClose}
+        open={open}
+        onClickAddToCard={onClickAddToCard}
+        onAddToFavorites={onClickAddFavorites}
+        listPrices={listPrices}
+      />
+    </>
   );
 }
