@@ -19,6 +19,7 @@ import {
 } from "../../appSlice";
 import Spinner from "../../components/Spinner";
 import AlertNotification from "../../components/Alert";
+import favoriteApi from "../../api/favoriteApi";
 
 export default function Container({}) {
   const [productList, setProductList] = useState([]);
@@ -57,12 +58,26 @@ export default function Container({}) {
   };
 
   const HandleAddToFavorites = (product) => {
+    dispatch(setLoading(true));
+
+    const addFavoriteProduct = async () => {
+      try {
+        const params = {
+          id: product.id,
+          token: token,
+        };
+        await favoriteApi.post(params);
+        dispatch(setMsg("Product is added"));
+        dispatch(setIsAlert({ isAlert: true, code: 200 }));
+        dispatch(setLoading(false));
+      } catch (error) {
+        // console.log("no products found", error);
+        dispatch(setLoading(false));
+      }
+    };
+
     if (token) {
-      dispatch(setFavoritesCard({ ...product }));
-      dispatch(setMsg("Product is added"));
-      dispatch(setIsAlert({ isAlert: true, code: 200 }));
-    } else {
-      dispatch(setOpenLogin(true));
+      addFavoriteProduct();
     }
   };
 

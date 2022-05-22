@@ -4,7 +4,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Container from "./features/Container";
 import ErrorPage from "./features/ErrorPage";
-import OrderPage from "./features/OrderPage";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectProductCards,
@@ -18,7 +17,6 @@ import {
 } from "./appSlice";
 import Login from "./features/Login";
 import TabContainer from "./features/TabContainer";
-import ManagerCMS from "./features/ManagerCMS";
 import Setting from "./features/Setting";
 import loginApi from "./api/loginApi";
 import signupApi from "./api/signupApi";
@@ -62,6 +60,7 @@ function App() {
         localStorage.setItem("token", `${token.access_token}`);
         localStorage.setItem("customerName", `${token.customer.customer_name}`);
         dispatch(setCustomerId(token.customer.id));
+        dispatch(setToken(token.customer.favourite_items));
         dispatch(setLoading(false));
       } catch (error) {
         dispatch(setMsg(error.response.data.msg));
@@ -87,7 +86,6 @@ function App() {
           path="/cart"
           element={<TabContainer productCards={productCards} />}
         />
-        <Route exact path="/cms" element={<ManagerCMS />} />
         <Route exact path="/setting" element={<Setting />} />
         <Route path="/payment" element={<Payment />} />
         <Route exact path="*" element={<ErrorPage />} />

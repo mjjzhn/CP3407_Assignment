@@ -98,8 +98,7 @@ export const appSlice = createSlice({
       state.customerId = action.payload;
     },
     setFavoritesCard: (state, action) => {
-      const { favoritesCards } = state;
-      favoritesCards.push(action.payload);
+      state.favoritesCards = action.payload;
     },
     removeFavoritesCard: (state, action) => {
       state.favoritesCards = [];

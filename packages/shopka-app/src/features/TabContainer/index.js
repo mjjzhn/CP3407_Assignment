@@ -3,6 +3,7 @@ import { Tabs, Tab, Box, Typography, Grid } from "@mui/material";
 import OrderPage from "../OrderPage";
 import Header from "../../components/Header";
 import ProgressingPage from "../ProgressingPage";
+import FavoritePage from "../FavoritePage";
 
 export default function TabContainer({ productCards }) {
   const [value, setValue] = useState(0);
@@ -17,8 +18,12 @@ export default function TabContainer({ productCards }) {
   const checkTabValue = (value, productCards, autoChangeTab) => {
     switch (value) {
       case 0:
-        return <OrderPage productCards={productCards} changeTab={autoChangeTab} />;
+        return <FavoritePage />;
       case 1:
+        return (
+          <OrderPage productCards={productCards} changeTab={autoChangeTab} />
+        );
+      case 2:
         return <ProgressingPage />;
     }
   };
@@ -31,6 +36,7 @@ export default function TabContainer({ productCards }) {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
+          <Tab label="Favorite Products" />
           <Tab label="Order Card" />
           <Tab label="Progressing" />
         </Tabs>

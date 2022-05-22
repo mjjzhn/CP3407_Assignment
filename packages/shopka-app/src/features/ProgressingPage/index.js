@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectPaidProductCards, selectStatus } from "../../appSlice";
 import numeral from "numeral";
 import { checkValue } from "../../logicHelper/functions";
+import progressingApi from "../../api/progressApi";
 
 
 
@@ -22,7 +23,7 @@ export default function LinearWithValueLabel() {
 
   const paidProductCards = useSelector(selectPaidProductCards);
   const status = useSelector(selectStatus);
-
+  const orderID = localStorage.getItem("orderID");
   const [orderStatus, setOrderStatus] = useState("nothing in progress");
 
   useEffect(() => {
@@ -32,34 +33,34 @@ export default function LinearWithValueLabel() {
     }
   }, [paidProductCards]);
 
-  // useEffect(() => {
-  //   const getProgressingOrder = async () => {
-  //     try {
-  //       const params = { id: orderId };
-  //       const response = await progressingApi.get(params);
+  useEffect(() => {
+    const getProgressingOrder = async () => {
+      try {
+        const params = { id: orderID };
+        const response = await progressingApi.get(params);
 
-  //       const orderStatus = response.order_status || "order received";
-  //       setProgress(checkValue(orderStatus));
-  //       setOrderStatus(orderStatus);
-  //     } catch (error) {
-  //       // console.log("no order found", error);
-  //     }
-  //   };
+        const orderStatus = response.order_status || "order received";
+        setProgress(checkValue(orderStatus));
+        setOrderStatus(orderStatus);
+      } catch (error) {
+        // console.log("no order found", error);
+      }
+    };
 
-  //   if (orderId && tableNumber) {
-  //     getProgressingOrder();
+    if (orderID) {
+      getProgressingOrder();
 
-  //     if (progress < 100) {
-  //       const timer = setInterval(() => {
-  //         getProgressingOrder();
-  //       }, 5000);
+      if (progress < 100) {
+        const timer = setInterval(() => {
+          getProgressingOrder();
+        }, 5000);
 
-  //       return () => {
-  //         clearInterval(timer);
-  //       };
-  //     }
-  //   }
-  // }, [progress]);
+        return () => {
+          clearInterval(timer);
+        };
+      }
+    }
+  }, [progress]);
 
   return (
     <Box p={3}>
