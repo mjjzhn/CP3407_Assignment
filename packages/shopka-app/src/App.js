@@ -21,6 +21,8 @@ import Setting from "./features/Setting";
 import loginApi from "./api/loginApi";
 import signupApi from "./api/signupApi";
 import Payment from "./features/Payment";
+import ContactForm from "./features/ContactForm";
+import contactApi from "./api/contactApi";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,7 +33,6 @@ function App() {
   };
 
   const handleSubmit = (data) => {
-    dispatch(setOpenLogin(false));
     dispatch(setLoading(true));
 
     const Signup = async () => {
@@ -77,6 +78,31 @@ function App() {
     }
   };
 
+  const handleSubmitFormContact = (data) => {
+    dispatch(setLoading(true));
+    const sendContact = async () => {
+      try {
+        const params = {
+          email: data.email,
+          full_name: data.fullName,
+          message: data.message,
+        };
+        const response = await contactApi.post(params).then(function (response) {
+          return response;
+        });
+        dispatch(setLoading(false));
+        dispatch(setMsg(response.msg));
+        dispatch(setLoading(false));
+        dispatch(setIsAlert({ isAlert: true, code: 200 }));
+      } catch (error) {
+        dispatch(setMsg(error.message));
+        dispatch(setLoading(false));
+        dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
+      }
+    };
+    sendContact();
+  };
+
   return (
     <div className="App">
       <Routes>
@@ -88,6 +114,7 @@ function App() {
         />
         <Route exact path="/setting" element={<Setting />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/contact" element={<ContactForm />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
 
@@ -96,6 +123,7 @@ function App() {
         handleClose={handleCloseLogin}
         onSubmit={handleSubmit}
       />
+      <ContactForm onSubmit={handleSubmitFormContact} />
     </div>
   );
 }
