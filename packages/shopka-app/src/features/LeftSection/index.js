@@ -4,7 +4,14 @@ import { mockProducts } from "./products";
 import ProductCard from "./components/ProductCard";
 import { checkType } from "../../logicHelper/functions";
 
-function TabPanel({ children, value, index, productList, onAddProduct }) {
+function TabPanel({
+  children,
+  value,
+  index,
+  productList,
+  onAddProduct,
+  onAddToFavorites,
+}) {
   const code = checkType(value);
   return (
     <Box hidden={value !== index}>
@@ -13,7 +20,11 @@ function TabPanel({ children, value, index, productList, onAddProduct }) {
           // if (product.item_category.includes(code)) {
           return (
             <Grid item key={index}>
-              <ProductCard product={product} onAddProduct={onAddProduct} />
+              <ProductCard
+                product={product}
+                onAddProduct={onAddProduct}
+                onAddToFavorites={onAddToFavorites}
+              />
             </Grid>
           );
           // }
@@ -23,15 +34,22 @@ function TabPanel({ children, value, index, productList, onAddProduct }) {
   );
 }
 
-export default function LeftSection({ productList, handleAddProduct }) {
+export default function LeftSection({
+  productList,
+  handleAddProduct,
+  HandleAddToFavorites,
+}) {
   const [value, setValue] = useState(2);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const onAddProduct = (product) => {
-    console.log(product,"product");
     handleAddProduct(product);
+  };
+
+  const onAddToFavorites = (product) => {
+    HandleAddToFavorites(product);
   };
 
   return (
@@ -88,54 +106,63 @@ export default function LeftSection({ productList, handleAddProduct }) {
           index={2}
           productList={productList}
           onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
         />
         <TabPanel
           value={value}
           index={3}
           productList={productList}
           onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
         />
         <TabPanel
           value={value}
           index={4}
           productList={productList}
           onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
         />
         <TabPanel
           value={value}
           index={6}
           productList={productList}
           onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
         />
         <TabPanel
           value={value}
           index={7}
           productList={productList}
           onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
         />
         <TabPanel
           value={value}
           index={8}
           productList={productList}
           onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
         />
         <TabPanel
           value={value}
           index={10}
           productList={productList}
           onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
         />
         <TabPanel
           value={value}
           index={11}
           productList={productList}
           onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
         />
         <TabPanel
           value={value}
           index={12}
           productList={productList}
           onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
         />
       </Grid>
     </Grid>

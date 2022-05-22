@@ -15,6 +15,7 @@ import {
   selectToken,
   setToken,
   setOpenLogin,
+  setFavoritesCard,
 } from "../../appSlice";
 import Spinner from "../../components/Spinner";
 import AlertNotification from "../../components/Alert";
@@ -25,7 +26,7 @@ export default function Container({}) {
   const loading = useSelector(selectLoading);
   const msg = useSelector(selectMsg);
   const isAlert = useSelector(selectIsAlert);
-  const token = useSelector(selectToken);
+  const token = localStorage.getItem("token");
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -55,11 +56,21 @@ export default function Container({}) {
     }
   };
 
+  const HandleAddToFavorites = (product) => {
+    if (token) {
+      dispatch(setFavoritesCard({ ...product }));
+      dispatch(setMsg("Product is added"));
+      dispatch(setIsAlert({ isAlert: true, code: 200 }));
+    } else {
+      dispatch(setOpenLogin(true));
+    }
+  };
+
   useEffect(() => {
     const getProduct = async () => {
       dispatch(setLoading(true));
       try {
-        const params = { };
+        const params = {};
         const response = await menuApi.get(params);
         setProductList(response.items);
         dispatch(setLoading(false));
@@ -80,6 +91,7 @@ export default function Container({}) {
         productList={productList}
         handleAddProduct={handleAddProduct}
         handleRemoveProduct={handleRemoveProduct}
+        HandleAddToFavorites={HandleAddToFavorites}
       />
       <AlertNotification
         msg={msg}

@@ -17,7 +17,11 @@ import { color } from "../../../styles/constants";
 import ProductModal from "./ProductModal";
 import { writerDescription } from "../../../logicHelper/functions";
 
-export default function ProductCard({ product, onAddProduct }) {
+export default function ProductCard({
+  product,
+  onAddProduct,
+  onAddToFavorites,
+}) {
   const {
     name = product?.item_name,
     description = product?.item_description,
@@ -36,6 +40,10 @@ export default function ProductCard({ product, onAddProduct }) {
     onAddProduct({ ...data });
   };
 
+  const onClickAddFavorites = (e, data) => {
+    e.stopPropagation();
+    onAddToFavorites({ ...data });
+  };
 
   return (
     <>
@@ -86,6 +94,7 @@ export default function ProductCard({ product, onAddProduct }) {
         handleClose={handleClose}
         open={open}
         onClickAddToCard={onClickAddToCard}
+        onAddToFavorites={onClickAddFavorites}
         listPrices={listPrices}
       />
     </>
