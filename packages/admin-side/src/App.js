@@ -19,6 +19,7 @@ import {
   setIsAlert,
 } from "./appSlice";
 import AlertNotification from "./components/Alert";
+import Contact from "./features/Contact";
 
 function App() {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ function App() {
       {loading && <Spinner open={loading} />}
 
       <Routes>
-        <Route exact path="/" element={<Navigate to="login" replace />} />
+        <Route exact path="/" element={<Navigate to="home" replace />} />
         <Route path="/login" element={<LoginPage onSubmit={handleSubmit} />} />
         <Route
           path="/home"
@@ -97,6 +98,8 @@ function App() {
             </AuthGuard>
           }
         />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
       <AlertNotification
@@ -105,21 +108,6 @@ function App() {
         onClose={handleClose}
         code={isAlert.code}
       />
-
-      {/* <Snackbar
-        open={isAlert.isAlert}
-        autoHideDuration={6000}
-        onClose={handleClose}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={isAlert.code !== 200 ? "error" : "success"}
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {msg}
-        </Alert>
-      </Snackbar> */}
     </div>
   );
 }

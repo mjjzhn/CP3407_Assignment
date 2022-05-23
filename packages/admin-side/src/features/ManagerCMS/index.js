@@ -161,6 +161,7 @@ export default function ManagerCMS({}) {
           top: changeTop(data.tShirt, data.hoodie, data.jacket),
           bottom: changeBottom(data.jane, data.sort, data.trouser),
           item_price: data.price,
+          is_hot: data.isHot
         };
         const msg = await productApi.post(params).then(function (response) {
           return response;

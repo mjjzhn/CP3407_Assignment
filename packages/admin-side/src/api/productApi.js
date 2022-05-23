@@ -21,6 +21,7 @@ const productApi = {
       top,
       bottom,
       item_price,
+      is_hot,
     } = params;
 
     const formData = new FormData();
@@ -39,6 +40,7 @@ const productApi = {
     formData.append("gender", gender);
     formData.append("top", top);
     formData.append("bottom", bottom);
+    formData.append("is_hot", is_hot);
 
     const url = `/menu/items/${id}`;
     return axiosClient.put(url, formData);
@@ -57,6 +59,7 @@ const productApi = {
       gender,
       top,
       bottom,
+      is_hot,
     } = params;
 
     const formData = new FormData();
@@ -75,6 +78,7 @@ const productApi = {
     formData.append("gender", gender);
     formData.append("top", top);
     formData.append("bottom", bottom);
+    formData.append("is_hot", is_hot);
 
     const url = `/menu/items/create`;
     return axiosClient.post(url, formData);

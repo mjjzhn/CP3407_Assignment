@@ -14,8 +14,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectStaff } from "../appSlice";
@@ -38,6 +39,12 @@ const options = [
     name: "Manager CMS",
     path: "/cms",
     description: "Manager product, promotion, and news",
+  },
+  {
+    icon: <MailOutlineIcon />,
+    name: "Contact",
+    path: "/contact",
+    description: "View mails from the clients.",
   },
   {
     icon: <SettingsIcon />,
