@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import menuApi from "../../../../shopka-app/src/api/menuApi";
+import menuApi from "../../api/menuApi";
 import Header from "../../components/Header";
 import LeftSection from "../LeftSection";
 import { useSelector, useDispatch } from "react-redux";
