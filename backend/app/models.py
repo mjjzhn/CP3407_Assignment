@@ -302,7 +302,7 @@ class Order(APIMixin, db.Model):
 
     order_items = db.relationship('Order_item', backref='order', lazy='dynamic')
 
-    status = ['order received', 'shipping', 'delivered', 'close']
+    status = ['order received', 'shipping', 'delivered', 'taken']
     unpaid_status="unpaid"
 
     def __repr__(self):
