@@ -5,11 +5,18 @@ import contactApi from "../../api/contactApi";
 import { setLoading, setMsg, setIsAlert } from "../../appSlice";
 import { useDispatch } from "react-redux";
 import ContactCard from "./components/ContactCard";
+import AlertDialog from "../../components/AlertDialog";
 
 export default function Contact() {
   const [mailList, setList] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [id, setId] = useState("");
   const dispatch = useDispatch();
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   useEffect(() => {
     const getMail = async () => {
@@ -29,14 +36,14 @@ export default function Contact() {
     getMail();
   }, [refresh]);
 
-  const handleDeleteMail = (id) => {
+  const handleConfirmDialog = () => {
     const deleteMail = async () => {
       dispatch(setLoading(true));
       try {
         const params = { id };
-
         const response = await contactApi.delete(params);
         dispatch(setLoading(false));
+        setOpenDialog(false);
         setRefresh(!refresh);
       } catch (error) {
         dispatch(setLoading(false));
@@ -45,6 +52,10 @@ export default function Contact() {
       }
     };
     deleteMail();
+  };
+  const handleDeleteMail = (id) => {
+    setId(id);
+    setOpenDialog(true);
   };
 
   return (
@@ -74,12 +85,17 @@ export default function Contact() {
           justifyContent="flex-start"
         >
           {mailList.map((mail, index) => (
-            <Grid item key={index}>
+            <Grid item key={index} xs={6}>
               <ContactCard mail={mail} deleteMail={handleDeleteMail} />
             </Grid>
           ))}
         </Grid>
       </Grid>
+      <AlertDialog
+        open={openDialog}
+        handleClose={handleCloseDialog}
+        handleConfirm={handleConfirmDialog}
+      />
     </>
   );
 }

@@ -18,15 +18,21 @@ export default function ContactCard({ mail, deleteMail }) {
     <Card>
       <CardContent>
         <Typography variant="body2" align="left">
-          Customer Email: {mail.email}
+          Customer Email:{" "}
+          <Typography variant="body1" component="span" sx={{ fontWeight: 700 }}>
+            {mail.email}
+          </Typography>
         </Typography>
-        <Typography variant="body2" align="left">
-          Subject: {mail.subject || "No subject"}
+        <Typography variant="body2" align="left" sx={{ mt: 2 }}>
+          Subject:{" "}
+          <Typography variant="body1" component="span" sx={{ fontWeight: 700 }}>
+            {mail.subject || "No subject"}
+          </Typography>
         </Typography>
-        <Typography variant="body2" align="left">
-          Message:
+        <Typography variant="body2" align="left" sx={{ mt: 2 }}>
+          Message:{" "}
         </Typography>
-        <Typography variant="body2" align="left">
+        <Typography variant="body1" sx={{ fontWeight: 700 }}>
           {mail.message}
         </Typography>
       </CardContent>

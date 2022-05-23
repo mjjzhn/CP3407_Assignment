@@ -59,7 +59,8 @@ export default function HeaderNavigation({}) {
     left: false,
   });
   const navigate = useNavigate();
-  const staff = useSelector(selectStaff);
+  const staffName = localStorage.getItem("staffName");
+  const avatar = localStorage.getItem("avatar");
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -78,6 +79,8 @@ export default function HeaderNavigation({}) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("staffName");
+    localStorage.removeItem("avatar");
     navigate("/");
   };
   const list = () => (
@@ -90,9 +93,9 @@ export default function HeaderNavigation({}) {
       <List>
         <ListItem>
           <ListItemIcon>
-            <img src={staff.avatar} alt="avatar" width="50" height="50" />
+            <img src={avatar} alt="avatar" width="50" height="50" />
           </ListItemIcon>
-          <ListItemText primary={`${staff.staffname}`} />
+          <ListItemText primary={`${staffName}`} />
         </ListItem>
       </List>
       <List>
