@@ -433,57 +433,6 @@ export default function CMSForm({
           </Grid>
         </Grid>
 
-        {/* {isAddProduct && (
-          <>
-            <Grid item xs={6}>
-              <Controller
-                name="category"
-                defaultValue={true}
-                control={control}
-                render={({ field }) => (
-                  <>
-                    <InputLabel id="category">Category</InputLabel>
-                    <Select
-                      {...field}
-                      variant="standard"
-                      color="primary"
-                      fullWidth
-                    >
-                      <MenuItem value={"chicken"}>Chicken</MenuItem>
-                      <MenuItem value={"beef"}>Beef</MenuItem>
-                    </Select>
-                  </>
-                )}
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <Controller
-                name="number"
-                control={control}
-                defaultValue="" // this will avoid uncontrolled to controlled input
-                rules={{ required: "Price is required" }}
-                render={({
-                  field: { onChange, value, isTouched },
-                  fieldState: { error },
-                }) => (
-                  <TextField
-                    label="Number of products"
-                    variant="standard"
-                    value={numeral(configNumber(value)).format("0")}
-                    type="number"
-                    color="primary"
-                    onChange={onChange}
-                    error={!!error || isTouched}
-                    helperText={error ? error.message : null}
-                    fullWidth
-                  />
-                )}
-              />
-            </Grid>
-          </>
-        )} */}
-
         <Grid item xs={6}>
           <InputLabel id="update-picture" sx={{ mt: 1 }}>
             Product Image
@@ -522,6 +471,26 @@ export default function CMSForm({
                   ),
                 }}
               />
+            )}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <Controller
+            name="isHot"
+            defaultValue={true}
+            control={control}
+            render={({ field }) => (
+              <Grid container>
+                <Checkbox
+                  color="primary"
+                  onChange={(e) => field.onChange(e.target.checked)}
+                  checked={field.value}
+                />
+                <Typography variant="body2" sx={{ mt: 1.5 }}>
+                  Trending
+                </Typography>
+              </Grid>
             )}
           />
         </Grid>

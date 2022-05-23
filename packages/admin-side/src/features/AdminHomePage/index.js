@@ -5,6 +5,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 // import Header from "../../components/Header";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Header from "../../components/Header";
 
 const options = [
@@ -34,6 +35,15 @@ const options = [
     icon: (
       <DisplaySettingsIcon sx={{ height: 100, width: 100 }} color="primary" />
     ),
+  },
+  {
+    id: "contact",
+    name: "CONTACT",
+    descriptions: [
+      { 1: "View mails from the clients." },
+      { 2: "Send contact to clients." },
+    ],
+    icon: <MailOutlineIcon sx={{ height: 100, width: 100 }} color="primary" />,
   },
   {
     id: "setting",
