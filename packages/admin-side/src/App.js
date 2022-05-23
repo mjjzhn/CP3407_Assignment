@@ -46,7 +46,8 @@ function App() {
         });
 
         localStorage.setItem("token", `${token.access_token}`);
-        dispatch(setStaff(token.admin));
+        localStorage.setItem("avatar", `${token.admin.avatar}`);
+        localStorage.setItem("staffName", `${token.admin.staffname}`);
         navigate("/home");
         dispatch(setLoading(false));
       } catch (error) {
