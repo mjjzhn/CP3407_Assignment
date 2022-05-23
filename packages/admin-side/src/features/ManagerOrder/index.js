@@ -92,7 +92,7 @@ export default function ManagerOrder({}) {
   return (
     <>
       <Grid container>
-        <Grid item xs={12} sx={{ background: "#FF0000" }}>
+        <Grid item xs={12}>
           <Header />
         </Grid>
         <Grid item xs={12} p={2}>
@@ -109,8 +109,8 @@ export default function ManagerOrder({}) {
               variant="fullWidth"
             >
               <Tab value="order received" label="Order Received" wrapped />
-              <Tab value="processing" label="Processing" />
-              <Tab value="ready" label="Ready" />
+              <Tab value="shipping" label="Shipping" />
+              <Tab value="delivered" label="Delivered" />
               <Tab value="taken" label="Taken" />
             </Tabs>
           </Box>

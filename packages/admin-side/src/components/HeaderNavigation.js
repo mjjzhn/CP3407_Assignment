@@ -14,12 +14,19 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectStaff } from "../appSlice";
 
 const options = [
+  {
+    icon: <HomeIcon />,
+    name: "Home",
+    path: "/home",
+    description: "Home",
+  },
   {
     icon: <FormatListBulletedIcon />,
     name: "Manager Order",
@@ -40,7 +47,7 @@ const options = [
   },
 ];
 
-export default function HeaderNavigation({ }) {
+export default function HeaderNavigation({}) {
   const [state, setState] = useState({
     left: false,
   });
@@ -106,11 +113,12 @@ export default function HeaderNavigation({ }) {
       sx={{
         position: "absolute",
         top: 0,
-        left: 0,
+        right: 0,
+        padding: "20px 10px",
       }}
     >
       <IconButton onClick={toggleDrawer("left", true)}>
-        <MenuIcon sx={{ color: "white" }} />
+        <MenuIcon color="primary" />
       </IconButton>
       <Drawer open={state["left"]} onClose={toggleDrawer("left", false)}>
         {list("left")}

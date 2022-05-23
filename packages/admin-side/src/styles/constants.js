@@ -4,9 +4,9 @@ export const color = {
   textSecondary: "#006D77", // 5%
   textPrimary: "#C83E4D", // 87%
   primary: {
-    main: "#DA1E37",
-    dark: "#DA1E37",
-    light: "DA1E37",
+    main: "#2979FF",
+    dark: "#2979FF",
+    light: "#2979FF",
     50: "rgba(71, 76, 170, 0.5)", // 50%
     20: "rgba(71, 76, 170, 0.2)", // 20%
     8: "#474CAA14",

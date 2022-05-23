@@ -21,7 +21,7 @@ export default function CustomCard(props) {
 
   return (
     <>
-      <Box sx={{ background: "#FFF0F3" }}>
+      <Box sx={{ background: "#e3edfc" }}>
         <CardContent>
           <Box height={400}>
             <Grid

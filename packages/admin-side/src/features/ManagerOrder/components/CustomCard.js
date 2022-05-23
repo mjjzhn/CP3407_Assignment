@@ -10,16 +10,14 @@ import {
 } from "@mui/material";
 import { reformatTime } from "../../../logicHelper";
 
-
-
 export default function CustomCard(props) {
   const {
     orderId = props.item.id,
-    customerId = props.customer_id,
+    customerId = props.item.customer_id,
     orderTime = props.item.timestamp,
     items = props.item.items,
     status = props.item.order_status,
-  } = props.item;
+  } = props;
 
   const onNextStep = props.onNextStep;
   const onDeleteOrder = props.onDeleteOrder;
@@ -44,11 +42,21 @@ export default function CustomCard(props) {
             gutterBottom
             component="span"
           >
+            {` ${customerId}`}
+          </Typography>
+        </Typography>
+        <Typography color="secondary">
+          Customer ID:
+          <Typography
+            variant="body1"
+            color="primary"
+            sx={{ fontWeight: 700 }}
+            gutterBottom
+            component="span"
+          >
             {` ${orderId}`}
           </Typography>
         </Typography>
-
-
         <Typography color="secondary">
           Order Time:
           <Typography
@@ -80,7 +88,7 @@ export default function CustomCard(props) {
                   variant="body1"
                   color="primary"
                   sx={{ fontWeight: 700 }}
-                >{`${item.item.item_name}`}</Typography>
+                >{`${item.item_name}`}</Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography
