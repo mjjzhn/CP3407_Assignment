@@ -3,6 +3,8 @@ from flask import jsonify
 from app.models import Item
 from flask import request,current_app
 from app.errors import bad_request
+from app.auth.admin_routes import admin_required
+from app.models import Customer
 from app import db
 from flask import url_for
 from app import cloudinary
@@ -18,7 +20,7 @@ def get_item(id):
     return jsonify(Item.query.get_or_404(id).to_dict())
 
 @bp.route('/items/<int:id>', methods =["PUT"])
-#authentication control here 
+@admin_required()
 def update_item(id):
     #now I will interact with json, However, when implement cms, everthing need to be change to form data
     item = Item.query.get_or_404(id)
@@ -29,8 +31,9 @@ def update_item(id):
         return bad_request('You can not change id of this item')
     
     if "item_name" in data:
-        if Item.query.filter_by(item_name=data['item_name']).first():
-            return bad_request('Name duplicate detected! Please use another name!')
+        if data["item_name"] != item.item_name:
+            if Item.query.filter_by(item_name=data['item_name']).first():
+                return bad_request('Name duplicate detected! Please use another name!')
 
     #these lines under here is no proper to update or add item
     # if "item_category" in data:
@@ -76,7 +79,7 @@ def update_item(id):
     return jsonify(item.to_dict())
 
 @bp.route('/items/create', methods =["GET","POST"])
-#authentication control here
+@admin_required()
 def create_item():
     if request.method == 'GET':
         #basic information before create an item
@@ -203,3 +206,17 @@ def get_image():
     upload_result = cloudinary.uploader.upload(upload_file)
     return upload_result["secure_url"]
 #therefore the binary files can be read by cloudbinary
+
+@bp.route('/items/<int:id>', methods =["DELETE"])
+@admin_required()
+def delete_item(id):
+    for customer in Customer.query.all():     
+        customer.remove_from_favourite(id)
+    item = Item.query.get_or_404(id)
+    deleted_item_infor = item.to_dict()
+    db.session.delete(item)
+    db.session.commit()
+    response ={}
+    response['isItemDeleted']=True
+    response['deletedItemInfo']= deleted_item_infor
+    return jsonify(response),200

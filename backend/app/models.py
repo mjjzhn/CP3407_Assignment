@@ -224,7 +224,7 @@ class Item(APIMixin, db.Model):
         item_category_list =list()
         for sub in self.item_category:
             for item in self.item_category[sub]:
-                item_category_list.append(item)
+                item_category_list.append(item.strip())
         data["item_category_list"]= item_category_list
         return data
     
