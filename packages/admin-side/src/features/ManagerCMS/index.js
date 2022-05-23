@@ -6,6 +6,8 @@ import productApi from "../../api/productApi";
 import { setLoading, setMsg, setIsAlert } from "../../appSlice";
 import ProductCard from "./components/ProductCard";
 import CMSForm from "./components/CMSForm";
+import AlertDialog from "../../components/AlertDialog";
+import { changeBottom, changeGender, changeTop } from "../../logicHelper";
 
 const style = {
   position: "absolute",
@@ -23,7 +25,9 @@ export default function ManagerCMS({}) {
   const [productList, setProductList] = useState([]);
   const [isAddProduct, setIsAddProduct] = useState(false);
   const [openCMSForm, setOpenCMSForm] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [toggleRefresh, setToggleRefresh] = useState(false);
+  const [id, setId] = useState("");
 
   const dispatch = useDispatch();
 
@@ -31,53 +35,17 @@ export default function ManagerCMS({}) {
     setOpenCMSForm(true);
     setIsAddProduct(true);
   };
+
   const handleCloseCMS = () => {
     setOpenCMSForm(false);
     setIsAddProduct(false);
   };
 
-  const changeGender = (value1, value2, value3) => {
-    let changedString = "";
-    if (value1 === true) {
-      changedString += "male";
-    }
-    if (value2 === true) {
-      changedString += ",female";
-    }
-    if (value3 === true) {
-      changedString += ",kid";
-    }
-    return changedString;
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
-  const changeTop = (value1, value2, value3) => {
-    let changedString = "";
-    if (value1 === true) {
-      changedString += "t-shirt";
-    }
-    if (value2 === true) {
-      changedString += ",hoodie";
-    }
-    if (value3 === true) {
-      changedString += ",jacket";
-    }
-    return changedString;
-  };
-  const changeBottom = (value1, value2, value3) => {
-    let changedString = "";
-    if (value1 === true) {
-      changedString += "jane";
-    }
-    if (value2 === true) {
-      changedString += ",sort";
-    }
-    if (value3 === true) {
-      changedString += ",trouser";
-    }
-    return changedString;
-  };
-
-  const handleDeleteProduct = (id) => {
+  const handleConfirmDialog = () => {
     dispatch(setLoading(true));
     const deleteProduct = async () => {
       dispatch(setLoading(true));
@@ -89,6 +57,7 @@ export default function ManagerCMS({}) {
         dispatch(setMsg("Delete success"));
         dispatch(setIsAlert({ isAlert: true, code: 200 }));
         dispatch(setLoading(false));
+        setOpenDialog(false);
         setToggleRefresh(!toggleRefresh);
       } catch (error) {
         dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
@@ -99,8 +68,12 @@ export default function ManagerCMS({}) {
     deleteProduct();
   };
 
+  const handleDeleteProduct = (id) => {
+    setOpenDialog(true);
+    setId(id);
+  };
+
   const handleUpdateProduct = (data) => {
-    console.log(data);
     const updateProduct = async () => {
       dispatch(setLoading(true));
       const lStock = data.lStock || 0;
@@ -161,6 +134,7 @@ export default function ManagerCMS({}) {
           top: changeTop(data.tShirt, data.hoodie, data.jacket),
           bottom: changeBottom(data.jane, data.sort, data.trouser),
           item_price: data.price,
+          is_hot: data.isHot,
         };
         const msg = await productApi.post(params).then(function (response) {
           return response;
@@ -258,6 +232,12 @@ export default function ManagerCMS({}) {
           />
         </Box>
       </Modal>
+
+      <AlertDialog
+        open={openDialog}
+        handleClose={handleCloseDialog}
+        handleConfirm={handleConfirmDialog}
+      />
     </>
   );
 }
