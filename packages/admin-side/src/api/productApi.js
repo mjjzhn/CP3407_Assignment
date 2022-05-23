@@ -6,69 +6,75 @@ const productApi = {
     return axiosClient.get(url, { params });
   },
   put: (params) => {
+    console.log(params);
     const {
       id,
-      available,
-      is_hot,
-      item_base_price,
       item_description,
       item_image_link,
       item_name,
-      num_of_item,
-      size_plus_price,
+      L_stock,
+      M_stock,
+      XL_stock,
+      XXL_stock,
       discount,
+      gender,
+      top,
+      bottom,
+      item_price,
     } = params;
 
     const formData = new FormData();
 
-    formData.append("id", id);
-    formData.append("available", available);
-    formData.append("is_hot", is_hot);
-    formData.append("item_base_price", item_base_price);
     formData.append("item_description", item_description);
     if (typeof item_image_link !== "string") {
       formData.append("item_image_link", item_image_link[0]);
     }
     formData.append("item_name", item_name);
-    formData.append("num_of_item", num_of_item);
-    formData.append("size_plus_price", size_plus_price);
+    formData.append("item_price", item_price);
+    formData.append("L_stock", L_stock);
+    formData.append("M_stock", M_stock);
+    formData.append("XL_stock", XL_stock);
+    formData.append("XXL_stock", XXL_stock);
     formData.append("discount", discount);
+    formData.append("gender", gender);
+    formData.append("top", top);
+    formData.append("bottom", bottom);
 
     const url = `/menu/items/${id}`;
     return axiosClient.put(url, formData);
   },
   post: (params) => {
     const {
-      available,
-      is_hot,
-      item_base_price,
       item_description,
       item_image_link,
       item_name,
-      num_of_item,
-      prices,
-      item_category,
-      size_plus_price,
-      size_list,
+      item_price,
+      L_stock,
+      M_stock,
+      XL_stock,
+      XXL_stock,
       discount,
+      gender,
+      top,
+      bottom,
     } = params;
 
     const formData = new FormData();
 
-    formData.append("available", available);
-    formData.append("is_hot", is_hot);
-    formData.append("item_base_price", item_base_price);
     formData.append("item_description", item_description);
     if (typeof item_image_link !== "string") {
       formData.append("item_image_link", item_image_link[0]);
     }
     formData.append("item_name", item_name);
-    formData.append("num_of_item", num_of_item);
-    formData.append("item_prices", prices);
-    formData.append("item_category", item_category);
-    formData.append("size_plus_price", size_plus_price);
-    formData.append("size_list", size_list);
+    formData.append("item_price", item_price);
+    formData.append("L_stock", L_stock);
+    formData.append("M_stock", M_stock);
+    formData.append("XL_stock", XL_stock);
+    formData.append("XXL_stock", XXL_stock);
     formData.append("discount", discount);
+    formData.append("gender", gender);
+    formData.append("top", top);
+    formData.append("bottom", bottom);
 
     const url = `/menu/items/create`;
     return axiosClient.post(url, formData);
