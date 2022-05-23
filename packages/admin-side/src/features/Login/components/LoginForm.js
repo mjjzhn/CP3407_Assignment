@@ -16,7 +16,7 @@ export default function LoginForm({ onSubmit }) {
           spacing={2}
         >
           <Grid item>
-            <Typography variant="h4" sx={{ color: "red" }}>
+            <Typography variant="h4" color="primary">
               WELCOME TO ADMIN SITE
             </Typography>
           </Grid>

@@ -20,7 +20,7 @@ export default function Setting({}) {
           staffname: data.staffName,
           picture: data.picture,
         };
-        const msg = await settingApi.post(params).then(function (response) {
+        const msg = await settingApi.put(params).then(function (response) {
           dispatch(
             setStaff({
               avatar: response.avatar,
@@ -34,8 +34,8 @@ export default function Setting({}) {
         dispatch(setIsAlert({ isAlert: true, code: 200 }));
         dispatch(setLoading(false));
       } catch (error) {
-        dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
-        dispatch(setMsg(error.response.data.message));
+        // dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
+        // dispatch(setMsg(error.response.data.message));
         dispatch(setLoading(false));
       }
     };
@@ -43,7 +43,7 @@ export default function Setting({}) {
   };
   return (
     <Grid container>
-      <Grid item xs={12} sx={{ background: "#FF0000" }}>
+      <Grid item xs={12}>
         <Header />
       </Grid>
       <Grid item xs={12} p={2}>

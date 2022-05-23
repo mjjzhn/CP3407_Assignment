@@ -53,7 +53,7 @@ export default function SettingForm({ onSubmit }) {
             <Controller
               name="account"
               control={control}
-              defaultValue="hellokitty113" // this will avoid uncontrolled to controlled input
+              defaultValue="admin" // this will avoid uncontrolled to controlled input
               render={({
                 field: { onChange, value, isTouched },
                 fieldState: { error },
