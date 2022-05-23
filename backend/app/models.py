@@ -67,6 +67,11 @@ class Customer(db.Model):
     favorite_list = db.Column(db.JSON) #store an array of Item id
     customer_name=db.Column(db.String(64))
     avatar =db.Column(db.String(140))
+    phone= db.Column(db.Integer)
+    postal_code =db.Column(db.Integer)
+    address=db.Column(db.Text)
+    unit_no = db.Column(db.String(16))
+    
     orders = db.relationship('Order', backref='customer', lazy='dynamic')
     contact_forms =db.relationship('Contact_form', backref='customer', lazy='dynamic')
 
@@ -80,13 +85,17 @@ class Customer(db.Model):
             "orders": self.get_orders(),
             "favourite_items":self.get_favourite(),
             "favourite":self.favorite_list,
+            "customer_name":self.customer_name,
             "avatar": self.avatar,
-            "customer_name":self.customer_name
+            "phone":self.phone,
+            "postal_code":self.postal_code,
+            "address":self.address,
+            "unit_no":self.unit_no
         }
         return data
 
     def from_dict(self,data):
-        for field in ['username','customer_name','avatar']:
+        for field in ['username','customer_name','avatar','phone','postal_code','address','unit_no']:
             if field in data:
                 setattr(self, field, data[field])
         if 'password' in data:

@@ -28,6 +28,13 @@ def update_profile():
         if 'currentPassword' in data and not current_user.check_password(data["currentPassword"]):
             return bad_request("Current password incorrect")
         
+        for field in ["phone", "postal_code"]:
+            if field in data:
+                try:
+                    data[field] = int(data[field])
+                except ValueError:
+                    return bad_request(f"Please provide an integer for {field} field!") 
+                       
         #change avatar
         current_app.logger.info('in admin/update route')
         upload_result = None
