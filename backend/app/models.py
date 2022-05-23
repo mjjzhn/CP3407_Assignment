@@ -259,8 +259,8 @@ class Contact_form(APIMixin,db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
     full_name=db.Column(db.String(32))
     email=db.Column(db.String(32))
-    message=db.Column(db.String(140))
-    response=db.Column(db.String(140))
+    message=db.Column(db.Text)
+    response=db.Column(db.Text)
     
     def __repr__(self):
         return f'<Contact_form {self.id}:Customer:"{self.full_name}">'
