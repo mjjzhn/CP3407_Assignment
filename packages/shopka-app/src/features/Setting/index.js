@@ -13,7 +13,6 @@ import {
   selectDefaultValuesSetting,
 } from "../../appSlice";
 
-
 export default function Setting({}) {
   const dispatch = useDispatch();
 
@@ -49,7 +48,7 @@ export default function Setting({}) {
     };
 
     getSetting();
-  }, [toggleRefresh]);
+  }, [toggleRefresh, token]);
 
   const handleSubmit = (data) => {
     dispatch(setLoading(true));
@@ -87,11 +86,16 @@ export default function Setting({}) {
       <Typography variant="h5" align="left" color="primary" p={2}>
         SETTING
       </Typography>
-      <Grid container p={2}>
-        <Box sx={{ border: "1px solid #2979FF", borderRadius: "5px" }}>
-          <SettingForm onSubmit={handleSubmit} defaultValues={defaultValues} />
-        </Box>
-      </Grid>
+      {token && (
+        <Grid container p={2}>
+          <Box sx={{ border: "1px solid #2979FF", borderRadius: "5px" }}>
+            <SettingForm
+              onSubmit={handleSubmit}
+              defaultValues={defaultValues}
+            />
+          </Box>
+        </Grid>
+      )}
     </>
   );
 }
