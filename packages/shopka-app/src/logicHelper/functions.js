@@ -31,7 +31,7 @@ export const configNumber = (value) => {
   }
 };
 
-const validationNumber = (value) => {
+export const validationNumber = (value) => {
   let newValue = "";
   if (value.length > 0) {
     newValue = value.replace(/[^0-9]/g, "");

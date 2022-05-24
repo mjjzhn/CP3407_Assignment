@@ -17,7 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setOpenLogin } from "../../appSlice";
 
 export default function LinearWithValueLabel() {
-  const [paidSession, setPaidSession] = useState();
+  const [paidSession, setPaidSession] = useState(null);
   const dispatch = useDispatch();
   const token = sessionStorage.getItem("token");
 
@@ -28,6 +28,8 @@ export default function LinearWithValueLabel() {
   }, [token]);
 
   useEffect(() => {
+    // this function will call api after 5 seconds
+    // so cannot add loading in this
     const getProgressingOrder = async () => {
       try {
         const params = {};

@@ -15,6 +15,7 @@ import {
   setIsAlert,
   setCustomerId,
   setIsOpenDialog,
+  setDefaultValuesSetting,
 } from "./appSlice";
 import Login from "./features/Login";
 import TabContainer from "./features/TabContainer";
@@ -62,7 +63,21 @@ function App() {
           return response;
         });
         sessionStorage.setItem("token", `${token.access_token}`);
-        sessionStorage.setItem("customerName", `${token.customer.customer_name}`);
+        sessionStorage.setItem(
+          "customerName",
+          `${token.customer.customer_name}`
+        );
+
+        dispatch(
+          setDefaultValuesSetting({
+            fullName: token.customer.customer_name,
+            address: token.customer.address,
+            unitNo: token.customer.unit_no,
+            postalCode: token.customer.postal_code,
+            phoneNumber: token.customer.phone,
+          })
+        );
+
         dispatch(setCustomerId(token.customer.id));
         dispatch(setToken(token.customer.favourite_items));
         dispatch(setLoading(false));
@@ -92,9 +107,11 @@ function App() {
           subject: data.subject,
           message: data.message,
         };
-        const response = await contactApi.post(params).then(function (response) {
-          return response;
-        });
+        const response = await contactApi
+          .post(params)
+          .then(function (response) {
+            return response;
+          });
         dispatch(setIsOpenDialog(false));
         dispatch(setLoading(false));
         dispatch(setMsg(response.msg));
@@ -129,7 +146,7 @@ function App() {
         handleClose={handleCloseLogin}
         onSubmit={handleSubmit}
       />
-      <ContactForm onSubmit={handleSubmitFormContact}/>
+      <ContactForm onSubmit={handleSubmitFormContact} />
     </div>
   );
 }
