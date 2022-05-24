@@ -24,6 +24,7 @@ import signupApi from "./api/signupApi";
 import Payment from "./features/Payment";
 import ContactForm from "./features/ContactForm";
 import contactApi from "./api/contactApi";
+import ProgressingPage from "./features/ProgressingPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -119,6 +120,7 @@ function App() {
         />
         <Route exact path="/setting" element={<Setting />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/history" element={<ProgressingPage />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
 
