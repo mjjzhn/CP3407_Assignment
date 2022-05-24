@@ -25,7 +25,7 @@ import AlertNotification from "../../components/Alert";
 
 export default function OrderPage({ productCards, changeTab }) {
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const customerId = useSelector(selectCustomerId);
   const navigate = useNavigate();
 
@@ -70,8 +70,8 @@ export default function OrderPage({ productCards, changeTab }) {
         };
 
         const checkout = await orderApi.post(params).then(function (response) {
-          localStorage.setItem("clientSecret", `${response.client_secret}`);
-          localStorage.setItem("orderID", `${response.order_id}`);
+          sessionStorage.setItem("clientSecret", `${response.client_secret}`);
+          sessionStorage.setItem("orderID", `${response.order_id}`);
         });
 
         navigate("/payment");

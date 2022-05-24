@@ -22,8 +22,8 @@ import { stripePromise } from "../../constants";
 
 
 export default function Payment() {
-  const clientSecret = localStorage.getItem("clientSecret");
-  const orderId = localStorage.getItem("orderID");
+  const clientSecret = sessionStorage.getItem("clientSecret");
+  const orderId = sessionStorage.getItem("orderID");
   const dispatch = useDispatch();
 
   const loading = useSelector(selectLoading);

@@ -27,7 +27,7 @@ export default function Container({}) {
   const loading = useSelector(selectLoading);
   const msg = useSelector(selectMsg);
   const isAlert = useSelector(selectIsAlert);
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {

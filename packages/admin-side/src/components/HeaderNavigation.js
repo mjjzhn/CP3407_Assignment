@@ -59,8 +59,8 @@ export default function HeaderNavigation({}) {
     left: false,
   });
   const navigate = useNavigate();
-  const staffName = localStorage.getItem("staffName");
-  const avatar = localStorage.getItem("avatar");
+  const staffName = sessionStorage.getItem("staffName");
+  const avatar = sessionStorage.getItem("avatar");
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -78,9 +78,9 @@ export default function HeaderNavigation({}) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("staffName");
-    localStorage.removeItem("avatar");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("staffName");
+    sessionStorage.removeItem("avatar");
     navigate("/");
   };
   const list = () => (
