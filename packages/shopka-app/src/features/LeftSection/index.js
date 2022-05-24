@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Tabs, Typography, Box, Grid } from "@mui/material";
-import { mockProducts } from "./products";
 import ProductCard from "./components/ProductCard";
 import { checkType } from "../../logicHelper/functions";
 
 function TabPanel({
-  children,
   value,
   index,
   productList,
@@ -13,22 +11,45 @@ function TabPanel({
   onAddToFavorites,
 }) {
   const code = checkType(value);
+
   return (
     <Box hidden={value !== index}>
       <Grid container spacing={2} pl={2}>
-        {productList.map((product, index) => {
-          // if (product.item_category.includes(code)) {
-          return (
-            <Grid item key={index}>
-              <ProductCard
-                product={product}
-                onAddProduct={onAddProduct}
-                onAddToFavorites={onAddToFavorites}
-              />
-            </Grid>
-          );
-          // }
-        })}
+        {code !== "hot" ? (
+          <>
+            {productList.map((product, index) => {
+              if (product.item_category_list.includes(code)) {
+                return (
+                  <Grid item key={index}>
+                    <ProductCard
+                      product={product}
+                      onAddProduct={onAddProduct}
+                      onAddToFavorites={onAddToFavorites}
+                      isDiscount={!!product.discount}
+                    />
+                  </Grid>
+                );
+              }
+            })}
+          </>
+        ) : (
+          <>
+            {productList.map((product, index) => {
+              if (product.is_hot) {
+                return (
+                  <Grid item key={index}>
+                    <ProductCard
+                      product={product}
+                      onAddProduct={onAddProduct}
+                      onAddToFavorites={onAddToFavorites}
+                      isDiscount={!!product.discount}
+                    />
+                  </Grid>
+                );
+              }
+            })}
+          </>
+        )}
       </Grid>
     </Box>
   );
@@ -39,7 +60,7 @@ export default function LeftSection({
   handleAddProduct,
   HandleAddToFavorites,
 }) {
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -62,6 +83,7 @@ export default function LeftSection({
           aria-label="Vertical tabs example"
           sx={{ borderRight: 1, borderColor: "divider" }}
         >
+          <Tab label="Trending" />
           <Typography variant="h5" color="primary" align="left">
             Filter
           </Typography>
@@ -95,15 +117,15 @@ export default function LeftSection({
           >
             Bottom
           </Typography>
-          <Tab label="Jean" />
-          <Tab label="Sort" />
-          <Tab label="Trouser" />
+          <Tab label="Jeans" />
+          <Tab label="Short" />
+          <Tab label="Trousers" />
         </Tabs>
       </Grid>
       <Grid item xs={10}>
         <TabPanel
           value={value}
-          index={2}
+          index={0}
           productList={productList}
           onAddProduct={onAddProduct}
           onAddToFavorites={onAddToFavorites}
@@ -124,7 +146,7 @@ export default function LeftSection({
         />
         <TabPanel
           value={value}
-          index={6}
+          index={5}
           productList={productList}
           onAddProduct={onAddProduct}
           onAddToFavorites={onAddToFavorites}
@@ -145,7 +167,7 @@ export default function LeftSection({
         />
         <TabPanel
           value={value}
-          index={10}
+          index={9}
           productList={productList}
           onAddProduct={onAddProduct}
           onAddToFavorites={onAddToFavorites}
@@ -160,6 +182,13 @@ export default function LeftSection({
         <TabPanel
           value={value}
           index={12}
+          productList={productList}
+          onAddProduct={onAddProduct}
+          onAddToFavorites={onAddToFavorites}
+        />
+        <TabPanel
+          value={value}
+          index={13}
           productList={productList}
           onAddProduct={onAddProduct}
           onAddToFavorites={onAddToFavorites}

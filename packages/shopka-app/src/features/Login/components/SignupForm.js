@@ -4,21 +4,11 @@ import { useForm, Controller } from "react-hook-form";
 
 export default function SignUpForm({ onSubmit }) {
   const { handleSubmit, control } = useForm();
-  const [isSame, setIsSame] = useState(true);
 
-  const checkValue = (data) => {
-    if (data.password === data.confPassword) {
-      onSubmit(data);
-    }
-    setIsSame(false);
-  };
-  
   return (
     <Grid item>
       <form
-        onSubmit={handleSubmit((data) =>
-          checkValue({ ...data, type: "signup" })
-        )}
+        onSubmit={handleSubmit((data) => onSubmit({ ...data, type: "signup" }))}
       >
         <Grid
           container
@@ -74,7 +64,7 @@ export default function SignUpForm({ onSubmit }) {
 
           <Grid item>
             <Controller
-              name="confPassword"
+              name="cfPass"
               control={control}
               defaultValue="" // this will avoid uncontrolled to controlled input
               render={({
@@ -87,18 +77,12 @@ export default function SignUpForm({ onSubmit }) {
                   value={value}
                   type="password"
                   onChange={onChange}
-                  error={!!error || isTouched || !isSame}
-                  helperText={
-                    error
-                      ? error.message
-                      : !isSame
-                      ? "Password must match"
-                      : null
-                  }
+                  error={!!error || isTouched}
+                  helperText={error ? error.message : null}
                 />
               )}
               rules={{
-                required: "Password is required",
+                required: "New Password is required",
               }}
             />
           </Grid>

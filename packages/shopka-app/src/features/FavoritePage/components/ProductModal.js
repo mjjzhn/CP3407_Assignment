@@ -7,11 +7,13 @@ import {
   Grid,
   Box,
   Button,
+  IconButton,
 } from "@mui/material";
 import numeral from "numeral";
 import { color } from "../../../styles/constants";
 import AddIcon from "@mui/icons-material/Add";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const style = {
   position: "absolute",
@@ -37,7 +39,7 @@ export default function ProductModal({
   open,
   price,
   onClickAddToCard,
-  onAddToFavorites,
+  onDeleteFavorite,
 }) {
   const [size, setSize] = useState(sizes[0]);
   const handleSize = (event, newAlignment) => {
@@ -50,6 +52,12 @@ export default function ProductModal({
       description,
       size,
       price,
+      id,
+    });
+  };
+  
+  const handleClickDeleteCard = (e) => {
+    onDeleteFavorite(e, {
       id,
     });
   };
@@ -130,19 +138,38 @@ export default function ProductModal({
             </Grid>
           </Grid>
 
-          <Grid item xs={12}>
-            <Button
-              startIcon={<AddIcon />}
-              variant="contained"
-              //   disabled={!isAvailable}
-              color="primary"
-              sx={{ height: "40px", width: "100%" }}
-              onClick={(e) => {
-                handleClickAddToCard(e);
-              }}
+          <Grid item xs={12} container spacing={2}>
+            <Grid
+              item
+              xs={4}
+              container
+              justifyContent="center"
+              alignItems="center"
             >
-              <Typography variant="body2">Add to Cart</Typography>
-            </Button>
+              <IconButton
+                color="error"
+                onClick={(e) => {
+                  handleClickDeleteCard(e);
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Grid>
+            <Grid item xs={8}>
+              <Button
+                startIcon={<AddIcon />}
+                variant="contained"
+                //   disabled={!isAvailable}
+                color="primary"
+                sx={{ height: "40px" }}
+                onClick={(e) => {
+                  handleClickAddToCard(e);
+                }}
+                fullWidth
+              >
+                <Typography variant="body2">Add to Cart</Typography>
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Box>

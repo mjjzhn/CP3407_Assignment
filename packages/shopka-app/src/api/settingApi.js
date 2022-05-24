@@ -1,18 +1,33 @@
 import axiosClient from "./axiosClient";
 
 const settingApi = {
-  post: (params) => {
-    const { staffname, currentPassword, password, username, picture } = params;
+  put: (params) => {
+    const {
+      customer_name,
+      currentPassword,
+      password,
+      address,
+      unit_no,
+      postal_code,
+      phone,
+    } = params;
+    console.log(params);
 
     const formData = new FormData();
-    formData.append("staffname", staffname);
+    formData.append("customer_name", customer_name);
     formData.append("currentPassword", currentPassword);
     formData.append("password", password);
-    formData.append("username", username);
-    formData.append("avatar", picture[0]);
+    formData.append("address", address);
+    formData.append("unit_no", unit_no);
+    formData.append("postal_code", postal_code);
+    formData.append("phone", phone);
 
-    const url = `/admin/update`;
-    return axiosClient.post(url, formData);
+    const url = `/customer/update`;
+    return axiosClient.put(url, formData);
+  },
+  get: (params) => {
+    const url = `/customer`;
+    return axiosClient.get(url, { params });
   },
 };
 

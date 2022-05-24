@@ -4,11 +4,18 @@ import { Grid, Typography, Button, TextField, Box } from "@mui/material";
 import Header from "../../components/Header";
 import SettingForm from "./components/SettingForm";
 import settingApi from "../../api/settingApi";
-import { setLoading, setMsg, setIsAlert, setStaff } from "../../appSlice";
+import {
+  setLoading,
+  setMsg,
+  setIsAlert,
+  setStaff,
+  setRefresh,
+  selectRefresh,
+} from "../../appSlice";
 
 export default function Setting({}) {
   const dispatch = useDispatch();
-
+  const refresh = useSelector(selectRefresh);
   const handleSubmit = (data) => {
     const updateData = async () => {
       dispatch(setLoading(true));
@@ -30,6 +37,9 @@ export default function Setting({}) {
             })
           );
         });
+        dispatch(setRefresh(!refresh));
+        sessionStorage.setItem("avatar", msg.avatar);
+        sessionStorage.setItem("staffName", msg.staffname);
         dispatch(setMsg("Update success"));
         dispatch(setIsAlert({ isAlert: true, code: 200 }));
         dispatch(setLoading(false));
