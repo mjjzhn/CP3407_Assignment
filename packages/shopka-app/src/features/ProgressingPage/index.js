@@ -25,7 +25,7 @@ export default function LinearWithValueLabel() {
   const status = useSelector(selectStatus);
   const orderID = sessionStorage.getItem("orderID");
   const [orderStatus, setOrderStatus] = useState("nothing in progress");
-  console.log(orderID);
+
   useEffect(() => {
     if (paidProductCards) {
       setOrderStatus(status || "nothing in progress");
@@ -48,7 +48,6 @@ export default function LinearWithValueLabel() {
     };
 
     if (orderID) {
-      getProgressingOrder();
 
       if (progress < 100) {
         const timer = setInterval(() => {

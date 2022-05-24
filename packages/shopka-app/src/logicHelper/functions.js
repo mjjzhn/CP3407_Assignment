@@ -104,9 +104,9 @@ export const checkValue = (value) => {
   switch (value) {
     case "order received":
       return 25;
-    case "processing":
+    case "shipping":
       return 50;
-    case "ready":
+    case "delivered":
       return 75;
     case "taken":
       return 100;
