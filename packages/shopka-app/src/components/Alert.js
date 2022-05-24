@@ -6,7 +6,7 @@ export default function AlertNotification({ msg, open, onClose, code }) {
     <Snackbar open={open} autoHideDuration={6000} onClose={onClose}>
       <Alert
         onClose={onClose}
-        severity={code !== 200 ? "error" : "success"}
+        severity={code < 400 ? "error" : "success"}
         variant="filled"
         sx={{ width: "100%" }}
       >

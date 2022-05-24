@@ -34,8 +34,8 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 export default function FavoritePage({}) {
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
-
+  const token = sessionStorage.getItem("token");
+  const [toggleRefresh, setToggleRefresh] = useState(false);
   useEffect(() => {
     if (!token) {
       dispatch(setOpenLogin(true));
@@ -57,7 +57,7 @@ export default function FavoritePage({}) {
     };
 
     getFavoriteProduct();
-  }, []);
+  }, [toggleRefresh]);
 
   const favoriteCards = useSelector(selectFavoritesCards);
 
@@ -68,10 +68,11 @@ export default function FavoritePage({}) {
         const params = {
           id: product.id,
         };
-        await favoriteApi.delete(params);
+        const response = await favoriteApi.delete(params);
         dispatch(setMsg("Product is added"));
         dispatch(setIsAlert({ isAlert: true, code: 200 }));
         dispatch(setLoading(false));
+        setToggleRefresh(!toggleRefresh);
       } catch (error) {
         // console.log("no products found", error);
         dispatch(setLoading(false));
@@ -89,9 +90,10 @@ export default function FavoritePage({}) {
         const params = {
           id: product.id,
         };
-        await favoriteApi.delete(params);
+        const response = await favoriteApi.delete(params);
         dispatch(setMsg("Product is added"));
         dispatch(setIsAlert({ isAlert: true, code: 200 }));
+        setToggleRefresh(!toggleRefresh);
         dispatch(setLoading(false));
       } catch (error) {
         // console.log("no products found", error);
@@ -156,14 +158,14 @@ export default function FavoritePage({}) {
                         >
                           <Grid item>
                             <FavoriteBorderIcon
-                              color="secondary"
+                              color="error"
                               sx={{ fontSize: 40, opacity: 0.8, zIndex: 200 }}
                             />
                           </Grid>
                           <Grid item>
                             <Typography
                               variant="h6"
-                              color="secondary"
+                              color="error"
                               align="center"
                               mt={2}
                               sx={{ opacity: "0.8" }}

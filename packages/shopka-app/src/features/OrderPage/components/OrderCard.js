@@ -27,6 +27,7 @@ export default function OrderCard({
   productCards.forEach((product) => {
     total += product.discountPrice * product.numberOrder;
   });
+  console.log(productCards);
 
   return (
     <>
@@ -128,7 +129,8 @@ export default function OrderCard({
                                 {product.name}
                               </Typography>
                             </Grid>
-                            {/* <Grid item mt={2}>
+
+                            <Grid item mt={1}>
                               <Typography variant="body1" align="left">
                                 Size:{" "}
                                 <Typography
@@ -141,19 +143,7 @@ export default function OrderCard({
                                 </Typography>
                               </Typography>
                             </Grid>
-                            <Grid item mt={1}>
-                              <Typography variant="body1" align="left">
-                                Color:{" "}
-                                <Typography
-                                  variant="body1"
-                                  color="primary"
-                                  fontWeight={700}
-                                  component="span"
-                                >
-                                  {product.selectedColor.toUpperCase()}
-                                </Typography>
-                              </Typography>
-                            </Grid> */}
+                            
                             <Grid item mt={1}>
                               <Typography variant="body1" align="left">
                                 Price:{" "}

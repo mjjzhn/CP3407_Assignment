@@ -21,16 +21,19 @@ export default function ProductCard({
   product,
   onAddProduct,
   onAddToFavorites,
+  isDiscount,
 }) {
   const {
     name = product?.item_name,
     description = product?.item_description,
     image = product?.item_image_link,
-    price = product?.item_current_price,
-    listPrices = product?.item_prices,
+    price = product?.item_price,
     id = product?.id,
-    discountPrice = product?.discount,
-    isAvailable = product?.available,
+    currentPrice = product?.item_current_price,
+    isMAvailable = !!product?.M_stock,
+    isLAvailable = !!product?.L_stock,
+    isXLAvailable = !!product?.XL_stock,
+    isXXLAvailable = !!product?.XXL_stock,
   } = product;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -49,11 +52,11 @@ export default function ProductCard({
     <>
       <Card sx={{ width: 180 }} onClick={handleOpen}>
         <CardMedia component="img" height="140" image={image} alt={name} />
-        <CardContent sx={{ height: 200 }}>
-          <Box sx={{ height: 70 }}>
+        <CardContent sx={{ height: 150 }}>
+          <Box sx={{ height: 100 }}>
             <Typography
               variant="body2"
-              sx={{ fontWeight: 700, color: color.textPrimary }}
+              sx={{ fontWeight: 700, color: color.textPrimary, fontSize: 16 }}
               align="left"
             >
               {name}
@@ -67,20 +70,51 @@ export default function ProductCard({
             spacing={2}
           >
             <Grid item>
-              <Typography variant="h6" align="left" sx={{ fontWeight: 700 }}>
-                ${numeral(price).format("0,0.00")}
-              </Typography>
-            </Grid>
-          </Grid>
+              {isDiscount ? (
+                <>
+                  <Typography variant="body2" component="span">
+                    Price:
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: color.textPrimary,
 
-          <Grid item>
-            <Typography
-              variant="body2"
-              align="left"
-              sx={{ color: color.grey[500] }}
-            >
-              {writerDescription(description)}
-            </Typography>
+                      textDecoration: "line-through",
+                    }}
+                  >
+                    {" "}
+                    ${numeral(price).format("0,0")}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    sx={{
+                      color: color.textSecondary,
+                      textDecorationStyle: "none",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {" $"}
+                    {numeral(currentPrice).format("0,0")}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="body2" component="span">
+                    Price:{" "}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    align="left"
+                    component="span"
+                    sx={{ fontWeight: 700 }}
+                  >
+                    ${numeral(price).format("0,0.00")}
+                  </Typography>
+                </>
+              )}
+            </Grid>
           </Grid>
         </CardContent>
       </Card>
@@ -90,12 +124,17 @@ export default function ProductCard({
         description={description}
         image={image}
         price={price}
+        currentPrice={currentPrice}
         id={id}
         handleClose={handleClose}
         open={open}
         onClickAddToCard={onClickAddToCard}
         onAddToFavorites={onClickAddFavorites}
-        listPrices={listPrices}
+        isXXLAvailable={isXXLAvailable}
+        isXLAvailable={isXLAvailable}
+        isLAvailable={isLAvailable}
+        isMAvailable={isMAvailable}
+        isDiscount={isDiscount}
       />
     </>
   );

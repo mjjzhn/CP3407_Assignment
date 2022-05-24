@@ -18,6 +18,14 @@ const initialState = {
   status: null,
   clientSecret: null,
   customerId: null,
+  isOpenDialog: false,
+  defaultValuesSetting: {
+    fullName: "",
+    address: "",
+    unitNo: "",
+    phoneNumber: "",
+    postalCode: "",
+  },
 };
 
 export const appSlice = createSlice({
@@ -103,6 +111,12 @@ export const appSlice = createSlice({
     removeFavoritesCard: (state, action) => {
       state.favoritesCards = [];
     },
+    setIsOpenDialog: (state, action) => {
+      state.isOpenDialog = action.payload;
+    },
+    setDefaultValuesSetting: (state, action) => {
+      state.defaultValuesSetting = action.payload;
+    },
   },
 });
 
@@ -125,6 +139,8 @@ export const {
   setCustomerId,
   setFavoritesCard,
   removeFavoritesCard,
+  setIsOpenDialog,
+  setDefaultValuesSetting,
 } = appSlice.actions;
 
 export const selectLoading = (state) => state.app.loading;
@@ -140,5 +156,8 @@ export const selectStatus = (state) => state.app.status;
 export const selectClientSecret = (state) => state.app.clientSecret;
 export const selectCustomerId = (state) => state.app.customerId;
 export const selectFavoritesCards = (state) => state.app.favoritesCards;
+export const selectIsOpenDialog = (state) => state.app.isOpenDialog;
+export const selectDefaultValuesSetting = (state) =>
+  state.app.defaultValuesSetting;
 
 export default appSlice.reducer;

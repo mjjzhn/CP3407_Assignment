@@ -65,9 +65,6 @@ export default function Login({ open, handleClose, onSubmit }) {
             alignItems="center"
             spacing={2}
           >
-            <Grid item>
-              <img src={Logo} alt="logo" />
-            </Grid>
             <Grid item xs={12}>
               <Tabs
                 value={value}

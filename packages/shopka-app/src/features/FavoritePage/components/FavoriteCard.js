@@ -21,6 +21,7 @@ export default function FavoriteCard({
   product,
   onAddProduct,
   onAddToFavorites,
+  handleRemoveProduct,
 }) {
   const {
     name = product?.item_name,
@@ -29,20 +30,20 @@ export default function FavoriteCard({
     price = product?.item_current_price,
     listPrices = product?.item_prices,
     id = product?.id,
-    discountPrice = product?.discount,
-    isAvailable = product?.available,
   } = product;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const onClickAddToCard = (e, data) => {
     e.stopPropagation();
+    handleClose();
     onAddProduct({ ...data });
   };
 
-  const onClickAddFavorites = (e, data) => {
+  const onDeleteFavorite = (e, id) => {
     e.stopPropagation();
-    onAddToFavorites({ ...data });
+    handleClose();
+    handleRemoveProduct(id);
   };
 
   return (
@@ -94,7 +95,7 @@ export default function FavoriteCard({
         handleClose={handleClose}
         open={open}
         onClickAddToCard={onClickAddToCard}
-        onAddToFavorites={onClickAddFavorites}
+        onDeleteFavorite={onDeleteFavorite}
         listPrices={listPrices}
       />
     </>
