@@ -14,6 +14,7 @@ import {
   setMsg,
   setIsAlert,
   setCustomerId,
+  setIsOpenDialog,
 } from "./appSlice";
 import Login from "./features/Login";
 import TabContainer from "./features/TabContainer";
@@ -87,11 +88,13 @@ function App() {
         const params = {
           email: data.email,
           full_name: data.fullName,
+          subject: data.subject,
           message: data.message,
         };
         const response = await contactApi.post(params).then(function (response) {
           return response;
         });
+        dispatch(setIsOpenDialog(false));
         dispatch(setLoading(false));
         dispatch(setMsg(response.msg));
         dispatch(setLoading(false));
@@ -116,7 +119,6 @@ function App() {
         />
         <Route exact path="/setting" element={<Setting />} />
         <Route path="/payment" element={<Payment />} />
-        <Route path="/contact" element={<ContactForm />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
 
@@ -125,7 +127,7 @@ function App() {
         handleClose={handleCloseLogin}
         onSubmit={handleSubmit}
       />
-      <ContactForm onSubmit={handleSubmitFormContact} />
+      <ContactForm onSubmit={handleSubmitFormContact}/>
     </div>
   );
 }
