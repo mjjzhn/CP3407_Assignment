@@ -23,7 +23,7 @@ export default function LinearWithValueLabel() {
 
   const paidProductCards = useSelector(selectPaidProductCards);
   const status = useSelector(selectStatus);
-  const orderID = localStorage.getItem("orderID");
+  const orderID = sessionStorage.getItem("orderID");
   const [orderStatus, setOrderStatus] = useState("nothing in progress");
   console.log(orderID);
   useEffect(() => {

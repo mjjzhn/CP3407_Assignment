@@ -50,8 +50,8 @@ export default function HeaderNavigation({}) {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
-  const customerName = localStorage.getItem("customerName");
+  const token = sessionStorage.getItem("token");
+  const customerName = sessionStorage.getItem("customerName");
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -69,10 +69,10 @@ export default function HeaderNavigation({}) {
 
   const handleClickLoginAndOut = () => {
     if (token) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("customerName");
-      localStorage.removeItem("orderID");
-      localStorage.removeItem("clientSecret");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("customerName");
+      sessionStorage.removeItem("orderID");
+      sessionStorage.removeItem("clientSecret");
       dispatch(setToken(""));
       navigate("/");
     } else {

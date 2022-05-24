@@ -66,7 +66,7 @@ export default function ProductModal({
     XXL: isXXLAvailable,
   };
 
-  const [size, setSize] = useState(sizes[0]);
+  const [size, setSize] = useState("M");
   const handleSize = (event, newAlignment) => {
     setSize(newAlignment);
   };

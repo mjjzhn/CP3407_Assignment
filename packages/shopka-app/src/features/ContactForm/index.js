@@ -15,7 +15,7 @@ import ContactForm from "./components/ContactForm";
 
 export default function FormContactUs({ onSubmit }) {
   const [open, setOpen] = useState(false);
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const handleClickOpen = () => {
     setOpen(true);
   };
