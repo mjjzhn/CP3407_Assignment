@@ -43,13 +43,14 @@ function App() {
         });
         dispatch(setLoading(false));
         dispatch(setMsg(response.msg));
-        dispatch(setLoading(false));
+        dispatch(setOpenLogin(false));
         dispatch(setIsAlert({ isAlert: true, code: 200 }));
       } catch (error) {
         dispatch(setMsg(error.response.data.msg));
         dispatch(setLoading(false));
         dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
       }
+      dispatch(setOpenLogin(false));
     };
 
     const Login = async () => {
@@ -63,6 +64,7 @@ function App() {
         dispatch(setCustomerId(token.customer.id));
         dispatch(setToken(token.customer.favourite_items));
         dispatch(setLoading(false));
+        dispatch(setOpenLogin(false));
       } catch (error) {
         dispatch(setMsg(error.response.data.msg));
         dispatch(setLoading(false));
