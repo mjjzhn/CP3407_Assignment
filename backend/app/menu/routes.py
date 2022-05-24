@@ -11,13 +11,17 @@ from app import cloudinary
 
 @bp.route('/items', methods =["GET"])
 def get_items():
-    data = Item.to_collection_dict(Item.query.all(), 'menu.get_items')
+    data = Item.to_collection_dict(Item.query.filter_by(is_deleted=False).all(), 'menu.get_items')
     return jsonify(data)
+    
 
 
 @bp.route('/items/<int:id>', methods =["GET"])
 def get_item(id):
-    return jsonify(Item.query.get_or_404(id).to_dict())
+    try:
+        return jsonify(Item.query.filter_by(is_deleted=False).filter_by(id=int(id)).first().to_dict())
+    except:
+        return "Item not found",404
 
 @bp.route('/items/<int:id>', methods =["PUT"])
 @admin_required()
@@ -46,15 +50,26 @@ def update_item(id):
     
     #for float attribute
     if "item_price" in data:
-        data["item_price"] = float(data["item_price"])
+        if data["item_price"]:
+            try:
+                data["item_price"] = float(data["item_price"])
+            except ValueError:
+                return bad_request(f"please providea float value for item price")
     #for integer attribute    
     for field in ["M_stock","L_stock","XL_stock","XXL_stock","discount"]:
         if field in data:
-            data[field]= int(data[field])
+            if data[field]:
+                try:
+                    data[field]= int(data[field])
+                except ValueError:
+                    return bad_request(f"please provide integer value for {field} field")
     #for boolean value
     for field in ["is_hot","available"]:
         if field in data:
-            data[field]= bool(data[field])
+            if data[field]=='true':
+                data[field]= True 
+            else:
+                data[field]=False
                 
     #adding item_image_link
     upload_result = None
@@ -125,11 +140,17 @@ def create_item():
         #for integer attribute    
         for field in ["M_stock","L_stock","XL_stock","XXL_stock","discount"]:
             if field in data:
-                data[field]= int(data[field])
+                try: 
+                    data[field]= int(data[field])
+                except ValueError:
+                    return bad_request(f"Please provide integer value for {field} field!")
         #for boolean value
         for field in ["is_hot","available"]:
             if field in data:
-                data[field]= bool(data[field])
+                if data[field]=='true':
+                    data[field]= True 
+                else:
+                    data[field]=False
                 
         #adding item_image_link
         upload_result = None
@@ -214,7 +235,7 @@ def delete_item(id):
         customer.remove_from_favourite(id)
     item = Item.query.get_or_404(id)
     deleted_item_infor = item.to_dict()
-    db.session.delete(item)
+    item.is_deleted = True
     db.session.commit()
     response ={}
     response['isItemDeleted']=True

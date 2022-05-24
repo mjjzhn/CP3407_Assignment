@@ -45,10 +45,13 @@ def register_customer():
     data = request.get_json() or {}
     username = request.json.get("username", None)
     password = request.json.get("password", None)
+    confirm_password =request.json.get("cfPass", None)
 
     if Customer.query.filter_by(username= username).first():
         return {"msg": "choose another username"}, 401
     customer = Customer(username= username)
+    if confirm_password != password:
+        return bad_request("please confirm your password")
     customer.set_password(password)
     if "customer_name" in data:
         customer.customer_name = data["customer_name"]
@@ -60,4 +63,4 @@ def register_customer():
         customer.avatar = "https://www.nicepng.com/png/detail/115-1150176_employee-avatar-png-transparent-image-avatar-male.png"
     db.session.add(customer)
     db.session.commit()
-    return {"msg": "register successfully"}, 200
+    return {"msg": "Register successfully. Please log in!"}, 200

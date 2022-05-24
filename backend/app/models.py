@@ -117,11 +117,12 @@ class Customer(db.Model):
     
     
     def remove_from_favourite(self,item_id):
-        new_list= list(self.favorite_list)
-        if item_id in new_list:
-            new_list.remove(item_id)
-            self.favorite_list =new_list
-        db.session.commit()
+        if self.favorite_list:
+            new_list= list(self.favorite_list)
+            if item_id in new_list:
+                new_list.remove(item_id)
+                self.favorite_list =new_list
+            db.session.commit()
     
     def get_favourite(self):
         favourite_items_to_dict = list()
@@ -133,7 +134,9 @@ class Customer(db.Model):
     def get_orders(self):
         order_to_dict_list=list()
         for order in self.orders:
-            order_to_dict_list.append(order.to_dict())
+            if order.order_status != Order.unpaid_status:
+                order_to_dict_list.append(order.to_dict())
+            # order_to_dict_list.append(order.to_dict())
         return order_to_dict_list
     
     def set_username(self,username):
@@ -163,6 +166,7 @@ class Item(APIMixin, db.Model):
     XXL_stock= db.Column(db.Integer)
     is_hot = db.Column(db.Boolean, default=False)
     available = db.Column(db.Boolean, default=True)
+    is_deleted = db.Column(db.Boolean, default=False)
 
     # #the list of size for this item in ascending order. Format:"small large big"
     # size_list_dict ={}
@@ -215,7 +219,8 @@ class Item(APIMixin, db.Model):
             "XL_stock":self.XL_stock,
             "XXL_stock":self.XXL_stock,
             "is_hot": self.is_hot,
-            "available":self.available
+            "available":self.available,
+            "is_deleted":self.is_deleted
             # ,
             # '_links':{
             #     'self': url_for('menu.get_item', id=self.id)

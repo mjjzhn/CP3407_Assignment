@@ -55,6 +55,7 @@ def create_order():
         if not selected_item.check_quantity_available(item["quantity"],item["item_size"]):
             return bad_request("There is not enough {} to make an order".format(selected_item["item_name"]))
     
+    
     new_order = Order(customer_id=data["customer_id"])
     new_order.set_status_order_unpaid()
     db.session.add(new_order)

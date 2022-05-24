@@ -23,17 +23,22 @@ def update_profile():
             Customer.query.filter_by(username=data['username']).first():
             return bad_request('please use a different username')
         if "password" in data:
-            if 'currentPassword' not in data:
-                return bad_request("Please provide your current password")
-        if 'currentPassword' in data and not current_user.check_password(data["currentPassword"]):
-            return bad_request("Current password incorrect")
-        
+            if data["password"]:
+                if 'currentPassword' not in data:
+                    return bad_request("Please provide your current password")
+                if 'currentPassword' in data and not current_user.check_password(data["currentPassword"]):
+                    return bad_request("Current password incorrect")
+        else:
+            if "currentPassword" in data:
+                del data["currentPassword"]
+                
         for field in ["phone", "postal_code"]:
             if field in data:
-                try:
-                    data[field] = int(data[field])
-                except ValueError:
-                    return bad_request(f"Please provide an integer for {field} field!") 
+                if data[field]:
+                    try:
+                        data[field] = int(data[field])
+                    except ValueError:
+                        return bad_request(f"Please provide an integer for {field} field!") 
                        
         #change avatar
         current_app.logger.info('in admin/update route')
