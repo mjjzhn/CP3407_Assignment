@@ -45,6 +45,7 @@ export default function ProductCard({ product, onSubmitCMS, deleteProduct }) {
     mStock = product.M_stock,
     xlStock = product.XL_stock,
     xxlStock = product.XXL_stock,
+    isHot = product.is_hot,
   } = product;
 
   const [open, setOpen] = useState(false);
@@ -260,13 +261,14 @@ export default function ProductCard({ product, onSubmitCMS, deleteProduct }) {
               xxlStock,
               male: category.includes("male"),
               female: category.includes("female"),
-              kid: category.includes("kid"),
-              jane: category.includes("jane"),
+              children: category.includes("children"),
+              tShirt: category.includes("t-shirt"),
               hoodie: category.includes("hoodie"),
               jacket: category.includes("jacket"),
-              jane: category.includes("jane"),
-              sort: category.includes("sort"),
+              jeans: category.includes("jeans"),
+              short: category.includes("short"),
               trouser: category.includes("trouser"),
+              isHot,
             }}
             onSubmitCMS={onSubmitCMS}
           />

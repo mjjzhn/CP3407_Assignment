@@ -83,6 +83,7 @@ export default function HeaderNavigation({}) {
     sessionStorage.removeItem("avatar");
     navigate("/");
   };
+
   const list = () => (
     <Box
       sx={{ width: 280 }}

@@ -22,13 +22,13 @@ export const writerDescription = (description) => {
 export const changeGender = (value1, value2, value3) => {
   let changedString = "";
   if (value1 === true) {
-    changedString += "male";
+    changedString += "male,";
   }
   if (value2 === true) {
-    changedString += ",female";
+    changedString += "female,";
   }
   if (value3 === true) {
-    changedString += ",kid";
+    changedString += "children";
   }
   return changedString;
 };
@@ -36,26 +36,30 @@ export const changeGender = (value1, value2, value3) => {
 export const changeTop = (value1, value2, value3) => {
   let changedString = "";
   if (value1 === true) {
-    changedString += "t-shirt";
+    changedString += "t-shirt,";
   }
+
   if (value2 === true) {
-    changedString += ",hoodie";
+    changedString += "hoodie,";
   }
+
   if (value3 === true) {
-    changedString += ",jacket";
+    changedString += "jacket";
   }
   return changedString;
 };
 export const changeBottom = (value1, value2, value3) => {
   let changedString = "";
   if (value1 === true) {
-    changedString += "jane";
+    changedString += "jeans,";
   }
+
   if (value2 === true) {
-    changedString += ",sort";
+    changedString += "short,";
   }
+
   if (value3 === true) {
-    changedString += ",trouser";
+    changedString += "trouser";
   }
   return changedString;
 };

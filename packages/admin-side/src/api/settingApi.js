@@ -6,11 +6,16 @@ const settingApi = {
 
     const formData = new FormData();
     formData.append("staffname", staffname);
-    formData.append("currentPassword", currentPassword);
-    formData.append("password", password);
+    if (currentPassword) {
+      formData.append("currentPassword", currentPassword);
+    }
+    if (password) {
+      formData.append("password", password);
+    }
     formData.append("username", username);
-    formData.append("avatar", picture[0]);
-
+    if (picture) {
+      formData.append("avatar", picture[0]);
+    }
     const url = `/admin/update`;
     return axiosClient.put(url, formData);
   },
