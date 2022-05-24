@@ -266,8 +266,9 @@ class Item(APIMixin, db.Model):
 class Contact_form(APIMixin,db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
-    full_name=db.Column(db.String(32))
-    email=db.Column(db.String(32))
+    full_name=db.Column(db.String(140))
+    email=db.Column(db.String(140))
+    subject=db.Column(db.Text)
     message=db.Column(db.Text)
     response=db.Column(db.Text)
     
@@ -280,13 +281,21 @@ class Contact_form(APIMixin,db.Model):
             "customer_id": self.customer_id,
             "full_name":self.full_name,
             "email":self.email,
+            "subject":self.subject,
             "message":self.message,
             "response":self.response
         }
+        if self.subject:
+            reply_subject= f"RE: {self.subject}. Customer: {self.full_name}"
+        else:
+            reply_subject= f"RE: Customer contact. Customer: {self.full_name}"
+        reply_subject=reply_subject.replace(" ", "%20")
+        mail_link= f"mailto:{self.email}?subject={reply_subject}"
+        data["mail_link"]=mail_link
         return data
     
     def from_dict(self,data):
-        for field in ['customer_id', 'full_name',"email","message"]:
+        for field in ['customer_id', 'full_name',"email","message","subject"]:
             if field in data:
                 setattr(self, field, data[field])
     

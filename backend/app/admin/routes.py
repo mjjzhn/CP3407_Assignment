@@ -64,6 +64,18 @@ def get_all_message():
 def get_contact(id):
     return jsonify(Contact_form.query.filter_by(id=id).first().to_dict()),200 
 
+@bp.route('/contactforms/<id>', methods=["DELETE"])
+@admin_required()
+def delete_contact(id):
+    form= Contact_form.query.filter_by(id=id).first()
+    deleted_form_infor=form.to_dict()
+    db.session.delete(form)
+    db.session.commit()
+    response = dict()
+    response['isItemDeleted']=True
+    response['deletedItemInfo']= deleted_form_infor
+    return jsonify(response),200
+
 @bp.route('/contactforms/<id>/response', methods=["POST"])
 @admin_required()
 def response_to_contact(id):

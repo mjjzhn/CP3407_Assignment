@@ -85,7 +85,7 @@ def get_shopping_history():
 @customer_required()
 def contact_to_shop():
     data = request.form.to_dict() or {}
-    for field in ["email","message"]:
+    for field in ["subject","email","message"]:
         if field not in data:
             return bad_request(f"Please include {field} field")
     if "customer_id" not in data:
