@@ -19,10 +19,15 @@ Please put your name here:
  https://nodejs.org/download/release/v14.17.0/
  ```
  #### 1. Clone this project 
- #### 2. Go to the packages and go to the client or admin project
-	cd packages/shopka-app
-	cd packages/admin-side
-	 
+ #### 2. Go to the packages, then:
+ > Go to client side
+```
+cd packages/shopka-app
+```
+ > Go to admin side
+```
+cd packages/admin-side
+```
  #### 3. Install package: 
  > Just run in the first time
  ```
