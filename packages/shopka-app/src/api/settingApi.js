@@ -11,12 +11,15 @@ const settingApi = {
       postal_code,
       phone,
     } = params;
-    console.log(params);
 
     const formData = new FormData();
     formData.append("customer_name", customer_name);
-    formData.append("currentPassword", currentPassword);
-    formData.append("password", password);
+    if (currentPassword) {
+      formData.append("currentPassword", currentPassword);
+    }
+    if (password) {
+      formData.append("password", password);
+    }
     formData.append("address", address);
     formData.append("unit_no", unit_no);
     formData.append("postal_code", postal_code);
