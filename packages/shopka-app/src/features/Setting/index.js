@@ -73,9 +73,8 @@ export default function Setting({}) {
         dispatch(setLoading(false));
         setToggleRefresh(!toggleRefresh);
       } catch (error) {
-        console.log(error);
-        // dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
-        // dispatch(setMsg(error.response.data.message));
+        dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
+        dispatch(setMsg(error.response.data.message));
         dispatch(setLoading(false));
       }
     };

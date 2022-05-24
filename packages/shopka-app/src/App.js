@@ -16,6 +16,8 @@ import {
   setCustomerId,
   setIsOpenDialog,
   setDefaultValuesSetting,
+  selectMsg,
+  selectIsAlert,
 } from "./appSlice";
 import Login from "./features/Login";
 import TabContainer from "./features/TabContainer";
@@ -26,11 +28,24 @@ import Payment from "./features/Payment";
 import ContactForm from "./features/ContactForm";
 import contactApi from "./api/contactApi";
 import ProgressingPage from "./features/ProgressingPage";
+import AlertNotification from "./components/Alert";
 
 function App() {
   const dispatch = useDispatch();
   const productCards = useSelector(selectProductCards);
   const openLogin = useSelector(selectOpenLogin);
+
+  const msg = useSelector(selectMsg);
+  const isAlert = useSelector(selectIsAlert);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    dispatch(setIsAlert({ isAlert: false, code: 200 }));
+  };
+  
   const handleCloseLogin = () => {
     dispatch(setOpenLogin(false));
   };
@@ -67,6 +82,7 @@ function App() {
           "customerName",
           `${token.customer.customer_name}`
         );
+        sessionStorage.setItem("postalCode", `${token.customer.postal_code}`);
 
         dispatch(
           setDefaultValuesSetting({
@@ -145,6 +161,12 @@ function App() {
         open={openLogin}
         handleClose={handleCloseLogin}
         onSubmit={handleSubmit}
+      />
+      <AlertNotification
+        msg={msg}
+        open={isAlert.isAlert}
+        onClose={handleClose}
+        code={isAlert.code}
       />
       <ContactForm onSubmit={handleSubmitFormContact} />
     </div>
