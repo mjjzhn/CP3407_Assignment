@@ -46,9 +46,9 @@ function App() {
           return response;
         });
 
-        localStorage.setItem("token", `${token.access_token}`);
-        localStorage.setItem("avatar", `${token.admin.avatar}`);
-        localStorage.setItem("staffName", `${token.admin.staffname}`);
+        sessionStorage.setItem("token", `${token.access_token}`);
+        sessionStorage.setItem("avatar", `${token.admin.avatar}`);
+        sessionStorage.setItem("staffName", `${token.admin.staffname}`);
         dispatch(setStaff(token.admin));
         navigate("/home");
         dispatch(setLoading(false));
@@ -71,7 +71,7 @@ function App() {
         <Route
           path="/home"
           element={
-            <AuthGuard token={localStorage.getItem("token")}>
+            <AuthGuard token={sessionStorage.getItem("token")}>
               <AdminHomePage />
             </AuthGuard>
           }
@@ -79,7 +79,7 @@ function App() {
         <Route
           path="/order"
           element={
-            <AuthGuard token={localStorage.getItem("token")}>
+            <AuthGuard token={sessionStorage.getItem("token")}>
               <ManagerOrder />
             </AuthGuard>
           }
@@ -87,7 +87,7 @@ function App() {
         <Route
           path="/cms"
           element={
-            <AuthGuard token={localStorage.getItem("token")}>
+            <AuthGuard token={sessionStorage.getItem("token")}>
               <ManagerCMS />
             </AuthGuard>
           }
@@ -95,7 +95,7 @@ function App() {
         <Route
           path="/setting"
           element={
-            <AuthGuard token={localStorage.getItem("token")}>
+            <AuthGuard token={sessionStorage.getItem("token")}>
               <Setting />
             </AuthGuard>
           }

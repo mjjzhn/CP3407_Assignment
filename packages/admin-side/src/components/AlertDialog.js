@@ -32,9 +32,9 @@ export default function AlertDialog({ open, handleClose, handleConfirm }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleConfirm} color="error">
-            Agree
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
