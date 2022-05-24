@@ -26,7 +26,21 @@ const style = {
   p: 4,
 };
 
-const sizes = ["M", "L", "XL", "XXL"];
+const renderOptions = (options) => {
+  let array = [];
+  for (const key in options) {
+    array.push(
+      <ToggleButton
+        value={key}
+        disabled={!options[key]}
+        sx={{ width: 40, height: 40 }}
+      >
+        {key}
+      </ToggleButton>
+    );
+  }
+  return array;
+};
 
 export default function ProductModal({
   name,
@@ -36,9 +50,22 @@ export default function ProductModal({
   handleClose,
   open,
   price,
+  currentPrice,
+  isDiscount,
+  isXXLAvailable,
+  isXLAvailable,
+  isLAvailable,
+  isMAvailable,
   onClickAddToCard,
   onAddToFavorites,
 }) {
+  const sizes = {
+    M: isMAvailable,
+    L: isLAvailable,
+    XL: isXLAvailable,
+    XXL: isXXLAvailable,
+  };
+
   const [size, setSize] = useState(sizes[0]);
   const handleSize = (event, newAlignment) => {
     setSize(newAlignment);
@@ -89,17 +116,49 @@ export default function ProductModal({
           </Grid>
           <Grid item xs={7} container>
             <Grid item xs={12}>
-              <Typography variant="body1" align="left">
-                Price:{" "}
-                <Typography
-                  variant="body1"
-                  align="left"
-                  component="span"
-                  sx={{ fontWeight: 700 }}
-                >
-                  {numeral(price).format("0,0.00")}
-                </Typography>
-              </Typography>
+              {isDiscount ? (
+                <>
+                  <Typography variant="body2" component="span">
+                    Price:
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: color.textPrimary,
+                      textDecoration: "line-through",
+                    }}
+                  >
+                    {" "}
+                    ${numeral(price).format("0,0")}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    component="span"
+                    sx={{
+                      color: color.textSecondary,
+                      textDecorationStyle: "none",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {" $"}
+                    {numeral(currentPrice).format("0,0")}
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Typography variant="body2" component="span">
+                    Price:{" "}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    align="left"
+                    component="span"
+                    sx={{ fontWeight: 700 }}
+                  >
+                    ${numeral(price).format("0,0.00")}
+                  </Typography>
+                </>
+              )}
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body1" align="left">
@@ -127,15 +186,7 @@ export default function ProductModal({
                   aria-label="size"
                   color="primary"
                 >
-                  {sizes.map((size) => (
-                    <ToggleButton
-                      value={size}
-                      key={size}
-                      sx={{ width: 40, height: 40 }}
-                    >
-                      {size}
-                    </ToggleButton>
-                  ))}
+                  {renderOptions(sizes)}
                 </ToggleButtonGroup>
               </Grid>
             </Grid>

@@ -1,23 +1,25 @@
 export const checkType = (value) => {
   switch (value) {
-    case 2:
-      return "men";
+    case 0:
+      return "hot";
     case 3:
-      return "women";
+      return "male";
     case 4:
-      return "kid";
-    case 6:
-      return "t-shirt";
+      return "female";
+    case 5:
+      return "children";
     case 7:
-      return "hoodie";
+      return "t-shirt";
     case 8:
+      return "hoodie";
+    case 9:
       return "jacket";
-    case 10:
-      return "jean";
     case 11:
-      return "sort";
+      return "jeans";
     case 12:
-      return "trouser";
+      return "short";
+    case 13:
+      return "trousers";
   }
 };
 

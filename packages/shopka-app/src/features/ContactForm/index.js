@@ -32,7 +32,7 @@ export default function FormContactUs({ onSubmit }) {
             variant="contained"
             onClick={handleClickOpen}
             sx={{
-              position: "absolute",
+              position: "fixed",
               bottom: "0px",
               right: "0px",
               borderRadius: 0,
