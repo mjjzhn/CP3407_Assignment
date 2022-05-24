@@ -96,7 +96,6 @@ export default function SettingForm({ onSubmit }) {
                   helperText={error ? error.message : null}
                 />
               )}
-              rules={{ required: "Password is required" }}
             />
           </Grid>
 
@@ -119,7 +118,6 @@ export default function SettingForm({ onSubmit }) {
                   helperText={error ? error.message : null}
                 />
               )}
-              rules={{ required: "Password is required" }}
             />
           </Grid>
 

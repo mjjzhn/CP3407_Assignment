@@ -80,7 +80,7 @@ export default function CMSForm({
               fieldState: { error },
             }) => (
               <TextField
-                label="Base Price"
+                label="Price"
                 variant="standard"
                 value={numeral(configNumber(value)).format("0.00")}
                 type="number"
@@ -282,7 +282,7 @@ export default function CMSForm({
 
             <Grid item>
               <Controller
-                name="kid"
+                name="children"
                 defaultValue={true}
                 control={control}
                 render={({ field }) => (
@@ -374,7 +374,7 @@ export default function CMSForm({
             </Grid>
             <Grid item>
               <Controller
-                name="jean"
+                name="jeans"
                 defaultValue={true}
                 control={control}
                 render={({ field }) => (
@@ -385,7 +385,7 @@ export default function CMSForm({
                       checked={field.value}
                     />
                     <Typography variant="body2" sx={{ mt: 1.5 }}>
-                      Jean
+                      Jeans
                     </Typography>
                   </Grid>
                 )}
@@ -394,7 +394,7 @@ export default function CMSForm({
 
             <Grid item>
               <Controller
-                name="sort"
+                name="short"
                 defaultValue={true}
                 control={control}
                 render={({ field }) => (
@@ -405,7 +405,7 @@ export default function CMSForm({
                       checked={field.value}
                     />
                     <Typography variant="body2" sx={{ mt: 1.5 }}>
-                      Sort
+                      Short
                     </Typography>
                   </Grid>
                 )}
@@ -506,7 +506,7 @@ export default function CMSForm({
           <Grid item>
             <Button
               variant="outlined"
-              color="secondary"
+              color="error"
               onClick={onCloseCMSForm}
             >
               Cancel

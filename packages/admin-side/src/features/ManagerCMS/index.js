@@ -93,9 +93,11 @@ export default function ManagerCMS({}) {
           M_stock: mStock,
           XL_stock: xlStock,
           XXL_stock: xxlStock,
-          gender: changeGender(data.male, data.female, data.kid),
+          gender: changeGender(data.male, data.female, data.children),
           top: changeTop(data.tShirt, data.hoodie, data.jacket),
-          bottom: changeBottom(data.jane, data.sort, data.trouser),
+          bottom: changeBottom(data.jeans, data.short, data.trouser),
+          item_price: data.price,
+          is_hot: data.isHot,
         };
         const msg = await productApi.put(params).then(function (response) {
           return response;
@@ -130,9 +132,9 @@ export default function ManagerCMS({}) {
           M_stock: mStock,
           XL_stock: xlStock,
           XXL_stock: xxlStock,
-          gender: changeGender(data.male, data.female, data.kid),
+          gender: changeGender(data.male, data.female, data.children),
           top: changeTop(data.tShirt, data.hoodie, data.jacket),
-          bottom: changeBottom(data.jane, data.sort, data.trouser),
+          bottom: changeBottom(data.jeans, data.short, data.trouser),
           item_price: data.price,
           is_hot: data.isHot,
         };

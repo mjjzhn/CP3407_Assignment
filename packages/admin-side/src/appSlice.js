@@ -9,6 +9,7 @@ const initialState = {
     isAlert: false,
     code: null,
   },
+  refresh: false,
 };
 
 export const appSlice = createSlice({
@@ -28,17 +29,22 @@ export const appSlice = createSlice({
     setIsAlert: (state, action) => {
       state.isAlert = action.payload;
     },
+    setRefresh: (state, action) => {
+      state.refresh = action.payload;
+    },
   },
 });
 
 //export the actions
-export const { setLoading, setMsg, setStaff, setIsAlert } = appSlice.actions;
+export const { setLoading, setMsg, setStaff, setIsAlert, setRefresh } =
+  appSlice.actions;
 
 //export the selectors
 export const selectLoading = (state) => state.app.loading;
 export const selectMsg = (state) => state.app.msg;
 export const selectStaff = (state) => state.app.staff;
 export const selectIsAlert = (state) => state.app.isAlert;
+export const selectRefresh = (state) => state.app.refresh;
 
 //export redux store to app.js
 export default appSlice.reducer;
