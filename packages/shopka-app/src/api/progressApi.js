@@ -2,9 +2,8 @@ import axiosClient from "./axiosClient";
 
 const progressingApi = {
   get: (params) => {
-    const { id } = params;
-    const url = `/order/${id}`;
-    return axiosClient.get(url);
+    const url = `/customer/orders`;
+    return axiosClient.get(url, { params });
   },
 };
 

@@ -23,8 +23,6 @@ export default function TabContainer({ productCards }) {
         return (
           <OrderPage productCards={productCards} changeTab={autoChangeTab} />
         );
-      case 2:
-        return <ProgressingPage />;
     }
   };
   return (
@@ -38,7 +36,6 @@ export default function TabContainer({ productCards }) {
         >
           <Tab label="Favorite Products" />
           <Tab label="Order Card" />
-          <Tab label="Progressing" />
         </Tabs>
       </Box>
       {checkTabValue(value, productCards, autoChangeTab)}

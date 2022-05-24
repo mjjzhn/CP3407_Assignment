@@ -18,6 +18,7 @@ import {
   removeAllProductCard,
   setStatus,
   selectCustomerId,
+  selectDefaultValuesSetting,
 } from "../../appSlice";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/Spinner";
@@ -28,10 +29,8 @@ export default function OrderPage({ productCards, changeTab }) {
   const token = sessionStorage.getItem("token");
   const customerId = useSelector(selectCustomerId);
   const navigate = useNavigate();
-
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => setOpen(true);
+  const postalCode = useSelector(selectDefaultValuesSetting).postalCode;
+  console.log(postalCode);
 
   useEffect(() => {
     if (!token) {
@@ -79,26 +78,16 @@ export default function OrderPage({ productCards, changeTab }) {
         console.log("no user found", error);
       }
     };
-    postData();
-  };
-  const [disablePayment, setDisablePayment] = useState(true);
 
-  const handleSubmit = (data) => {
-    dispatch(setPaidProductCard({ ...productCards }));
-    dispatch(removeAllProductCard());
-    changeTab(1);
-  };
-
-  useEffect(() => {
-    if (Object.keys(productCards).length > 0) {
-      setDisablePayment(false);
+    if (!!postalCode) {
+      postData();
     } else {
-      setDisablePayment(true);
+      dispatch(setMsg("Please set your postal code"));
+      dispatch(setIsAlert({ isAlert: true, code: 400 }));
     }
-  }, [productCards]);
+  };
 
   const handleClickCheckout = () => {
-    handleOpen();
     handleCheckout(productCards);
   };
 

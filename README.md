@@ -7,8 +7,8 @@ Please put your name here:
 - Chen Runting
 
 # Deploy link (no need to run on localhost): 
-- Admin: 
-- Client: 
+- Admin: https://shopka-admin-side.herokuapp.com
+- Client: https://shopka-client-side.herokuapp.com
 
 # How to work in local host?
  ## Front-end ReactJS

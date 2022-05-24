@@ -18,24 +18,17 @@ import {
   setFavoritesCard,
 } from "../../appSlice";
 import Spinner from "../../components/Spinner";
-import AlertNotification from "../../components/Alert";
+
 import favoriteApi from "../../api/favoriteApi";
 
 export default function Container({}) {
   const [productList, setProductList] = useState([]);
   const dispatch = useDispatch();
   const loading = useSelector(selectLoading);
-  const msg = useSelector(selectMsg);
-  const isAlert = useSelector(selectIsAlert);
+
   const token = sessionStorage.getItem("token");
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
 
-    dispatch(setIsAlert({ isAlert: false, code: 200 }));
-  };
 
   const handleAddProduct = (product) => {
     if (token) {
@@ -107,12 +100,6 @@ export default function Container({}) {
         handleAddProduct={handleAddProduct}
         handleRemoveProduct={handleRemoveProduct}
         HandleAddToFavorites={HandleAddToFavorites}
-      />
-      <AlertNotification
-        msg={msg}
-        open={isAlert.isAlert}
-        onClose={handleClose}
-        code={isAlert.code}
       />
     </>
   );

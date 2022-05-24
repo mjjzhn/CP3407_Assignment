@@ -12,16 +12,18 @@ import {
   Grid,
 } from "@mui/material";
 import ContactForm from "./components/ContactForm";
+import { selectIsOpenDialog, setIsOpenDialog } from "../../appSlice";
 
 export default function FormContactUs({ onSubmit }) {
-  const [open, setOpen] = useState(false);
   const token = sessionStorage.getItem("token");
+  const dispatch = useDispatch();
+  const isOpenDialog = useSelector(selectIsOpenDialog);
   const handleClickOpen = () => {
-    setOpen(true);
+    dispatch(setIsOpenDialog(true));
   };
 
   const handleClose = () => {
-    setOpen(false);
+    dispatch(setIsOpenDialog(false));
   };
 
   return (
@@ -32,7 +34,7 @@ export default function FormContactUs({ onSubmit }) {
             variant="contained"
             onClick={handleClickOpen}
             sx={{
-              position: "absolute",
+              position: "fixed",
               bottom: "0px",
               right: "0px",
               borderRadius: 0,
@@ -42,7 +44,7 @@ export default function FormContactUs({ onSubmit }) {
             Contact Admin
           </Button>
 
-          <Dialog open={open} onClose={handleClose}>
+          <Dialog open={isOpenDialog} onClose={handleClose}>
             <DialogTitle>Contact Admin</DialogTitle>
             <DialogContent>
               <DialogContentText>

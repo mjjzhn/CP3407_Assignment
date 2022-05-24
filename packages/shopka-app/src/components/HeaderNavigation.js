@@ -17,6 +17,7 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutIcon from "@mui/icons-material/Logout";
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectToken, setOpenLogin, setToken } from "../appSlice";
@@ -35,6 +36,12 @@ const options = [
     name: "My Cart",
     path: "/cart",
     description: "View all products in cart",
+  },
+  {
+    icon: <LocalShippingIcon />,
+    name: "Shopping History",
+    path: "/history",
+    description: "View all shipping history",
   },
   {
     icon: <SettingsIcon />,
