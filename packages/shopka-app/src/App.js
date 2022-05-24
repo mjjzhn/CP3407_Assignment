@@ -45,7 +45,7 @@ function App() {
 
     dispatch(setIsAlert({ isAlert: false, code: 200 }));
   };
-  
+
   const handleCloseLogin = () => {
     dispatch(setOpenLogin(false));
   };
@@ -55,7 +55,11 @@ function App() {
 
     const Signup = async () => {
       try {
-        const params = { username: data.userName, password: data.password };
+        const params = {
+          username: data.userName,
+          password: data.password,
+          cfPass: data.cfPass,
+        };
         const response = await signupApi.post(params).then(function (response) {
           return response;
         });
@@ -64,11 +68,11 @@ function App() {
         dispatch(setOpenLogin(false));
         dispatch(setIsAlert({ isAlert: true, code: 200 }));
       } catch (error) {
-        dispatch(setMsg(error.response.data.msg));
+        dispatch(setMsg(error.response.data.message));
         dispatch(setLoading(false));
         dispatch(setIsAlert({ isAlert: true, code: error.response.status }));
       }
-      dispatch(setOpenLogin(false));
+      
     };
 
     const Login = async () => {
