@@ -45,12 +45,21 @@ cd packages/admin-side
   #### 3. (For dev team) select a different branch, not the main branch
   #### 4. Create new venv: 
   	python -m venv venv
-  #### 5. Activate the venv
+  #### 5. Activate the venv using terminal
+  - for cmd: venv/Scripts/activate 
+  - for git bash: source venv/Scripts/activate 
   #### 6. Install necessary files: 
   	pip install -r requirements.txt
   #### 7. Create new .env file (inside /backend) and add this content: 
-
-  ##### For dev team, delete the DATABASE_URL (we should work with sqlite db before deployment)
+JWT_COOKIE_SECURE=False
+JWT_SECRET_KEY=hello_world
+SECRET_KEY=just-a-random-key
+CLOUD_NAME=df5cmvx1g
+API_KEY=889399675492336
+API_SECRET=UP2CF9s_B_lmwMa4alSjxnzSJQw
+CLOUDINARY_URL=cloudinary://889399675492336:UP2CF9s_B_lmwMa4alSjxnzSJQw@df5cmvx1g
+STRIPE_API_KEY=sk_test_51L0yhzEoCtaUFlhaMUo7jhXY09zxE4hdAxRIXay2odk01659nGEE7AUeSYoOqinXgH2jjCy7PpXOYlixOMUX79me00hN55tMJn
+ENDPOINT_SECRET=whsec_BTKS261w6fs7SGcVVFGlLTrONlKR8BQY
   #### 8. Upgrade the database (for dev team):
   	flask db upgrade
   #### 9.run Flask app:
