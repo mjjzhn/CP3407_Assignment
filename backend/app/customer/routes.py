@@ -4,7 +4,7 @@ from flask import jsonify, request, current_app
 from flask_jwt_extended import current_user
 from app.errors import bad_request
 from app import db, models
-from app.models import Customer, Order, Order_item, Item
+from app.models import Customer, Order, Order_item, Item, Contact_form
 from app import cloudinary
 #this file is for control user settings.
 
@@ -23,11 +23,23 @@ def update_profile():
             Customer.query.filter_by(username=data['username']).first():
             return bad_request('please use a different username')
         if "password" in data:
-            if 'currentPassword' not in data:
-                return bad_request("Please provide your current password")
-        if 'currentPassword' in data and not current_user.check_password(data["currentPassword"]):
-            return bad_request("Current password incorrect")
-        
+            if data["password"]:
+                if 'currentPassword' not in data:
+                    return bad_request("Please provide your current password")
+                if 'currentPassword' in data and not current_user.check_password(data["currentPassword"]):
+                    return bad_request("Current password incorrect")
+        else:
+            if "currentPassword" in data:
+                del data["currentPassword"]
+                
+        for field in ["phone", "postal_code"]:
+            if field in data:
+                if data[field]:
+                    try:
+                        data[field] = int(data[field])
+                    except ValueError:
+                        return bad_request(f"Please provide an integer for {field} field!") 
+                       
         #change avatar
         current_app.logger.info('in admin/update route')
         upload_result = None
@@ -46,28 +58,65 @@ def update_profile():
             response["is_password_updated"] = True
         return jsonify(response)
 
-@bp.route('/favorite', methods=["GET"])
+@bp.route('/favourite', methods=["GET"])
 @customer_required()
 def get_favourite_items():
-    return jsonify(current_user.get_favourite())
+    return jsonify(current_user.get_favourite()),200
 
-@bp.route('/favorite/<id>', methods=["POST"])
+@bp.route('/favourite/<id>', methods=["POST"])
 @customer_required()
 def add_to_favourite(id):
     item = Item.query.get_or_404(id)
     current_user.add_to_favorite(id)
-    return jsonify(current_user.get_favourite())
+    return jsonify(current_user.get_favourite()),200
 
-@bp.route('/favorite/<id>', methods=["DELETE"])
+@bp.route('/favourite/<id>', methods=["DELETE"])
 @customer_required()
 def remove_from_favourite(id):
     id= int(id)
     # item = Item.query.get_or_404(id)
     current_user.remove_from_favourite(id)
-    return jsonify(current_user.get_favourite())
+    return jsonify(current_user.get_favourite()),200
 
 
+@bp.route('/orders', methods=["GET"])
+@customer_required()
+def get_shopping_history():
+    # data = Order.to_collection_dict(current_user.orders.all(), 'customer.get_shopping_history')
+    # return jsonify(data),200
+    return jsonify(current_user.get_orders()),200
 
+@bp.route('/contact', methods=["POST"])
+@customer_required()
+def contact_to_shop():
+    data = request.form.to_dict() or {}
+    for field in ["subject","email","message"]:
+        if field not in data:
+            return bad_request(f"Please include {field} field")
+    if "customer_id" not in data:
+        data["customer_id"] = current_user.id
+    if "full_name" not in data:
+        data["full_name"] = current_user.customer_name
+    if not isinstance(data["customer_id"], int):
+        return bad_request(f"Please provide an integer for {field} field")
+    
+    new_message = Contact_form()
+    new_message.from_dict(data)
+    db.session.add(new_message)
+    db.session.commit()
+    return jsonify(new_message.to_dict())
+
+@bp.route('/contact/get', methods=["GET"])
+@customer_required()
+def get_all_contacts():
+    data = Contact_form.to_collection_dict(current_user.contact_forms.all(), 'customer.get_all_contacts')
+    return jsonify(data),200 
+
+@bp.route('/contact/get/<id>', methods=["GET"])
+@customer_required()
+def get_contact(id):
+    return jsonify(current_user.contact_forms.filter_by(id=id).first().to_dict()),200 
+    
 # @bp.route('/check_out', methods=["POST"])#check_out
 # @customer_required
 # def check_out():

@@ -12,6 +12,8 @@ import cloudinary.api
 
 from flask_jwt_extended import jwt_required
 
+import stripe
+
 # from dotenv import load_dotenv
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -34,6 +36,9 @@ def create_app(config_class=Config):
     #config cloudinary
     cloudinary.config(cloud_name = config_class.CLOUD_NAME, api_key=config_class.API_KEY, api_secret=config_class.API_SECRET)
 
+    #stripe
+    stripe.api_key=app.config["STRIPE_API_KEY"]
+    
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
 

@@ -23,3 +23,7 @@ class Config(object):
     API_KEY =os.environ.get('API_KEY')
     API_SECRET =os.environ.get('API_SECRET')
     CLOUDINARY_URL =os.environ.get('CLOUDINARY_URL')
+    
+    #STRIPE API KEY
+    STRIPE_API_KEY =os.environ.get('STRIPE_API_KEY')
+    ENDPOINT_SECRET=os.environ.get('ENDPOINT_SECRET')

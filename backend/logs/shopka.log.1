@@ -1,0 +1,109 @@
+2022-05-15 17:27:53,542 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-15 17:28:48,838 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-16 00:38:39,441 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-16 00:38:50,830 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-16 00:42:42,370 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 12:05:01,509 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 14:18:08,356 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 14:18:14,629 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 14:30:18,754 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 14:30:25,080 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 14:38:19,445 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 14:38:25,506 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 19:21:22,541 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 19:27:00,134 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 19:27:07,278 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-20 22:57:35,481 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:70]
+2022-05-21 17:34:26,393 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-21 17:34:33,115 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-21 17:34:38,429 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-21 19:13:07,999 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-21 19:13:38,633 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-21 23:45:28,969 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:28:50,559 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:29:04,588 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:29:50,780 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:30:39,943 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:32:21,636 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:43:31,497 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:44:51,729 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:47:10,390 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:51:16,621 INFO: flask-shopka startup [in D:\CP3407-Assignment 2\backend\app\__init__.py:75]
+2022-05-23 00:51:34,359 ERROR: Exception on /menu/items/create/multiple [POST] [in D:\CP3407-Assignment 2\backend\venv\lib\site-packages\flask\app.py:1455]
+Traceback (most recent call last):
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1819, in _execute_context
+    self.dialect.do_execute(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\engine\default.py", line 732, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.StringDataRightTruncation: value too long for type character varying(140)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\flask\app.py", line 2077, in wsgi_app
+    response = self.full_dispatch_request()
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\flask\app.py", line 1525, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\flask_cors\extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "D:\CP3407-Assignment 2\backend\app\menu\routes.py", line 176, in create_multiple_item
+    if Item.query.filter_by(item_name=data['item_name']).first():
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\query.py", line 2819, in first
+    return self.limit(1)._iter().first()
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\query.py", line 2903, in _iter
+    result = self.session.execute(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1640, in execute
+    ) = compile_state_cls.orm_pre_session_exec(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\context.py", line 319, in orm_pre_session_exec
+    session._autoflush()
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2237, in _autoflush
+    util.raise_(e, with_traceback=sys.exc_info()[2])
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\util\compat.py", line 207, in raise_
+    raise exception
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2226, in _autoflush
+    self.flush()
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\session.py", line 3363, in flush
+    self._flush(objects)
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\session.py", line 3502, in _flush
+    with util.safe_reraise():
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    compat.raise_(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\util\compat.py", line 207, in raise_
+    raise exception
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\session.py", line 3463, in _flush
+    flush_context.execute()
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 456, in execute
+    rec.execute(self)
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 630, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 245, in save_obj
+    _emit_insert_statements(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 1238, in _emit_insert_statements
+    result = connection._execute_20(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1631, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1498, in _execute_clauseelement
+    ret = self._execute_context(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1862, in _execute_context
+    self._handle_dbapi_exception(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2043, in _handle_dbapi_exception
+    util.raise_(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\util\compat.py", line 207, in raise_
+    raise exception
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1819, in _execute_context
+    self.dialect.do_execute(
+  File "D:\CP3407-Assignment 2\backend\venv\lib\site-packages\sqlalchemy\engine\default.py", line 732, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.DataError: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(psycopg2.errors.StringDataRightTruncation) value too long for type character varying(140)
+
+[SQL: INSERT INTO item (item_name, item_category, item_image_link, item_description, item_price, discount, "M_stock", "L_stock", "XL_stock", "XXL_stock", is_hot, available) VALUES (%(item_name)s, %(item_category)s, %(item_image_link)s, %(item_description)s, %(item_price)s, %(discount)s, %(M_stock)s, %(L_stock)s, %(XL_stock)s, %(XXL_stock)s, %(is_hot)s, %(available)s) RETURNING item.id]
+[parameters: {'item_name': 'KIDS Ultra Stretch Dry Sweat Full-Zip Hoodie', 'item_category': '{"gender": ["children"], "top": ["hoodie"], "bottom": []}', 'item_image_link': 'https://image.uniqlo.com/UQ/ST3/sg/imagesgoods/439859/item/sggoods_57_439859.jpg?width=1600&impolicy=quality_75', 'item_description': 'Quick-drying and easy to move in. These high-performance sweats are perfect for active kids. Also a versatile piece perfect for wearing at home or out', 'item_price': 29.9, 'discount': 10, 'M_stock': 100, 'L_stock': 100, 'XL_stock': 100, 'XXL_stock': 100, 'is_hot': True, 'available': True}]
+(Background on this error at: https://sqlalche.me/e/14/9h9h)
