@@ -11,6 +11,7 @@ Please put your name here:
 - Client: https://shopka-client-side.herokuapp.com
 
 # How to work in local host?
+Please using visual studio code.
  ## Front-end ReactJS
 
  > ### Require Node.js and npm version: (install before clone and work):
@@ -39,6 +40,7 @@ cd packages/admin-side
  ```
  
  ## Back-end Flask
+download python 3.10
   #### 1. Clone this project
   #### 2. Go to backend folder:
   	cd backend/
